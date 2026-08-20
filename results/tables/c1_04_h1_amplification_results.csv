@@ -1,0 +1,6 @@
+region,extreme_count,normal_count,mae_extreme,mae_normal,ratio,t_statistic,p_value,passes_h1,note,h1_overall_passed
+NSW1,3012,17523,1583.9625,80.0684,19.7826,19.626,0.0,True,,True
+VIC1,2403,18132,2479.8978,105.5371,23.4979,22.9409,0.0,True,,True
+QLD1,3246,17289,1812.886,139.5076,12.9949,22.2668,0.0,True,,True
+SA1,2779,17756,3265.876,744.2568,4.3881,23.2231,0.0,True,,True
+TAS1,1457,19078,1517.424,190.4157,7.969,12.9317,0.0,True,,True

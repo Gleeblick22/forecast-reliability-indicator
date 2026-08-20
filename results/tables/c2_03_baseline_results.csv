@@ -1,0 +1,2 @@
+model,train_f1,train_precision,train_recall,test_f1,test_precision,test_recall
+logistic_regression,0.5878,0.5133,0.6876,0.0448,0.0315,0.0775

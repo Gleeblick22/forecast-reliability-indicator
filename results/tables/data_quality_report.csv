@@ -1,0 +1,12 @@
+check,status,actual_start,actual_end,total_rows,rrp_min,rrp_max,duplicate_rows,missing_rate
+columns,PASS,,,,,,,
+regions,PASS,,,,,,,
+date_range,PASS,2021-10-01 04:30:00,2023-01-02 04:00:00,,,,,
+row_count,PASS,,,5663125.0,,,,
+price_range,PASS,,,,-1000.0,15500.0,,
+duplicates,PASS,,,,,,0.0,
+missing_NSW1,PASS,,,,,,,0.0
+missing_VIC1,PASS,,,,,,,0.0
+missing_QLD1,PASS,,,,,,,0.0
+missing_SA1,PASS,,,,,,,0.0
+missing_TAS1,PASS,,,,,,,0.0

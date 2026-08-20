@@ -1,0 +1,2 @@
+test,both_fail,baseline_only,fri_only,n_discordant,chi2,p_value,significant,note
+McNemar chi-squared,21,34,0,34,32.0294,0.0,True,H5 paired binary outcome test SD-003

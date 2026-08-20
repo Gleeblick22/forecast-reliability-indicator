@@ -1,0 +1,2 @@
+model,train_f1,test_f1,test_precision,test_recall,test_auc,passes_h4,note
+xgboost_v1_default,0.8598,0.3828,0.2474,0.8451,0.9883,False,default params before tuning

@@ -1,0 +1,2 @@
+variant,excluded_feature,methodology,gb_train_ratio,threshold_source,nem_f1,nem_auc,gb_f1,gb_auc_roc,f1_difference,h8_tolerance,passes_h8,data_leakage,note
+FRI 9 features without f_forecast_revision,f_forecast_revision,clean -- no data leakage,0.8,NEM training data only,0.0641,0.8034,0.3849,0.7995,0.3208,0.15,False,False,Clean methodology: GB threshold from train only. NEM threshold used for prediction.

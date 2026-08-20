@@ -1,0 +1,4 @@
+R_scenario,R_value,p5_baseline_net,p5_fri_net,fri_advantage_aud,fri_advantage_pct
+half (AUD 21M),21000000.0,228313.11,279183.25,50870.14,22.3
+baseline (AUD 42M),42000000.0,174163.46,267177.89,93014.43,53.4
+double (AUD 84M),84000000.0,65864.16,243167.17,177303.0,269.2

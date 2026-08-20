@@ -1,0 +1,50 @@
+# Windows/WSL artifacts
+*:Zone.Identifier
+
+# Virtual environment
+venv/
+__pycache__/
+*.pyc
+
+# Full raw/processed data (only data/samples/ is tracked)
+data/raw/
+data/processed/
+data/external/
+
+# Logs
+logs/
+
+# Archived/superseded work
+archive/
+archive_pre_relabel_20260720/
+scripts/archive/
+analysis/
+
+# Manuscript (private until published)
+manuscript/
+
+# Internal planning and tracking docs (not for public repo)
+docs/markdown/EXPERIMENTAL_TRACKER.md
+docs/markdown/Hypothesis_FRI.txt
+docs/markdown/MANUSCRIPT_DRAFT.md
+docs/markdown/MANUSCRIPT_OUTLINE.md
+docs/markdown/MANUSCRIPT_PLANNING.md
+docs/markdown/MANUSCRIPT_QA_FRAMEWORK.md
+docs/markdown/PDD.md
+docs/markdown/PDD v.2.md
+docs/markdown/PROGRESS.md
+docs/markdown/RESEARCH_LOG.md
+docs/markdown/RESEARCH_LOG v.2.md
+docs/markdown/RESULTS.md
+docs/markdown/archive/
+
+# Misc
+.DS_Store
+*.log
+
+# Manuscript section drafts (superseded, private)
+docs/manuscript_S*.md
+docs/FRI_Master_Correction_Sheet.md
+docs/markdown/
+tests/
+utils/

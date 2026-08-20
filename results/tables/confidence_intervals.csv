@@ -1,0 +1,11 @@
+metric,point,ci_low,ci_high,n,note
+H1_amplification_ratio,13.7265,7.5418,19.9112,5,Mean ratio across 5 NEM regions
+H2_masking_pct,78.256,72.506,82.52,5,Mean masking pct across 5 NEM regions
+H4_F1,0.6207,0.5525,0.6836,15165,Bootstrap on held-out test set
+H4_AUC,0.9893,0.9855,0.9927,15165,Bootstrap on held-out test set
+H4_Precision,0.6081,0.527,0.6839,15165,Bootstrap on held-out test set
+H4_Recall,0.6338,0.5521,0.7105,15165,Bootstrap on held-out test set
+H5_sf_reduction_pct,61.82,48.78,74.58,15165,Bootstrap silent failure reduction
+H6_pearson_correlation,0.2636,0.2044,0.3208,983,Fisher z-transformation CI on dispatched intervals
+H8_SA_F1,0.5923,0.58,0.6047,20535,"NEM model applied to SA, threshold=0.8006 (D-023); loaded not retrained"
+Q4_early_warning_pre2_ratio,45.6,29.72,62.78,5,Mean 2-interval early warning ratio across regions

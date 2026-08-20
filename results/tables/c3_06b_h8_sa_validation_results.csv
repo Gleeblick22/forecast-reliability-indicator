@@ -1,0 +1,2 @@
+market,train_regions,nem_f1,sa_f1,sa_auc_roc,f1_difference,h8_tolerance,optimal_threshold,train_n,test_n,test_extreme,passes_h8,deviation
+SA1_cross_region,"['NSW1', 'VIC1', 'QLD1', 'TAS1']",0.6207,0.592348,0.890264,0.028352,0.15,0.8006,82140,20535,2779,True,D-014 D-023

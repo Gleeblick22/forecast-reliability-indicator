@@ -1,0 +1,3 @@
+threshold,baseline_sf,fri_sf,h5_reduction_pct,h5_passes,baseline_revenue,fri_revenue,h7_improvement_pct,h7_passes,all_h5_robust,all_h7_robust
+50.0,88,29,67.05,True,314757.98,303954.11,-3.43,False,True,False
+200.0,15,7,53.33,True,322047.86,322311.1,0.08,False,True,False

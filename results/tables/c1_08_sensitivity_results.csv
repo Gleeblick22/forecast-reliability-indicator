@@ -1,0 +1,7 @@
+hypothesis,threshold,regions_passing,passes,masking_pct,p_value,all_hypotheses_robust
+H1,150.0,0.0,False,,,False
+H2,150.0,,False,,,False
+H3,150.0,,False,,,False
+H1,500.0,0.0,False,,,False
+H2,500.0,,False,,,False
+H3,500.0,,False,,,False

@@ -1,0 +1,5 @@
+algorithm,f1,auc_roc,precision,recall,train_time_sec,threshold,selected
+XGBoost,0.6207,0.9893,0.6081,0.6338,1.9,0.8006,True
+MLP Neural Network,0.6027,0.9848,0.8571,0.4648,42.1,0.8006,False
+Random Forest,0.454,0.9796,0.4022,0.5211,3.83,0.8006,False
+Logistic Regression,0.0515,0.716,0.0538,0.0493,87.6,0.8006,False

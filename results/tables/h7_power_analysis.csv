@@ -1,0 +1,2 @@
+hypothesis,n_extreme_events,cohen_d,achieved_power,required_n_80pct,conclusion,note
+H7,142,0.0183,0.0527,47090.0,Underpowered -- null result reflects insufficient sample not absent effect,Cohen 1988 TTestIndPower SD-004

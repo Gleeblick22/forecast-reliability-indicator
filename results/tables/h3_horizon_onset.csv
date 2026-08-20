@@ -1,0 +1,6 @@
+region,spearman_rho,spearman_p,monotonic,onset_horizon_min,onset_label
+NSW1,0.9762,0.0,True,60,P60
+VIC1,0.9524,0.0003,True,30,P30
+QLD1,0.119,0.7789,False,30,P30
+SA1,-0.2857,0.4927,False,30,P30
+TAS1,0.6667,0.071,False,30,P30

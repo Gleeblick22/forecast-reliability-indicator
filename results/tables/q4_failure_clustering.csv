@@ -1,0 +1,6 @@
+region,total_extreme,n_clusters,avg_cluster_length,max_cluster_length,single_interval,multi_interval,normal_fri_score,pre2_fri_score,pre1_fri_score,onset_fri_score,pre2_ratio,pre1_ratio,early_warning
+NSW1,3012,195,15.45,313,60,135,0.0042,0.3263,0.0662,0.9806,78.2,15.9,True
+VIC1,2403,228,10.54,213,82,146,0.0052,0.2911,0.0687,0.9835,56.5,13.3,True
+QLD1,3246,525,6.18,133,226,299,0.007,0.2664,0.0478,0.9715,38.0,6.8,True
+SA1,2779,326,8.52,191,129,197,0.0097,0.2204,0.0581,0.9647,22.8,6.0,True
+TAS1,1457,275,5.3,138,146,129,0.0056,0.1805,0.0485,0.982,32.5,8.7,True

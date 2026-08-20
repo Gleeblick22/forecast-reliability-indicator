@@ -1,0 +1,4 @@
+method,best_threshold,f1,auc_roc,note
+Simple rule (f_forecast_revision only),300.0,0.1486,0.7737,Best single-feature threshold rule
+FRI XGBoost (10 features),0.8006,0.6351,0.9901,Full FRI model
+FRI improvement over simple rule,,4.27,1.28,Ratio FRI/simple rule

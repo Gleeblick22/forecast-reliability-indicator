@@ -1,0 +1,3 @@
+agent,charge_intervals,charging_cost,charging_degradation,total_charging_economics
+P5-baseline,1194,-33147.76,18869.86,-14277.9
+P5+FRI combined,2837,-42370.08,10615.14,-31754.93

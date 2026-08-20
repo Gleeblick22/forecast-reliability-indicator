@@ -1,0 +1,2 @@
+deviation,analysis_type,run_date,threshold_used,lookback_intervals,lookback_minutes,total_episodes,pre_spike_count,pre_spike_pct,during_spike_count,no_trigger_count,mean_lead_time_min,median_lead_time_min,min_lead_time_min,max_lead_time_min
+D-024,POST-HOC EXPLORATORY,2026-06-17,D-009 AUD100 via regime column,6,180,71,17,23.94,43,11,90.0,90.0,30,180

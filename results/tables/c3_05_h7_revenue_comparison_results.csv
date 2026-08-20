@@ -1,0 +1,2 @@
+agent_type,total_revenue,mean_revenue,dispatch_revenue,dispatch_count,baseline_revenue,fri_revenue,revenue_difference,improvement_pct,h7_threshold_pct,passes_h7,extreme_baseline_revenue,extreme_fri_revenue,extreme_improvement_pct,normal_baseline_revenue,normal_fri_revenue,normal_improvement_pct
+fri,307450.96,20.2737,307450.96,983,317514.9,307450.96,-10063.94,-3.1696,15.0,False,11211.17,9688.61,-13.58,306303.74,297762.35,-2.79

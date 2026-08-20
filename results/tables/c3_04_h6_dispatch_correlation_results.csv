@@ -1,0 +1,2 @@
+n_intervals,pearson_correlation,p_value,direction_positive,p_significant,h6_threshold,passes_h6,high_mean_dispatch,med_mean_dispatch,low_mean_dispatch
+983,0.2636,0.0,True,True,0.05,True,19.76,22.48,5.18

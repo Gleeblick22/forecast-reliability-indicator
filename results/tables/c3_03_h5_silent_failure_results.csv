@@ -1,0 +1,2 @@
+agent_type,total_intervals,dispatch_intervals,silent_failures,silent_rate_pct,baseline_silent_failures,fri_silent_failures,reduction_pct,h5_threshold_pct,passes_h5,baseline_silent_rate,fri_silent_rate
+fri,15165,7601,21,0.1385,55,21,61.8182,20.0,True,0.3627,0.1385

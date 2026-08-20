@@ -1,0 +1,2 @@
+variant,nem_f1_reference,gb_f1,gb_auc_roc,f1_difference,h8_tolerance,passes_h8,note
+FRI full 10-feature model,0.6207,0.2119,0.6461,0.4088,0.15,False,f_forecast_revision zero-filled for GB (no equivalent feature exists); NEM reference fixed at locked value 0.6207
