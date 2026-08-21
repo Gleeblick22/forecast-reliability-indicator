@@ -12,7 +12,18 @@
 🔗 **Pre-registration (OSF)**: 10.17605/OSF.IO/Z89HD
 
 ---
+## Hypothesis structure
 
+The eight hypotheses form a dependency chain across four research gates, not eight independent tests:
+
+![Hypothesis dependency chain](results/figures/fig04_hypothesis_chain.png)
+
+- **Gate 1 — Does the problem exist?** (H1, H2, H3): forecast error amplifies and is masked during extreme events
+- **Gate 2 — Can it be detected?** (H4): a classifier can predict forecast unreliability ex ante
+- **Gate 3 — Does detection add value?** (H5, H6, H7): conditioning dispatch on the signal protects the asset economically
+- **Gate 4 — Does it generalise?** (H8): the classifier transfers within-market (SA1), but hits real boundaries, structural (GB) and scale (NZ)
+
+Each gate depends on the one before it holding; H4 only matters because H1–H3 establish there is a real problem to detect, and H5–H7 only matter because H4 confirms detection is genuinely possible.
 ## Key results at a glance
 
 | Hypothesis | Description | Result | Key metric |
@@ -26,9 +37,25 @@
 | H7 | Reliability signal increases raw trading revenue (≥15%) | Null | −1.55%, underpowered test (achieved power 5.3%) |
 | H8 | Classifier transfers across markets (F1 diff ≤ 0.15) | Mixed | SA1 pass (F1=0.8577); NZ, GB fail (mechanistically explained) |
 
-> Full results, confidence intervals, and supporting detail: [`docs/RESULTS.md`](docs/RESULTS.md)
 
 ---
+### Result tables and figures, direct links
+
+| Hypothesis | Result table (CSV) | Figure |
+|---|---|---|
+| H1 — Amplification | [`c1_04_h1_amplification_results.csv`](results/tables/c1_04_h1_amplification_results.csv) | [Fig. 5](results/figures/fig05_h1_amplification.png) |
+| H2 — Masking | [`c1_05_h2_masking_results.csv`](results/tables/c1_05_h2_masking_results.csv) | [Fig. 6](results/figures/fig06_h2_masking.png) |
+| H3 — Horizon | [`c1_06_h3_horizon_results.csv`](results/tables/c1_06_h3_horizon_results.csv) | [Fig. 7](results/figures/fig07_h3_horizon.png) |
+| H4 — Classifier performance | [`c2_23_roc_pr_summary_relabeled.csv`](results/tables/c2_23_roc_pr_summary_relabeled.csv) | [Fig. 8 (ROC)](results/figures/fig08_h4_roc.png) · [Fig. 9 (SHAP)](results/figures/fig09_h4_shap.png) |
+| H5 — Economic value | [`c3_41_charging_economics_relabeled_results.csv`](results/tables/c3_41_charging_economics_relabeled_results.csv) | [Fig. 10](results/figures/fig10_h5_four_agent.png) |
+| Signal attribution (M2) | [`c3_49_charging_economics_control_results.csv`](results/tables/c3_49_charging_economics_control_results.csv) | [Fig. 10](results/figures/fig10_h5_four_agent.png) |
+| H6 — Dispatch correlation | [`c3_42_h6_relabeled_results.csv`](results/tables/c3_42_h6_relabeled_results.csv) | [Fig. 11](results/figures/fig11_h6_correlation.png) |
+| H7 — Revenue comparison | [`c3_43_h7_relabeled_results.csv`](results/tables/c3_43_h7_relabeled_results.csv) | [Fig. 13](results/figures/fig13_h7_revenue_by_regime.png) · [Fig. 14](results/figures/fig14_h7_mcnemar_power.png) |
+| H8 — SA1 / NZ / GB transfer | [`c2_19_h8_sa1_relabeled_results.csv`](results/tables/c2_19_h8_sa1_relabeled_results.csv) · [`c3_45_h8_nz_relabeled_harmonized_results.csv`](results/tables/c3_45_h8_nz_relabeled_harmonized_results.csv) · [`c3_46_h8_gb_relabeled_results.csv`](results/tables/c3_46_h8_gb_relabeled_results.csv) | [Fig. 16](results/figures/fig16_gb_harmonization.png) · [Fig. 17](results/figures/fig17_crossmarket.png) |
+
+Trained classifier: [`results/models/fri_model_relabeled.pkl`](results/models/fri_model_relabeled.pkl)
+Full results, confidence intervals, and supporting detail: [`docs/RESULTS.md`](docs/RESULTS.md)
+
 
 ## Research context
 
