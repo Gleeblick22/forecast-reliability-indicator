@@ -32,11 +32,11 @@
 
 ## Research context
 
-Australia's National Electricity Market (NEM) runs predispatch every 30 minutes, producing price forecasts that battery operators rely on for dispatch decisions. During extreme price events (≥ AUD 300/MWh), these forecasts fail dramatically — but standard aggregate accuracy metrics hide this failure because extreme events are rare in the test partition.
+Australia's National Electricity Market (NEM) runs predispatch every 30 minutes, producing price forecasts that battery operators rely on for dispatch decisions. During extreme price events (≥ AUD 300/MWh), these forecasts fail dramatically, but standard aggregate accuracy metrics hide this failure because extreme events are rare in the test partition.
 
 This creates **silent failures**: battery operators dispatch confidently based on unreliable forecasts, missing high-value opportunities and incurring preventable degradation costs.
 
-**FRI addresses this gap** by monitoring forecast revision patterns across predispatch runs to detect when the forecast signal is unreliable — before dispatch decisions are made — and conditioning dispatch magnitude on that reliability score.
+**FRI addresses this gap** by monitoring forecast revision patterns across predispatch runs to detect when the forecast signal is unreliable — before dispatch decisions are made, and conditioning dispatch magnitude on that reliability score.
 
 ---
 
@@ -222,6 +222,4 @@ Code in this repository is licensed under the [Apache License 2.0](LICENSE).
 Data samples in `data/samples/` remain subject to their original sources' terms (see [`docs/DATA_CARD.md`](docs/DATA_CARD.md)) and are **not** covered by the code license. GB Elexon data specifically requires separate confirmation before any commercial use.
 
 ## Contact
-
-Dhan Prasad Ghale
-[email / contact details]
+dh.ghale@gmail.com
