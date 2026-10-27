@@ -48,3 +48,5 @@ docs/FRI_Master_Correction_Sheet.md
 docs/markdown/
 tests/
 utils/
+data/*
+!data/.gitkeep
