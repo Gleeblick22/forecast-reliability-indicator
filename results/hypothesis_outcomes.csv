@@ -1,0 +1,15 @@
+id,set,short,registered_criterion,result,outcome,note
+H1,original,Error amplification,"rho > 1.5, p < 0.05 in >= 4/5 regions","5/5 regions (revision-based error, 2021-22)",supported,"Registered error = first-to-last revision; confirmed with settled-price error in R1"
+H2,original,Masking,"m > 0.50 NEM-level","77.28% (revision-based error)",supported,"Same caveat as H1"
+H3,original,Horizon,"p < 0.05 NEM-level t-test","not significant",not supported,
+H4,original,Classifier,"F1 >= 0.60 on held-out test","F1 0.476 (corrected label, 2022 test; AUC 0.900)",not supported,"Original label gave F1 0.89 but was near-circular; corrected label reported"
+H5,original,Silent failures,">= 20% reduction vs baseline","0 vs 0 (corrected agent)",not testable,"No qualifying events in the 2022 test window"
+H6,original,Dispatch vs confidence,"r > 0, p < 0.05","r = 0.318 [0.243, 0.389], p = 3.1e-15, n = 587",supported,"Manipulation check: dispatch is scaled from the FRI score by design"
+H7,original,Revenue,">= +15% revenue","gross +0.17%, CI includes 0; net +1.0%",not supported,
+H8,original,Cross-market transfer,"|dF1| <= 0.15","SA1 passes; NZ, GB fail (original label)",partially supported via substitutes,"ERCOT inaccessible; evaluated with the original label, not re-run"
+R1,replication,Error amplification (settled price),"ratio > 1.5 and p < 0.05 in >= 4/5 regions","5/5 regions; ratios 28-56",supported,2023-25 frozen model
+R2,replication,Temporal transfer,"AUC >= 0.80 and CI lower bound > 0.70","AUC 0.955 [0.948, 0.961]",supported,
+R3,replication,Exposure reduction,">= 30% vs baseline and (vol - FRI) CI > 0","-47.0%; vol - FRI 557.6 MWh [387.7, 744.6]",supported,
+R4,replication,Beats raw volatility,"dAP > 0, CI excludes 0","dAP 0.363 [0.344, 0.382]",supported,
+R5,replication,60-min decision lead,"AUC >= 0.75","AUC 0.959 [0.954, 0.965]",supported,
+R6,replication,Degradation boundary,"descriptive","const x0.25 - FRI: +4.95M (beta 2.03), +3.19M (1.5), -0.65M (1.0)",as expected,"No pass/fail registered"
