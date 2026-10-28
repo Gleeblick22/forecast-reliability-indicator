@@ -206,11 +206,14 @@ save(fig, 6, f"Fig. 6. Feature importance of the FRI model ({len(imp)} features;
      f"and the revision-path group for {h['attr_path_group']:.1f}%.")
 
 # ---------- Fig. 7: exposure by agent ----------
-ORDER = [("baseline", "Baseline"), ("vol_matched", "Volatility-matched"), ("const_0.75", "Constant ×0.75"),
+ORDER = [("baseline", "Baseline"), ("vol_matched", "Volatility-matched"), ("fdec_matched", "Forecast-level-matched*"), ("const_0.75", "Constant ×0.75"),
          ("const_0.25", "Constant ×0.25"), ("fri_3band", "FRI three-band")]
 g22 = {r["agent"]: r for r in S["gateA"] if abs(r["beta"] - 2.03) < 1e-9}
 g25 = {r["agent"]: r for r in S["agents_2325"]}
-fig, axs = plt.subplots(1, 2, figsize=(W2, 2.2), sharey=True)
+for r in S["fdec_ctrl"]:
+    if r["agent"] == "fdec_matched":
+        (g22 if r["period"] == "2022 test" else g25)["fdec_matched"] = r
+fig, axs = plt.subplots(1, 2, figsize=(W2, 2.5), sharey=True)
 for ax_, g_, t_ in [(axs[0], g22, "(a) 2022 test"), (axs[1], g25, "(b) 2023–25 replication")]:
     vals = [g_[k]["mwh_into_overforecast"] for k, _ in ORDER]
     for i, (k, _) in enumerate(ORDER):
@@ -227,7 +230,7 @@ a2 = re.findall(r"\[[-\d., ]+\]", h["h5_h7"]["A2 exposure 2022"]["result"])[-1]
 r3 = [r for r in S["hypotheses"] if r["id"] == "R3"][0]["result"].split("; ", 1)[1]
 save(fig, 7, f"Fig. 7. Energy discharged into over-forecast intervals (f(w_t) − p̄_t > AUD 300/MWh) by agent, β = 2.03. "
      f"FRI reduces exposure against the baseline by {h['exposure_reduction_2022_pct']}% in 2022 (95% CI {a2} MWh) and by "
-     f"{h['rep_exposure_reduction_pct']}% in 2023–25 ({r3}; R3).")
+     f"{h['rep_exposure_reduction_pct']}% in 2023–25 ({r3}; R3). * Exploratory control, not registered: same band counts as FRI, assigned by highest f(w_t).")
 
 # ---------- Fig. 8: R6 degradation curvature ----------
 B = [1.0, 1.5, 2.03]

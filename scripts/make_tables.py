@@ -112,10 +112,17 @@ save("V", "Detection of unreliable decision forecasts", t5,
       "* Exploratory (not registered); H4 is assessed on the 2022 test only."])
 
 # ---------- Table VI: agents ----------
-names = {"baseline": "Baseline (no scaling)", "fri_3band": "FRI three-band", "vol_matched": "Volatility-matched",
+names = {"baseline": "Baseline (no scaling)", "fri_3band": "FRI three-band", "vol_matched": "Volatility-matched", "fdec_matched": "Forecast-level-matched*",
          "const_0.75": "Constant ×0.75", "const_0.25": "Constant ×0.25"}
 g22 = {r["agent"]: r for r in S["gateA"] if abs(r["beta"] - 2.03) < 1e-9}
 g25 = {r["agent"]: r for r in S["agents_2325"]}
+for r in S["fdec_ctrl"]:
+    if r["agent"] == "fdec_matched":
+        (g22 if r["period"] == "2022 test" else g25)["fdec_matched"] = r
+fb = h["fdec_ctrl_boot"]
+FDEC_NOTE = ("* Exploratory control (not registered): same band counts as FRI, assigned by highest f_decision. "
+             f"Forecast-level-matched − FRI exposure: 2022 {fb['2022 test|fdec_matched'][0]} MWh [{fb['2022 test|fdec_matched'][1]}, {fb['2022 test|fdec_matched'][2]}]; "
+             f"2023–25 {fb['2023-25|fdec_matched'][0]} MWh [{fb['2023-25|fdec_matched'][1]}, {fb['2023-25|fdec_matched'][2]}].")
 rows6 = []
 for per, g in [("2022 test", g22), ("2023–25", g25)]:
     for a, lbl in names.items():
@@ -134,7 +141,7 @@ save("VI", "Battery agents: exposure and revenue (β = 2.03)", t6,
       f"net FRI − baseline {aud(b22[0])} [{aud(b22[1])}, {aud(b22[2])}]; random band-matched net mean {aud(rm['mean'])} "
       f"[{aud(rm['p2_5'])}, {aud(rm['p97_5'])}], FRI above {rm['fri_beats_pct']}% of draws.",
       f"2023–25: exposure reduction {h['rep_exposure_reduction_pct']}%; {Hres['R3']['result'].split('; ', 1)[1]} (R3); net change {h['rep_net_change_pct']}%.",
-      "Over-forecast: f_decision − settled > AUD 300/MWh. The binary volatility control of c3_50 flagged no 2022 test intervals and is not shown."])
+      "Over-forecast: f_decision − settled > AUD 300/MWh. The binary volatility control of c3_50 flagged no 2022 test intervals and is not shown.", FDEC_NOTE])
 
 # ---------- Table VII: R6 degradation curvature ----------
 rows7 = []

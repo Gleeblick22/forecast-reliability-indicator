@@ -1,0 +1,7 @@
+period,comparison,diff,ci_lo,ci_hi
+2022 test,fdec_matched - fri_3band (MWh into over-forecast),-2.1,-6.2,0.0
+2022 test,vol_matched - fri_3band (MWh into over-forecast),24.7,0.0,62.0
+2022 test,baseline - fri_3band (MWh into over-forecast),44.5,0.0,99.8
+2023-25,fdec_matched - fri_3band (MWh into over-forecast),291.3,149.8,451.5
+2023-25,vol_matched - fri_3band (MWh into over-forecast),557.6,387.4,742.4
+2023-25,baseline - fri_3band (MWh into over-forecast),846.0,613.2,1091.3

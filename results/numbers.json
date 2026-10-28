@@ -333,6 +333,38 @@
     "top1pct_over": 0.8114,
     "all_over": 0.6437
    }
+  },
+  "fdec_ctrl_boot": {
+   "2022 test|fdec_matched": [
+    -2.1,
+    -6.2,
+    0.0
+   ],
+   "2022 test|vol_matched": [
+    24.7,
+    0.0,
+    62.0
+   ],
+   "2022 test|baseline": [
+    44.5,
+    0.0,
+    99.8
+   ],
+   "2023-25|fdec_matched": [
+    291.3,
+    149.8,
+    451.5
+   ],
+   "2023-25|vol_matched": [
+    557.6,
+    387.4,
+    742.4
+   ],
+   "2023-25|baseline": [
+    846.0,
+    613.2,
+    1091.3
+   ]
   }
  },
  "sources": {
@@ -4815,6 +4847,192 @@
     "top1pct_precision": 0.456,
     "top1pct_unreliable_overforecast_share": 0.8114,
     "all_unreliable_overforecast_share": 0.6437
+   }
+  ],
+  "fdec_ctrl": [
+   {
+    "period": "2022 test",
+    "agent": "baseline",
+    "dispatch_intervals": 581,
+    "mwh_discharged": 11675.0,
+    "gross_revenue": 1331723,
+    "degradation": 503886,
+    "charging_cost": 520608,
+    "net_revenue": 307230,
+    "unreplenished_mwh": 255.0,
+    "silent_failures": 0,
+    "dispatched_into_overforecast": 3,
+    "mwh_into_overforecast": 65.0
+   },
+   {
+    "period": "2022 test",
+    "agent": "fri_3band",
+    "dispatch_intervals": 587,
+    "mwh_discharged": 11662.5,
+    "gross_revenue": 1334008,
+    "degradation": 502282,
+    "charging_cost": 521439,
+    "net_revenue": 310287,
+    "unreplenished_mwh": 255.0,
+    "silent_failures": 0,
+    "dispatched_into_overforecast": 5,
+    "mwh_into_overforecast": 20.5
+   },
+   {
+    "period": "2022 test",
+    "agent": "vol_matched",
+    "dispatch_intervals": 585,
+    "mwh_discharged": 11671.2,
+    "gross_revenue": 1332114,
+    "degradation": 502847,
+    "charging_cost": 520509,
+    "net_revenue": 308758,
+    "unreplenished_mwh": 255.0,
+    "silent_failures": 0,
+    "dispatched_into_overforecast": 4,
+    "mwh_into_overforecast": 45.2
+   },
+   {
+    "period": "2022 test",
+    "agent": "const_0.25",
+    "dispatch_intervals": 3938,
+    "mwh_discharged": 10789.4,
+    "gross_revenue": 1272126,
+    "degradation": 98167,
+    "charging_cost": 507281,
+    "net_revenue": 666678,
+    "unreplenished_mwh": 258.0,
+    "silent_failures": 0,
+    "dispatched_into_overforecast": 31,
+    "mwh_into_overforecast": 64.7
+   },
+   {
+    "period": "2022 test",
+    "agent": "fdec_matched",
+    "dispatch_intervals": 592,
+    "mwh_discharged": 11662.5,
+    "gross_revenue": 1331757,
+    "degradation": 500895,
+    "charging_cost": 521439,
+    "net_revenue": 309424,
+    "unreplenished_mwh": 255.0,
+    "silent_failures": 0,
+    "dispatched_into_overforecast": 4,
+    "mwh_into_overforecast": 18.4
+   },
+   {
+    "period": "2023-25",
+    "agent": "baseline",
+    "dispatch_intervals": 9369,
+    "mwh_discharged": 188265.0,
+    "gross_revenue": 24098278,
+    "degradation": 8125324,
+    "charging_cost": 1945386,
+    "net_revenue": 14027569,
+    "unreplenished_mwh": 40.0,
+    "silent_failures": 8,
+    "dispatched_into_overforecast": 88,
+    "mwh_into_overforecast": 1800.0
+   },
+   {
+    "period": "2023-25",
+    "agent": "fri_3band",
+    "dispatch_intervals": 9539,
+    "mwh_discharged": 187891.8,
+    "gross_revenue": 23937879,
+    "degradation": 8075592,
+    "charging_cost": 1875481,
+    "net_revenue": 13986806,
+    "unreplenished_mwh": 40.0,
+    "silent_failures": 16,
+    "dispatched_into_overforecast": 138,
+    "mwh_into_overforecast": 954.0
+   },
+   {
+    "period": "2023-25",
+    "agent": "vol_matched",
+    "dispatch_intervals": 9489,
+    "mwh_discharged": 188157.3,
+    "gross_revenue": 24030475,
+    "degradation": 8095457,
+    "charging_cost": 1911167,
+    "net_revenue": 14023851,
+    "unreplenished_mwh": 40.0,
+    "silent_failures": 20,
+    "dispatched_into_overforecast": 117,
+    "mwh_into_overforecast": 1511.6
+   },
+   {
+    "period": "2023-25",
+    "agent": "const_0.25",
+    "dispatch_intervals": 56954,
+    "mwh_discharged": 166379.1,
+    "gross_revenue": 22317239,
+    "degradation": 1546061,
+    "charging_cost": 1829883,
+    "net_revenue": 18941294,
+    "unreplenished_mwh": 18.8,
+    "silent_failures": 201,
+    "dispatched_into_overforecast": 503,
+    "mwh_into_overforecast": 1368.8
+   },
+   {
+    "period": "2023-25",
+    "agent": "fdec_matched",
+    "dispatch_intervals": 9518,
+    "mwh_discharged": 188102.8,
+    "gross_revenue": 23905598,
+    "degradation": 8081393,
+    "charging_cost": 1881400,
+    "net_revenue": 13942805,
+    "unreplenished_mwh": 40.0,
+    "silent_failures": 14,
+    "dispatched_into_overforecast": 118,
+    "mwh_into_overforecast": 1245.2
+   }
+  ],
+  "fdec_ctrl_boot": [
+   {
+    "period": "2022 test",
+    "comparison": "fdec_matched - fri_3band (MWh into over-forecast)",
+    "diff": -2.1,
+    "ci_lo": -6.2,
+    "ci_hi": 0.0
+   },
+   {
+    "period": "2022 test",
+    "comparison": "vol_matched - fri_3band (MWh into over-forecast)",
+    "diff": 24.7,
+    "ci_lo": 0.0,
+    "ci_hi": 62.0
+   },
+   {
+    "period": "2022 test",
+    "comparison": "baseline - fri_3band (MWh into over-forecast)",
+    "diff": 44.5,
+    "ci_lo": 0.0,
+    "ci_hi": 99.8
+   },
+   {
+    "period": "2023-25",
+    "comparison": "fdec_matched - fri_3band (MWh into over-forecast)",
+    "diff": 291.3,
+    "ci_lo": 149.8,
+    "ci_hi": 451.5
+   },
+   {
+    "period": "2023-25",
+    "comparison": "vol_matched - fri_3band (MWh into over-forecast)",
+    "diff": 557.6,
+    "ci_lo": 387.4,
+    "ci_hi": 742.4
+   },
+   {
+    "period": "2023-25",
+    "comparison": "baseline - fri_3band (MWh into over-forecast)",
+    "diff": 846.0,
+    "ci_lo": 613.2,
+    "ci_hi": 1091.3
    }
   ]
  }

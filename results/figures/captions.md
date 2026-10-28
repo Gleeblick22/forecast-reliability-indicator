@@ -10,7 +10,7 @@ Fig. 5. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 20
 
 Fig. 6. Feature importance of the FRI model (17 features; mean |SHAP value| (TreeSHAP) on the 2022 test set, as % of the total). The decision forecast accounts for 44.2% and the revision-path group for 37.1%.
 
-Fig. 7. Energy discharged into over-forecast intervals (f(w_t) − p̄_t > AUD 300/MWh) by agent, β = 2.03. FRI reduces exposure against the baseline by 68.5% in 2022 (95% CI [0.0, 100.8] MWh) and by 47.0% in 2023–25 (vol - FRI 557.6 MWh [387.7, 744.6]; R3).
+Fig. 7. Energy discharged into over-forecast intervals (f(w_t) − p̄_t > AUD 300/MWh) by agent, β = 2.03. FRI reduces exposure against the baseline by 68.5% in 2022 (95% CI [0.0, 100.8] MWh) and by 47.0% in 2023–25 (vol - FRI 557.6 MWh [387.7, 744.6]; R3). * Exploratory control, not registered: same band counts as FRI, assigned by highest f(w_t).
 
 Fig. 8. Net-revenue advantage of constant ×0.25 dispatch over FRI as degradation becomes less convex (R6), as a percentage of FRI net revenue. α is rescaled at each β so that baseline degradation cost is unchanged. The advantage falls from +115% (2022) and +35% (2023–25) at β = 2.03 to -3% and -5% at β = 1.0. FRI and baseline net revenue differ by at most 1.0% at any β (Table VII).
 
