@@ -122,13 +122,13 @@ b.scatter(np.arange(1, 7) / 12, np.full(6, 1), marker="o", s=14, facecolor="whit
 a.annotate("Earliest run (median lead ≈ 27.5 h)", xy=(-27.5, 2.1), xytext=(-27.9, 2.75), ha="left", va="center", fontsize=7,
            arrowprops=dict(arrowstyle="-", lw=0.5, relpos=(0, 0.5)))
 a.text(-24, 2.38, "Revision path: all runs up to the decision run (features)", ha="left", fontsize=7)
-a.text(-14.5, 1.0, "No settled price for interval t exists before decision time", ha="center", va="center",
+a.text(-14.5, 1.0, "No settled price for interval $t$ exists before decision time", ha="center", va="center",
        fontsize=7, color="0.4", style="italic")
 b.text(-0.42, 2.62, "Decision run $f(w_t)$\nlead 30 min", ha="left", va="center", fontsize=7)
 b.text(0.25, 1.4, "Interval $t$", ha="center", fontsize=7)
 b.text(0.62, 1.0, "Six settled\n5-min prices\n" + r"$\rightarrow \bar{p}_t$ (label)", ha="left", va="center", fontsize=7)
 a.set_ylim(0.4, 3.0); a.set_yticks([1, 2]); a.set_yticklabels(["Settlement\n(label only)", "Pre-dispatch runs\n(features)"])
-fig.supxlabel("Hours relative to the start of trading interval t", fontsize=8)
+fig.supxlabel("Hours relative to the start of trading interval $t$", fontsize=8)
 save(fig, 3, "Fig. 3. Information timeline for one trading interval. Features use only pre-dispatch runs published up to the decision run "
      "(shaded). The label compares the decision forecast f(w_t) with the mean of the six settled 5-min DISPATCHPRICE values "
      "(INTERVENTION = 0): Y_t = 1[|f(w_t) − p̄_t| > δ_Y], δ_Y = AUD 300/MWh. Run spacing is schematic; the time axis is broken.")
