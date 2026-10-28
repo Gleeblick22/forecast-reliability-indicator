@@ -2730,9 +2730,9 @@
     "set": "original",
     "short": "Horizon",
     "registered_criterion": "p < 0.05 NEM-level t-test",
-    "result": "not significant",
+    "result": "Welch t = 0.106, p = 0.915 (c1_22)",
     "outcome": "not supported",
-    "note": null
+    "note": "Wilcoxon signed-rank (c1_06; not the registered test) gives p = 0.012; mean error 2,165 vs 2,159 AUD/MWh. CHECK OSF test wording"
    },
    {
     "id": "H4",

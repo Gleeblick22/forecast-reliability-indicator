@@ -84,7 +84,7 @@ ax.set_xlim(pd.Timestamp("2021-10-01"), pd.Timestamp("2026-01-01"))
 ax.set_ylim(0, g.rate.max() * 100 * 1.3)
 save(fig, 1, f"Fig. 1. Monthly share of unreliable decision forecasts (|f(w_t) − p̄_t| > AUD 300/MWh) across the five NEM regions. "
      f"Shading marks the fit ({h['n_fit']:,} intervals), validation ({h['n_val']:,}), test ({h['n_test']:,}) and 2023–25 "
-     f"replication ({h['rep_lead30']:,}) periods. October 2022 is not in the dataset.")
+     f"replication ({h['rep_lead30']:,}) periods. October 2022 is excluded because the AEMO archive holds only the latest pre-dispatch run for that month.")
 
 # ---------- Fig. 3: decision timeline ----------
 fig, (a, b) = plt.subplots(1, 2, figsize=(W2, 2.2), sharey=True, gridspec_kw={"width_ratios": [3, 2]})

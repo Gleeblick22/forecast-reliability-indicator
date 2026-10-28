@@ -58,7 +58,7 @@ t1 = pd.DataFrame([
     columns=["Dataset", "Period", "Intervals", "Unreliable (δ_Y = 300)", "Use", "Source"])
 save("I", "Datasets", t1, ["All NEM sets: five regions, 30-min trading intervals. Replication 60-min-lead set: "
                            f"{h['rep_lead60']:,} intervals. NZ/GB rows: fill from the v1.1 manuscript Table I. "
-                           "† Test partition = intervals ending on or after 1 Oct 2022. October 2022 pre-dispatch data are not in the dataset; the partition holds 10 intervals on 1 Oct (00:00–04:30, none unreliable) and 9 intervals early on 1 Nov have no decision run."])
+                           "† Test partition = intervals ending on or after 1 Oct 2022. The October 2022 AEMO archive holds only the latest pre-dispatch run per interval (PREDISPATCHPRICE_D), so no decision run can be built; the partition holds 10 intervals on 1 Oct (00:00–04:30, none unreliable) and 9 intervals early on 1 Nov have no decision run."])
 
 # ---------- Table III: hypotheses ----------
 t3 = pd.DataFrame([[r["id"], r["short"], r["registered_criterion"], r["result"], r["outcome"]] for r in S["hypotheses"]],
@@ -81,6 +81,7 @@ t4 = pd.DataFrame([
     ["Volatility control", "Binary volatility rule", "Volatility-matched control (same band counts as FRI)", "Binary rule flagged no intervals in the 2022 test"],
     ["Degradation α", "5.04 × 10⁻⁴", "5.04 × 10⁻⁴ kept; source value 5.24 × 10⁻⁴ as sensitivity", "Transcription error; rankings unchanged"],
     ["Settlement price", "P5MIN proxy", "DISPATCHPRICE throughout", "Data available"],
+    ["Test window", "1 Oct – 31 Dec 2022", "1 Nov – 31 Dec 2022", "October 2022 AEMO archive holds only the latest pre-dispatch run per interval (PREDISPATCHPRICE_D); decision run and revision path cannot be built"],
     ["H8", "Re-run under final method", "Reported under the original label", "ERCOT inaccessible; not re-run"]],
     columns=["Item", "Registered", "Reported", "Reason"])
 save("IV", "Deviations from registration", t4, ["CHECK (B5): 'Registered' column against OSF."])

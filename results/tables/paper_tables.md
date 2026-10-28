@@ -11,7 +11,7 @@
 | New Zealand | as in v1.1 | as in v1.1 | — | H8 only (original label) | Electricity Authority EMI |
 | Great Britain | as in v1.1 | as in v1.1 | — | H8 only (original label) | Elexon BMRS |
 
-All NEM sets: five regions, 30-min trading intervals. Replication 60-min-lead set: 261,445 intervals. NZ/GB rows: fill from the v1.1 manuscript Table I. † Test partition = intervals ending on or after 1 Oct 2022. October 2022 pre-dispatch data are not in the dataset; the partition holds 10 intervals on 1 Oct (00:00–04:30, none unreliable) and 9 intervals early on 1 Nov have no decision run.
+All NEM sets: five regions, 30-min trading intervals. Replication 60-min-lead set: 261,445 intervals. NZ/GB rows: fill from the v1.1 manuscript Table I. † Test partition = intervals ending on or after 1 Oct 2022. The October 2022 AEMO archive holds only the latest pre-dispatch run per interval (PREDISPATCHPRICE_D), so no decision run can be built; the partition holds 10 intervals on 1 Oct (00:00–04:30, none unreliable) and 9 intervals early on 1 Nov have no decision run.
 
 ## Table III. Registered hypotheses and outcomes
 
@@ -19,7 +19,7 @@ All NEM sets: five regions, 30-min trading intervals. Replication 60-min-lead se
 |---|---|---|---|---|
 | H1 | Error amplification | rho > 1.5, p < 0.05 in >= 4/5 regions | 5/5 regions (revision-based error, 2021-22) | supported |
 | H2 | Masking | m > 0.50 NEM-level | 77.28% (revision-based error) | supported |
-| H3 | Horizon | p < 0.05 NEM-level t-test | not significant | not supported |
+| H3 | Horizon | p < 0.05 NEM-level t-test | Welch t = 0.106, p = 0.915 (c1_22) | not supported |
 | H4 | Classifier | F1 >= 0.60 on held-out test | F1 0.476 (corrected label, 2022 test; AUC 0.900) | not supported |
 | H5 | Silent failures | >= 20% reduction vs baseline | 0 vs 0 (corrected agent) | not testable |
 | H6 | Dispatch vs confidence | r > 0, p < 0.05 | r = 0.318 [0.243, 0.389], p = 3.1e-15, n = 587 | supported |
@@ -49,6 +49,7 @@ H1–H8: original registration (OSF). R1–R6: amendment filed before 2023–25 
 | Volatility control | Binary volatility rule | Volatility-matched control (same band counts as FRI) | Binary rule flagged no intervals in the 2022 test |
 | Degradation α | 5.04 × 10⁻⁴ | 5.04 × 10⁻⁴ kept; source value 5.24 × 10⁻⁴ as sensitivity | Transcription error; rankings unchanged |
 | Settlement price | P5MIN proxy | DISPATCHPRICE throughout | Data available |
+| Test window | 1 Oct – 31 Dec 2022 | 1 Nov – 31 Dec 2022 | October 2022 AEMO archive holds only the latest pre-dispatch run per interval (PREDISPATCHPRICE_D); decision run and revision path cannot be built |
 | H8 | Re-run under final method | Reported under the original label | ERCOT inaccessible; not re-run |
 
 CHECK (B5): 'Registered' column against OSF.
