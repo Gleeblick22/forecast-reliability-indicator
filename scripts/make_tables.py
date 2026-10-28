@@ -155,5 +155,71 @@ t7 = pd.DataFrame(rows7, columns=["β", "k", "Period", "Net baseline", "Net FRI"
 save("VII", "Net revenue under degradation curvature (R6)", t7,
      ["k scales α so that baseline degradation cost is equal across β. AUD. R6 is descriptive (no pass/fail)."])
 
+
+# ================= Appendix A tables =================
+pfmt = lambda v: "< 0.001" if v < 0.001 else f"{v:.3f}"
+tA1 = pd.DataFrame([
+    ["Reliability label", "|earliest run − P5MIN proxy| above a threshold", "|f(w_t) − p̄_t| > AUD 300/MWh, settled DISPATCHPRICE"],
+    ["Forecast the label describes", "Earliest run", "Decision run (closest to 45 min lead, within 30–60 min)"],
+    ["Features", "10, incl. one revision (earliest → latest run)", "17: decision forecast (1), revision path to the decision run (7), earliest-run price and calendar (9)"],
+    ["Model selection", "200 trees, depth 9, rate 0.3; CV on training data", "300 trees, depth 2, rate 0.1; validation AP"],
+    ["Threshold θ", "Max-F1 on training data", f"Max-F1 on validation (θ = {h['det2022']['theta']})"],
+    ["Test set", "Oct–Dec 2022 (15,165 / 14,645 intervals)", f"Nov–Dec 2022 ({h['n_test']:,} intervals)"],
+    ["Test prevalence", "3.74%", f"{h['prev_test_pct']}%"],
+    ["Test AUC / AP", "0.9666 / 0.8931", f"{h['det2022']['auc']:.3f} / {h['det2022']['ap']:.3f}"],
+    ["Largest attribution", "Revision, 52.3%", f"Decision forecast {h['attr_f_decision']:.1f}%; revision path {h['attr_path_group']:.1f}%"],
+    ["Dispatch mapping", "High score → full dispatch (inverted)", "High score → ×0.25"],
+    ["Battery", "One battery for all regions; discharge only", "One battery per region"],
+    ["Charging", "Settled price, same-day discharge (look-ahead)", "Ex ante, decision forecast ≤ AUD 20/MWh"],
+    ["Replication", "None", f"2023–25, frozen model; R1–R5 supported"]],
+    columns=["Item", "v1.1 (desk-rejected)", "This version"])
+save("A.1", "Changes between the desk-rejected version and this version", tA1,
+     ["v1.1 values are taken from that manuscript and are not reproduced by the current pipeline."])
+H1t, H2t = pd.DataFrame(S["H1"]), pd.DataFrame(S["H2"])
+m = H1t.merge(H2t[["label", "aggregate_mae", "masking_pct"]].rename(columns={"label": "region"}), on="region")
+tA2 = pd.DataFrame({"Region": m.region, "n normal": m.normal_count.map("{:,}".format), "n extreme": m.extreme_count.map("{:,}".format),
+                    "MAE normal": m.mae_normal.map("{:,.2f}".format), "MAE aggregate": m.aggregate_mae.map("{:,.2f}".format),
+                    "MAE extreme": m.mae_extreme.map("{:,.2f}".format), "Ratio (H1)": m.ratio.map("{:.2f}".format),
+                    "t": m.t_statistic.map("{:.2f}".format), "p": m.p_value.map(pfmt), "Masking % (H2)": m.masking_pct.map("{:.2f}".format)})
+n_ = H2t[H2t.label == "OVERALL_NEM"].iloc[0]
+tA2.loc[len(tA2)] = ["NEM", f"{int(n_.normal_count):,}", f"{int(n_.extreme_count):,}", f"{n_.normal_mae:,.2f}", f"{n_.aggregate_mae:,.2f}",
+                     f"{n_.extreme_mae:,.2f}", "", "", "", f"{n_.masking_pct:.2f}"]
+save("A.2", "Registered H1 and H2 by region (error = |earliest − latest run|; extreme if latest run ≥ AUD 300/MWh)", tA2,
+     ["MAE in AUD/MWh. Registered analyses on 2021–22 data; see Section IV.A for the interpretation of this error definition."])
+
+G = pd.DataFrame(S["H1H2_genuine"]).sort_values("region")
+tA3 = pd.DataFrame({"Region": G.region, "n normal": G.normal_n.map("{:,}".format), "n extreme": G.extreme_n.map("{:,}".format),
+                    "Ratio": G.ratio.map("{:.2f}".format), "p": G.p_value.map("{:.1e}".format)})
+save("A.3", "Post-hoc check of H1 against the realised price (not registered)", tA3,
+     ["Error = |earliest run − realised price|; extreme if realised price ≥ AUD 300/MWh. Realised price = P5MIN-based proxy (c1_14); R1 uses settled DISPATCHPRICE."])
+
+H3t = pd.DataFrame(S["H3_wilcoxon"])
+tA4 = pd.DataFrame({"Region": H3t.label.replace({"OVERALL_NEM": "NEM"}), "n extreme": H3t.extreme_count.map("{:,}".format),
+                    "Mean error, final run": H3t.p5_mean.map("{:,.2f}".format), "Mean error, 30-min run": H3t.p30_mean.map("{:,.2f}".format),
+                    "Wilcoxon W": H3t.w_statistic.map("{:,.1f}".format), "p (Wilcoxon)": H3t.p_value.map(pfmt)})
+save("A.4", "H3 by region: Wilcoxon signed-rank test (not registered)", tA4,
+     [f"Registered test (Welch t-test, NEM level): {Hres['H3']['result']} → {Hres['H3']['outcome']}. "
+      "Wilcoxon results rest on few non-tied pairs (3 of 3,012 in NSW1; 3 of 2,399 in VIC1)."])
+
+AL = pd.DataFrame(S["alpha"])
+base_ = AL[AL.alpha < 5.1e-4].set_index(["period", "agent"]).net_revenue
+AL["Net change vs 5.04e-4 (%)"] = [round((r.net_revenue / base_[(r.period, r.agent)] - 1) * 100, 2) for r in AL.itertuples()]
+chg_ = AL.loc[AL.alpha > 5.1e-4, "Net change vs 5.04e-4 (%)"].abs()
+tA6 = pd.DataFrame({"Period": AL.period, "α": AL.alpha.map("{:.2e}".format), "Agent": AL.agent.map(lambda a: names.get(a, a)),
+                    "Degradation": AL.degradation.map(aud), "Net revenue": AL.net_revenue.map(aud),
+                    "Net change vs 5.04e-4 (%)": AL["Net change vs 5.04e-4 (%)"]})
+save("A.6", "Degradation α: simulation value (5.04 × 10⁻⁴) against the source value of [57] (5.24 × 10⁻⁴)", tA6,
+     [f"c3_53. With the source value, net revenue changes by {chg_.min():.1f}–{chg_.max():.1f}%; rankings of agents are unchanged. AUD."])
+
+DC = pd.DataFrame(S["daily_cycle"])
+tA7 = pd.DataFrame({"Period": DC.period, "Agent": DC.agent.map(lambda a: names.get(a, a)), "Gross": DC.gross.map(aud), "Charging": DC.charging.map(aud),
+                    "Degradation per interval": DC.deg_per_interval.map(aud), "Degradation per daily cycle": DC.deg_daily_cycle.map(aud),
+                    "Net (per interval)": DC.net_per_interval.map(aud), "Net (per daily cycle)": DC.net_daily_cycle.map(aud)})
+dcd = h["daily_cycle"]
+save("A.7", "Degradation charged per daily cycle instead of per discharge interval (exploratory; β = 2.03)", tA7,
+     [f"Constant ×0.25 − FRI net: 2022 {aud(dcd['2022 test']['c25_minus_fri_interval'])} → {aud(dcd['2022 test']['c25_minus_fri_daily'])}; "
+      f"2023–25 {aud(dcd['2023-25']['c25_minus_fri_interval'])} → {aud(dcd['2023-25']['c25_minus_fri_daily'])}. AUD. "
+      "Absolute revenues depend on the illustrative replacement cost; only comparisons between agents are findings."])
+
 (TABLES_DIR / "paper_tables.md").write_text("# Paper tables (generated by make_tables.py — do not edit by hand)\n\n" + "\n".join(md))
 print(f"Saved {TABLES_DIR / 'paper_tables.md'}")

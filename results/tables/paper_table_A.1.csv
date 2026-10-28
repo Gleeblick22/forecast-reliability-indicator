@@ -1,0 +1,14 @@
+Item,v1.1 (desk-rejected),This version
+Reliability label,|earliest run − P5MIN proxy| above a threshold,"|f(w_t) − p̄_t| > AUD 300/MWh, settled DISPATCHPRICE"
+Forecast the label describes,Earliest run,"Decision run (closest to 45 min lead, within 30–60 min)"
+Features,"10, incl. one revision (earliest → latest run)","17: decision forecast (1), revision path to the decision run (7), earliest-run price and calendar (9)"
+Model selection,"200 trees, depth 9, rate 0.3; CV on training data","300 trees, depth 2, rate 0.1; validation AP"
+Threshold θ,Max-F1 on training data,Max-F1 on validation (θ = 0.849089)
+Test set,"Oct–Dec 2022 (15,165 / 14,645 intervals)","Nov–Dec 2022 (14,650 intervals)"
+Test prevalence,3.74%,0.64%
+Test AUC / AP,0.9666 / 0.8931,0.900 / 0.355
+Largest attribution,"Revision, 52.3%",Decision forecast 44.2%; revision path 37.1%
+Dispatch mapping,High score → full dispatch (inverted),High score → ×0.25
+Battery,One battery for all regions; discharge only,One battery per region
+Charging,"Settled price, same-day discharge (look-ahead)","Ex ante, decision forecast ≤ AUD 20/MWh"
+Replication,None,"2023–25, frozen model; R1–R5 supported"

@@ -112,3 +112,99 @@ Over-forecast: f_decision − settled > AUD 300/MWh. The binary volatility contr
 | 1.0 | 0.2039 | 2023–25 | 14,027,569 | 13,953,183 | 13,306,604 | -646,578 |
 
 k scales α so that baseline degradation cost is equal across β. AUD. R6 is descriptive (no pass/fail).
+
+## Table A.1. Changes between the desk-rejected version and this version
+
+| Item | v1.1 (desk-rejected) | This version |
+|---|---|---|
+| Reliability label | \|earliest run − P5MIN proxy\| above a threshold | \|f(w_t) − p̄_t\| > AUD 300/MWh, settled DISPATCHPRICE |
+| Forecast the label describes | Earliest run | Decision run (closest to 45 min lead, within 30–60 min) |
+| Features | 10, incl. one revision (earliest → latest run) | 17: decision forecast (1), revision path to the decision run (7), earliest-run price and calendar (9) |
+| Model selection | 200 trees, depth 9, rate 0.3; CV on training data | 300 trees, depth 2, rate 0.1; validation AP |
+| Threshold θ | Max-F1 on training data | Max-F1 on validation (θ = 0.849089) |
+| Test set | Oct–Dec 2022 (15,165 / 14,645 intervals) | Nov–Dec 2022 (14,650 intervals) |
+| Test prevalence | 3.74% | 0.64% |
+| Test AUC / AP | 0.9666 / 0.8931 | 0.900 / 0.355 |
+| Largest attribution | Revision, 52.3% | Decision forecast 44.2%; revision path 37.1% |
+| Dispatch mapping | High score → full dispatch (inverted) | High score → ×0.25 |
+| Battery | One battery for all regions; discharge only | One battery per region |
+| Charging | Settled price, same-day discharge (look-ahead) | Ex ante, decision forecast ≤ AUD 20/MWh |
+| Replication | None | 2023–25, frozen model; R1–R5 supported |
+
+v1.1 values are taken from that manuscript and are not reproduced by the current pipeline.
+
+## Table A.2. Registered H1 and H2 by region (error = |earliest − latest run|; extreme if latest run ≥ AUD 300/MWh)
+
+| Region | n normal | n extreme | MAE normal | MAE aggregate | MAE extreme | Ratio (H1) | t | p | Masking % (H2) |
+|---|---|---|---|---|---|---|---|---|---|
+| NSW1 | 17,523 | 3,012 | 80.07 | 300.65 | 1,583.96 | 19.78 | 19.63 | < 0.001 | 81.02 |
+| VIC1 | 18,132 | 2,403 | 105.54 | 383.38 | 2,479.90 | 23.50 | 22.94 | < 0.001 | 84.54 |
+| QLD1 | 17,289 | 3,246 | 139.51 | 404.02 | 1,812.89 | 12.99 | 22.27 | < 0.001 | 77.71 |
+| SA1 | 17,756 | 2,779 | 744.26 | 1,085.51 | 3,265.88 | 4.39 | 23.22 | < 0.001 | 66.76 |
+| TAS1 | 19,078 | 1,457 | 190.42 | 284.57 | 1,517.42 | 7.97 | 12.93 | < 0.001 | 81.25 |
+| NEM | 89,778 | 12,897 | 251.47 | 491.63 | 2,163.41 |  |  |  | 77.28 |
+
+MAE in AUD/MWh. Registered analyses on 2021–22 data; see Section IV.A for the interpretation of this error definition.
+
+## Table A.3. Post-hoc check of H1 against the realised price (not registered)
+
+| Region | n normal | n extreme | Ratio | p |
+|---|---|---|---|---|
+| NSW1 | 17,477 | 3,001 | 16.89 | 9.9e-79 |
+| QLD1 | 17,316 | 3,162 | 12.05 | 1.8e-105 |
+| SA1 | 17,678 | 2,800 | 4.41 | 2.7e-113 |
+| TAS1 | 19,049 | 1,429 | 9.44 | 5.8e-42 |
+| VIC1 | 18,168 | 2,310 | 19.71 | 2.9e-100 |
+
+Error = |earliest run − realised price|; extreme if realised price ≥ AUD 300/MWh. Realised price = P5MIN-based proxy (c1_14); R1 uses settled DISPATCHPRICE.
+
+## Table A.4. H3 by region: Wilcoxon signed-rank test (not registered)
+
+| Region | n extreme | Mean error, final run | Mean error, 30-min run | Wilcoxon W | p (Wilcoxon) |
+|---|---|---|---|---|---|
+| NEM | 12,897 | 2,165.03 | 2,158.78 | 2,972.5 | 0.012 |
+| NSW1 | 3,012 | 1,583.96 | 1,589.24 | 1.0 | 0.285 |
+| VIC1 | 2,403 | 2,483.94 | 2,477.80 | 3.0 | 1.000 |
+| QLD1 | 3,246 | 1,812.89 | 1,779.98 | 1,044.5 | 0.002 |
+| SA1 | 2,779 | 3,272.77 | 3,282.73 | 76.0 | 0.279 |
+| TAS1 | 1,457 | 1,517.42 | 1,515.63 | 45.5 | 0.081 |
+
+Registered test (Welch t-test, NEM level): Welch t = 0.106, p = 0.915 (c1_22) → not supported. Wilcoxon results rest on few non-tied pairs (3 of 3,012 in NSW1; 3 of 2,399 in VIC1).
+
+## Table A.6. Degradation α: simulation value (5.04 × 10⁻⁴) against the source value of [57] (5.24 × 10⁻⁴)
+
+| Period | α | Agent | Degradation | Net revenue | Net change vs 5.04e-4 (%) |
+|---|---|---|---|---|---|
+| 2022 test | 5.04e-04 | Baseline (no scaling) | 503,886 | 307,230 | 0.0 |
+| 2022 test | 5.04e-04 | FRI three-band | 502,282 | 310,287 | 0.0 |
+| 2022 test | 5.04e-04 | Constant ×0.25 | 98,167 | 666,678 | 0.0 |
+| 2022 test | 5.24e-04 | Baseline (no scaling) | 523,881 | 287,234 | -6.51 |
+| 2022 test | 5.24e-04 | FRI three-band | 522,214 | 290,355 | -6.42 |
+| 2022 test | 5.24e-04 | Constant ×0.25 | 102,063 | 662,782 | -0.58 |
+| 2023-25 | 5.04e-04 | Baseline (no scaling) | 8,125,324 | 14,027,569 | 0.0 |
+| 2023-25 | 5.04e-04 | FRI three-band | 8,075,592 | 13,986,806 | 0.0 |
+| 2023-25 | 5.04e-04 | Constant ×0.25 | 1,546,061 | 18,941,294 | 0.0 |
+| 2023-25 | 5.24e-04 | Baseline (no scaling) | 8,447,757 | 13,705,135 | -2.3 |
+| 2023-25 | 5.24e-04 | FRI three-band | 8,396,052 | 13,666,346 | -2.29 |
+| 2023-25 | 5.24e-04 | Constant ×0.25 | 1,607,413 | 18,879,942 | -0.32 |
+
+c3_53. With the source value, net revenue changes by 0.3–6.5%; rankings of agents are unchanged. AUD.
+
+## Table A.7. Degradation charged per daily cycle instead of per discharge interval (exploratory; β = 2.03)
+
+| Period | Agent | Gross | Charging | Degradation per interval | Degradation per daily cycle | Net (per interval) | Net (per daily cycle) |
+|---|---|---|---|---|---|---|---|
+| 2022 test | Baseline (no scaling) | 1,331,723 | 520,608 | 503,886 | 953,049 | 307,230 | -141,933 |
+| 2022 test | FRI three-band | 1,334,008 | 521,439 | 502,282 | 951,153 | 310,287 | -138,583 |
+| 2022 test | Volatility-matched | 1,332,114 | 520,509 | 502,847 | 952,452 | 308,758 | -140,846 |
+| 2022 test | Constant ×0.25 | 1,272,126 | 507,281 | 98,167 | 851,257 | 666,678 | -86,412 |
+| 2022 test | Forecast-level-matched* | 1,331,757 | 521,439 | 500,895 | 951,153 | 309,424 | -140,834 |
+| 2022 test | Constant ×0.75 | 1,324,513 | 524,265 | 363,542 | 939,165 | 436,705 | -138,917 |
+| 2023-25 | Baseline (no scaling) | 24,098,278 | 1,945,386 | 8,125,324 | 15,368,668 | 14,027,569 | 6,784,225 |
+| 2023-25 | FRI three-band | 23,937,879 | 1,875,481 | 8,075,592 | 15,328,286 | 13,986,806 | 6,734,113 |
+| 2023-25 | Volatility-matched | 24,030,475 | 1,911,167 | 8,095,457 | 15,356,017 | 14,023,851 | 6,763,291 |
+| 2023-25 | Constant ×0.25 | 22,317,239 | 1,829,883 | 1,546,061 | 12,746,011 | 18,941,294 | 7,741,344 |
+| 2023-25 | Forecast-level-matched* | 23,905,598 | 1,881,400 | 8,081,393 | 15,349,677 | 13,942,805 | 6,674,522 |
+| 2023-25 | Constant ×0.75 | 23,981,793 | 1,927,095 | 5,859,356 | 15,054,330 | 16,195,343 | 7,000,369 |
+
+Constant ×0.25 − FRI net: 2022 356,391 → 52,171; 2023–25 4,954,488 → 1,007,231. AUD. Absolute revenues depend on the illustrative replacement cost; only comparisons between agents are findings.
