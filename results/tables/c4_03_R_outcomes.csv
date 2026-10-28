@@ -1,0 +1,7 @@
+R,result,criterion,passed
+R1,5/5 regions ratio>1.5 & p<0.05,>= 4/5,True
+R2,"AUC 0.9545 [0.9480, 0.9608]",AUC>=0.80 & lo>0.70,True
+R3,"MWh over-forecast: base 1800.0, vol 1511.6, FRI 954.0; reduction 47.0%; vol-FRI 557.6 [387.7, 744.6]",reduction>=30% & (vol-FRI) CI lo>0,True
+R4,"dAP 0.3634 [0.3437, 0.3820]",dAP>0 & lo>0,True
+R5,"AUC (60-min lead) 0.9591 [0.9539, 0.9646]",AUC>=0.75,True
+R6,"beta 2.03: 4,954,487; beta 1.5: 3,187,168; beta 1.0: -646,578",descriptive (no pass/fail),

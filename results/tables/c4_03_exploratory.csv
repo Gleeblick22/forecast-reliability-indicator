@@ -1,0 +1,10 @@
+item,value
+F1/precision/recall at frozen theta (d300),0.6296 / 0.7577 / 0.5386
+AP (d300),0.6426
+AUC y_v2_d150,0.8964
+AUC y_v2_d500,0.9575
+AUC d300 NSW1 (positives 404),0.9577
+AUC d300 QLD1 (positives 318),0.9727
+AUC d300 SA1 (positives 469),0.9211
+AUC d300 TAS1 (positives 337),0.9647
+AUC d300 VIC1 (positives 156),0.9718
