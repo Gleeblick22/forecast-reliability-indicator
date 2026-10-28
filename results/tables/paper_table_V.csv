@@ -1,0 +1,15 @@
+Model / check,Period,AUC [95% CI],AP,F1,Precision,Recall
+"FRI (XGBoost, 17 features)",2022 test,"0.900 [0.860, 0.938]",0.355,0.476,0.540,0.425
+  without revision path,2022 test,0.881,0.231,0.413,,
+  revision path only,2022 test,0.902,0.345,0.480,,
+  without recent_std_3h,2022 test,0.898,0.314,0.424,,
+Raw recent_std_3h,2022 test,0.877,0.143,0.052,,
+Raw |revision|,2022 test,0.796,0.051,0.013,,
+Raw |f_decision|,2022 test,0.744,0.427,0.082,,
+Logistic regression (17 features),2022 test,0.832,0.123,0.092,,
+Permuted labels (leakage test),2022 test,0.39–0.51,,,,
+"FRI, δ_Y = 150 / 500",2022 test,0.905 / 0.882,,,,
+FRI frozen (R2),2023–25,"0.955 [0.948, 0.961]",0.643,0.630*,0.758*,0.539*
+"FRI frozen, 60-min lead (R5)",2023–25,"0.959 [0.954, 0.965]",,,,
+"FRI frozen, δ_Y = 150 / 500",2023–25,0.896 / 0.958,,,,
+"ΔAP, FRI − raw recent_std_3h (R4)",2023–25,,"0.363 [0.344, 0.382]",,,

@@ -1,0 +1,13 @@
+Item,Registered,Reported,Reason
+Reliability label,Earliest forecast vs P5MIN proxy,"Decision forecast vs settled 30-min price, δ_Y = AUD 300/MWh",Old label described a forecast the agent did not act on; near-circular with the revision feature
+Revision feature,Single first-to-last revision,Seven revision-path features up to the decision run,Information available at decision time
+Price-dynamics features,Built from the earliest run,Rebuilt from the earliest run (code had used runs with lead < 30 min in 21.5% of intervals),Coding error corrected; negligible effect
+Hyperparameters,200 / 9 / 0.3,"300 / 2 / 0.1, chosen on validation AP",Validation AP 0.291 vs 0.352
+Threshold θ,Max-F1 on training data,Max-F1 on validation (θ = 0.849089),Avoids in-sample threshold
+Dispatch mapping,High score → full dispatch,High score → scale down,Original mapping inverted (coding error)
+Battery,One battery for all regions,One battery per region,Modelling error
+Charging,Used settled price and same-day discharge,Ex-ante rule: charge when f ≤ AUD 20/MWh in later intervals,Look-ahead removed
+Volatility control,Binary volatility rule,Volatility-matched control (same band counts as FRI),Binary rule flagged no intervals in the 2022 test
+Degradation α,5.04 × 10⁻⁴,5.04 × 10⁻⁴ kept; source value 5.24 × 10⁻⁴ as sensitivity,Transcription error; rankings unchanged
+Settlement price,P5MIN proxy,DISPATCHPRICE throughout,Data available
+H8,Re-run under final method,Reported under the original label,ERCOT inaccessible; not re-run

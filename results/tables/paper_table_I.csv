@@ -1,0 +1,7 @@
+Dataset,Period,Intervals,Unreliable (δ_Y = 300),Use,Source
+NEM fit,01 Oct 2021 – 31 Jul 2022,"72,865",3.25%,Model fitting,AEMO pre-dispatch (PREDISPATCHPRICE); settled DISPATCHPRICE (MMSDM)
+NEM validation,01 Aug 2022 – 30 Sep 2022,"14,640",0.41%,Hyperparameters and θ,AEMO pre-dispatch (PREDISPATCHPRICE); settled DISPATCHPRICE (MMSDM)
+NEM test,01 Nov – 31 Dec 2022†,"14,650",0.64%,H1–H7 (held-out),AEMO pre-dispatch (PREDISPATCHPRICE); settled DISPATCHPRICE (MMSDM)
+NEM replication,01 Jan 2023 – 31 Dec 2025,"261,635",0.64%,R1–R6 (frozen model),AEMO pre-dispatch (PREDISPATCHPRICE); settled DISPATCHPRICE (MMSDM); coverage 99.47%
+New Zealand,as in v1.1,as in v1.1,—,H8 only (original label),Electricity Authority EMI
+Great Britain,as in v1.1,as in v1.1,—,H8 only (original label),Elexon BMRS
