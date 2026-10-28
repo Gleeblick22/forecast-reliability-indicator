@@ -1,0 +1,7 @@
+comparison,net_diff,ci_lo,ci_hi,ci_excludes_0
+fri_3band - baseline,2180,172,5128,True
+fri_3band - const_0.25,-358686,-435248,-295101,True
+fri_3band - const_0.75,-127441,-138432,-116219,True
+fri_3band - vol_binary,2180,172,5013,True
+fri_3band - fri_inverted_old,-384677,-530051,-286631,True
+fri_binary - vol_binary,1633,-65,4381,False
