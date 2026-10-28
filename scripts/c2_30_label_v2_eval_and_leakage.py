@@ -32,7 +32,7 @@ from config.logging_config import get_logger
 logger = get_logger("c2_30_label_v2_eval_and_leakage")
 
 LABEL_FILE = PROCESSED_DIR / "aemo_nem_label_v2.csv"
-FEAT_FILE = PROCESSED_DIR / "final_leakage_controlled_dataset.csv"
+FEAT_FILE = PROCESSED_DIR / "price_features_earliest.csv"
 OUT_FILE = TABLES_DIR / "c2_30_label_v2_eval.csv"
 
 KEYS = ["REGIONID", "DATETIME"]

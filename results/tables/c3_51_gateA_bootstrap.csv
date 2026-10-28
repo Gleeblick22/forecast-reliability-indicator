@@ -1,13 +1,13 @@
 beta,comparison,net_diff,ci_lo,ci_hi,ci_excludes_0
-2.03,fri_3band - baseline,2180,140,5039,True
-2.03,fri_3band - vol_matched,651,0,1691,False
-2.03,fri_3band - const_0.25,-358686,-431875,-296840,True
-2.03,fri_3band - const_0.75,-127441,-137742,-116108,True
-1.0,fri_3band - baseline,1560,-37,3889,False
-1.0,fri_3band - vol_matched,909,0,2309,False
-1.0,fri_3band - const_0.25,7450,-62960,69124,False
-1.0,fri_3band - const_0.75,6629,-2344,15792,False
-1.5,fri_3band - baseline,2024,116,4820,True
-1.5,fri_3band - vol_matched,870,0,2216,False
-1.5,fri_3band - const_0.25,-244462,-320347,-185862,True
-1.5,fri_3band - const_0.75,-70886,-80324,-61386,True
+2.03,fri_3band - baseline,3058,172,7633,True
+2.03,fri_3band - vol_matched,1529,0,4198,False
+2.03,fri_3band - const_0.25,-356391,-431291,-292905,True
+2.03,fri_3band - const_0.75,-126418,-138792,-114171,True
+1.0,fri_3band - baseline,1994,-37,5119,False
+1.0,fri_3band - vol_matched,1342,0,3405,False
+1.0,fri_3band - const_0.25,10041,-60104,70097,False
+1.0,fri_3band - const_0.75,7788,-1593,17106,False
+1.5,fri_3band - baseline,2686,20,7037,True
+1.5,fri_3band - vol_matched,1532,0,4228,False
+1.5,fri_3band - const_0.25,-242162,-318599,-181801,True
+1.5,fri_3band - const_0.75,-69811,-80162,-58916,True
