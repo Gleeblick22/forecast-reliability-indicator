@@ -47,7 +47,7 @@ def run(name, fit, val, test, params):
 def main():
     params = json.load(open(TABLES_DIR / "c2_31_best_params.json"))["params"]
     lab = pd.read_csv(PROCESSED_DIR / "aemo_nem_label_v2.csv", parse_dates=["DATETIME"])
-    old = pd.read_csv(PROCESSED_DIR / "final_leakage_controlled_dataset.csv", parse_dates=["DATETIME"])[KEYS + OLD].drop_duplicates(KEYS)
+    old = pd.read_csv(PROCESSED_DIR / "price_features_earliest.csv", parse_dates=["DATETIME"])[KEYS + OLD].drop_duplicates(KEYS)
     df = lab.merge(old, on=KEYS); tr = df[df.partition == "train"]
     fit, val, test = tr[tr.DATETIME < "2022-08-01"], tr[tr.DATETIME >= "2022-08-01"], df[df.partition == "test"]
     inwin = (fit.DATETIME >= WINDOW[0]) & (fit.DATETIME < WINDOW[1])

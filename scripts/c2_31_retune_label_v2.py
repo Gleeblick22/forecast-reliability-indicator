@@ -26,7 +26,7 @@ from config.logging_config import get_logger
 logger = get_logger("c2_31_retune_label_v2")
 
 LABEL_FILE = PROCESSED_DIR / "aemo_nem_label_v2.csv"
-FEAT_FILE = PROCESSED_DIR / "final_leakage_controlled_dataset.csv"
+FEAT_FILE = PROCESSED_DIR / "price_features_earliest.csv"
 KEYS = ["REGIONID", "DATETIME"]
 OLD_KEEP = ["f_current_rrp", "f_rolling_mean_30min", "f_rolling_max_30min",
             "f_consecutive_high", "f_price_change_30min", "f_price_change_60min",
