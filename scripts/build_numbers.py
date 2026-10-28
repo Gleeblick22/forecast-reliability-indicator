@@ -18,7 +18,8 @@ F = {"eval_c2_30": T / "c2_30_label_v2_eval.csv", "eval_c2_31": T / "c2_31_final
      "R_exploratory": T / "c4_03_exploratory.csv", "agents_2325": T / "c4_04_agents_summary_2023_2025.csv",
      "hypotheses": R / "hypothesis_outcomes.csv", "coverage": PROCESSED_DIR / "coverage_2023_2025.csv",
      "H1": T / "c1_04_h1_amplification_results.csv", "H2": T / "c1_05_h2_masking_results.csv",
-     "H1H2_genuine": T / "h1_h2_genuine_error_results.csv", "H3_wilcoxon": T / "c1_06_h3_horizon_results.csv"}
+     "H1H2_genuine": T / "h1_h2_genuine_error_results.csv", "H3_wilcoxon": T / "c1_06_h3_horizon_results.csv",
+     "fdec_baseline": T / "c4_05_fdecision_baseline.csv"}
 missing = [k for k, p in F.items() if not p.exists()]
 if missing:
     print("MISSING:", missing); sys.exit(1)
@@ -104,6 +105,8 @@ r2 = h2[h2.label != "OVERALL_NEM"]
 h["H2_masking_min"], h["H2_masking_max"] = float(r2.masking_pct.min()), float(r2.masking_pct.max())
 h["H1_genuine_ratio_min"], h["H1_genuine_ratio_max"] = round(hg.ratio.min(), 2), round(hg.ratio.max(), 2)
 h["H1_genuine_p_max"] = float(hg.p_value.max())
+h["fdec"] = {r_["period"]: {"auc": r_["auc_abs_f"], "ap": r_["ap_abs_f"], "top1pct_over": r_["top1pct_unreliable_overforecast_share"],
+              "all_over": r_["all_unreliable_overforecast_share"]} for r_ in src["fdec_baseline"]}
 json.dump({"headline": h, "sources": src}, open(R / "numbers.json", "w"), indent=1, default=str)
 print(json.dumps(h, indent=1, default=str)[:4000])
 print(f"\nSaved {R / 'numbers.json'}")

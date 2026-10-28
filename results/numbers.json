@@ -319,7 +319,21 @@
   "H2_masking_max": 84.54,
   "H1_genuine_ratio_min": 4.41,
   "H1_genuine_ratio_max": 19.71,
-  "H1_genuine_p_max": 5.838379689972707e-42
+  "H1_genuine_p_max": 5.838379689972707e-42,
+  "fdec": {
+   "2022 test": {
+    "auc": 0.7435,
+    "ap": 0.4269,
+    "top1pct_over": 0.8085,
+    "all_over": 0.5532
+   },
+   "2023-25": {
+    "auc": 0.9059,
+    "ap": 0.6452,
+    "top1pct_over": 0.8114,
+    "all_over": 0.6437
+   }
+  }
  },
  "sources": {
   "eval_c2_30": [
@@ -4777,6 +4791,30 @@
     "passes_h3": false,
     "note": null,
     "h3_overall_passed": true
+   }
+  ],
+  "fdec_baseline": [
+   {
+    "period": "2022 test",
+    "n": 14650,
+    "positives": 94,
+    "auc_abs_f": 0.7435,
+    "ap_abs_f": 0.4269,
+    "top1pct_n": 146,
+    "top1pct_precision": 0.3219,
+    "top1pct_unreliable_overforecast_share": 0.8085,
+    "all_unreliable_overforecast_share": 0.5532
+   },
+   {
+    "period": "2023-25",
+    "n": 261635,
+    "positives": 1684,
+    "auc_abs_f": 0.9059,
+    "ap_abs_f": 0.6452,
+    "top1pct_n": 2616,
+    "top1pct_precision": 0.456,
+    "top1pct_unreliable_overforecast_share": 0.8114,
+    "all_unreliable_overforecast_share": 0.6437
    }
   ]
  }

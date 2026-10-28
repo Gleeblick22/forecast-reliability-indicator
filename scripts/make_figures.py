@@ -162,7 +162,15 @@ if "recent_std_3h" in rep.columns:
     pr, rc, _ = precision_recall_curve(y25, v)
     b.step(rc, pr, where="post", color="0.5", ls="-.", label=f"recent_std_3h, 2023–25 (AP {ap_v:.3f})")
     vol_note = " The dash-dot curve is raw recent_std_3h on 2023–25 (R4 comparison)."
-a.plot([0, 1], [0, 1], color="0.6", ls=":", lw=0.8)
+if "f_decision" in rep.columns:
+    fa = np.abs(rep.f_decision.values)
+    ap_f, auc_f = average_precision_score(y25, fa), roc_auc_score(y25, fa)
+    check("AP |f| 2023-25 (c4_05)", ap_f, h["fdec"]["2023-25"]["ap"])
+    f_, t_, _ = roc_curve(y25, fa); a.plot(f_, t_, color="0.3", ls=":", lw=1.4, label=f"$|f(w_t)|$, 2023–25 (AUC {auc_f:.3f})")
+    pr, rc, _ = precision_recall_curve(y25, fa)
+    b.step(rc, pr, where="post", color="0.3", ls=":", lw=1.4, label=f"$|f(w_t)|$, 2023–25 (AP {ap_f:.3f})")
+    vol_note += " Dotted curves rank intervals by the decision forecast alone, |f(w_t)| (exploratory, not registered)."
+a.plot([0, 1], [0, 1], color="0.8", ls="-", lw=0.6)
 for ax_, t_, xl, yl, loc in [(a, "(a) ROC", "False positive rate", "True positive rate", "lower right"),
                              (b, "(b) Precision–recall", "Recall", "Precision", "upper right")]:
     ax_.set_title(t_, loc="left"); ax_.set_xlabel(xl); ax_.set_ylabel(yl)

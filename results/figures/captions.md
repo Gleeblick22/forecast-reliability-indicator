@@ -6,7 +6,7 @@ Fig. 3. Information timeline for one trading interval. Features use only pre-dis
 
 Fig. 4. Mean absolute error of the decision forecast against the settled price in extreme and normal intervals, 2023–25 (R1; log scale). Labels give the ratio of means (28–56); Welch p < 0.001 in every region.
 
-Fig. 5. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and frozen, on the 2022 test set (14,650 intervals, 94 unreliable) and the 2023–25 replication (261,635 intervals). The dash-dot curve is raw recent_std_3h on 2023–25 (R4 comparison).
+Fig. 5. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and frozen, on the 2022 test set (14,650 intervals, 94 unreliable) and the 2023–25 replication (261,635 intervals). The dash-dot curve is raw recent_std_3h on 2023–25 (R4 comparison). Dotted curves rank intervals by the decision forecast alone, |f(w_t)| (exploratory, not registered).
 
 Fig. 6. Feature importance of the FRI model (17 features; mean |SHAP value| (TreeSHAP) on the 2022 test set, as % of the total). The decision forecast accounts for 44.2% and the revision-path group for 37.1%.
 
