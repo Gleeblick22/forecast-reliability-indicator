@@ -365,6 +365,16 @@
     613.2,
     1091.3
    ]
+  },
+  "daily_cycle": {
+   "2022 test": {
+    "c25_minus_fri_interval": 356391,
+    "c25_minus_fri_daily": 52171
+   },
+   "2023-25": {
+    "c25_minus_fri_interval": 4954488,
+    "c25_minus_fri_daily": 1007231
+   }
   }
  },
  "sources": {
@@ -5033,6 +5043,128 @@
     "diff": 846.0,
     "ci_lo": 613.2,
     "ci_hi": 1091.3
+   }
+  ],
+  "daily_cycle": [
+   {
+    "period": "2022 test",
+    "agent": "baseline",
+    "gross": 1331723,
+    "charging": 520608,
+    "deg_per_interval": 503886,
+    "deg_daily_cycle": 953049,
+    "net_per_interval": 307230,
+    "net_daily_cycle": -141933
+   },
+   {
+    "period": "2022 test",
+    "agent": "fri_3band",
+    "gross": 1334008,
+    "charging": 521439,
+    "deg_per_interval": 502282,
+    "deg_daily_cycle": 951153,
+    "net_per_interval": 310287,
+    "net_daily_cycle": -138583
+   },
+   {
+    "period": "2022 test",
+    "agent": "vol_matched",
+    "gross": 1332114,
+    "charging": 520509,
+    "deg_per_interval": 502847,
+    "deg_daily_cycle": 952452,
+    "net_per_interval": 308758,
+    "net_daily_cycle": -140846
+   },
+   {
+    "period": "2022 test",
+    "agent": "const_0.25",
+    "gross": 1272126,
+    "charging": 507281,
+    "deg_per_interval": 98167,
+    "deg_daily_cycle": 851257,
+    "net_per_interval": 666678,
+    "net_daily_cycle": -86412
+   },
+   {
+    "period": "2022 test",
+    "agent": "fdec_matched",
+    "gross": 1331757,
+    "charging": 521439,
+    "deg_per_interval": 500895,
+    "deg_daily_cycle": 951153,
+    "net_per_interval": 309424,
+    "net_daily_cycle": -140834
+   },
+   {
+    "period": "2022 test",
+    "agent": "const_0.75",
+    "gross": 1324513,
+    "charging": 524265,
+    "deg_per_interval": 363542,
+    "deg_daily_cycle": 939165,
+    "net_per_interval": 436705,
+    "net_daily_cycle": -138917
+   },
+   {
+    "period": "2023-25",
+    "agent": "baseline",
+    "gross": 24098278,
+    "charging": 1945386,
+    "deg_per_interval": 8125324,
+    "deg_daily_cycle": 15368668,
+    "net_per_interval": 14027569,
+    "net_daily_cycle": 6784225
+   },
+   {
+    "period": "2023-25",
+    "agent": "fri_3band",
+    "gross": 23937879,
+    "charging": 1875481,
+    "deg_per_interval": 8075592,
+    "deg_daily_cycle": 15328286,
+    "net_per_interval": 13986806,
+    "net_daily_cycle": 6734113
+   },
+   {
+    "period": "2023-25",
+    "agent": "vol_matched",
+    "gross": 24030475,
+    "charging": 1911167,
+    "deg_per_interval": 8095457,
+    "deg_daily_cycle": 15356017,
+    "net_per_interval": 14023851,
+    "net_daily_cycle": 6763291
+   },
+   {
+    "period": "2023-25",
+    "agent": "const_0.25",
+    "gross": 22317239,
+    "charging": 1829883,
+    "deg_per_interval": 1546061,
+    "deg_daily_cycle": 12746011,
+    "net_per_interval": 18941294,
+    "net_daily_cycle": 7741344
+   },
+   {
+    "period": "2023-25",
+    "agent": "fdec_matched",
+    "gross": 23905598,
+    "charging": 1881400,
+    "deg_per_interval": 8081393,
+    "deg_daily_cycle": 15349677,
+    "net_per_interval": 13942805,
+    "net_daily_cycle": 6674522
+   },
+   {
+    "period": "2023-25",
+    "agent": "const_0.75",
+    "gross": 23981793,
+    "charging": 1927095,
+    "deg_per_interval": 5859356,
+    "deg_daily_cycle": 15054330,
+    "net_per_interval": 16195343,
+    "net_daily_cycle": 7000369
    }
   ]
  }

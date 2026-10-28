@@ -20,7 +20,8 @@ F = {"eval_c2_30": T / "c2_30_label_v2_eval.csv", "eval_c2_31": T / "c2_31_final
      "H1": T / "c1_04_h1_amplification_results.csv", "H2": T / "c1_05_h2_masking_results.csv",
      "H1H2_genuine": T / "h1_h2_genuine_error_results.csv", "H3_wilcoxon": T / "c1_06_h3_horizon_results.csv",
      "fdec_baseline": T / "c4_05_fdecision_baseline.csv",
-     "fdec_ctrl": T / "c4_06_fdec_matched.csv", "fdec_ctrl_boot": T / "c4_06_fdec_matched_boot.csv"}
+     "fdec_ctrl": T / "c4_06_fdec_matched.csv", "fdec_ctrl_boot": T / "c4_06_fdec_matched_boot.csv",
+     "daily_cycle": T / "c4_07_daily_cycle.csv"}
 missing = [k for k, p in F.items() if not p.exists()]
 if missing:
     print("MISSING:", missing); sys.exit(1)
@@ -109,6 +110,12 @@ h["H1_genuine_p_max"] = float(hg.p_value.max())
 h["fdec"] = {r_["period"]: {"auc": r_["auc_abs_f"], "ap": r_["ap_abs_f"], "top1pct_over": r_["top1pct_unreliable_overforecast_share"],
               "all_over": r_["all_unreliable_overforecast_share"]} for r_ in src["fdec_baseline"]}
 h["fdec_ctrl_boot"] = {f'{r_["period"]}|{r_["comparison"].split(" ")[0]}': [r_["diff"], r_["ci_lo"], r_["ci_hi"]] for r_ in src["fdec_ctrl_boot"]}
+dc = pd.DataFrame(src["daily_cycle"])
+h["daily_cycle"] = {}
+for per in dc.period.unique():
+    g_ = dc[dc.period == per].set_index("agent")
+    h["daily_cycle"][per] = {"c25_minus_fri_interval": int(g_.loc["const_0.25", "net_per_interval"] - g_.loc["fri_3band", "net_per_interval"]),
+                             "c25_minus_fri_daily": int(g_.loc["const_0.25", "net_daily_cycle"] - g_.loc["fri_3band", "net_daily_cycle"])}
 json.dump({"headline": h, "sources": src}, open(R / "numbers.json", "w"), indent=1, default=str)
 print(json.dumps(h, indent=1, default=str)[:4000])
 print(f"\nSaved {R / 'numbers.json'}")
