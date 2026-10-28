@@ -1,0 +1,1 @@
+Fig. 2. FRI pipeline, run separately for each of the five NEM regions. Solid arrows carry information available at decision time; dashed arrows carry settled prices, used only to build the label for model fitting and to evaluate the agent. θ = 0.849089 was chosen on the validation period.
