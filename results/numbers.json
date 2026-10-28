@@ -305,7 +305,21 @@
   "rep_coverage_pct": 99.47,
   "rep_exposure_reduction_pct": 47.0,
   "rep_net_change_pct": -0.29,
-  "exposure_reduction_2022_pct": 68.5
+  "exposure_reduction_2022_pct": 68.5,
+  "H1_ratio_min": 4.39,
+  "H1_ratio_max": 23.5,
+  "H1_regions_passed": 5,
+  "H2_nem": {
+   "masking_pct": 77.28,
+   "aggregate_mae": 491.63,
+   "extreme_mae": 2163.41,
+   "n": 102675
+  },
+  "H2_masking_min": 66.76,
+  "H2_masking_max": 84.54,
+  "H1_genuine_ratio_min": 4.41,
+  "H1_genuine_ratio_max": 19.71,
+  "H1_genuine_p_max": 5.838379689972707e-42
  },
  "sources": {
   "eval_c2_30": [
@@ -4499,6 +4513,270 @@
     "lead30_rows": 1,
     "lead60_rows": 1,
     "lead30_pct": 100.0
+   }
+  ],
+  "H1": [
+   {
+    "region": "NSW1",
+    "extreme_count": 3012,
+    "normal_count": 17523,
+    "mae_extreme": 1583.9625,
+    "mae_normal": 80.0684,
+    "ratio": 19.7826,
+    "t_statistic": 19.626,
+    "p_value": 0.0,
+    "passes_h1": true,
+    "note": null,
+    "h1_overall_passed": true
+   },
+   {
+    "region": "VIC1",
+    "extreme_count": 2403,
+    "normal_count": 18132,
+    "mae_extreme": 2479.8978,
+    "mae_normal": 105.5371,
+    "ratio": 23.4979,
+    "t_statistic": 22.9409,
+    "p_value": 0.0,
+    "passes_h1": true,
+    "note": null,
+    "h1_overall_passed": true
+   },
+   {
+    "region": "QLD1",
+    "extreme_count": 3246,
+    "normal_count": 17289,
+    "mae_extreme": 1812.886,
+    "mae_normal": 139.5076,
+    "ratio": 12.9949,
+    "t_statistic": 22.2668,
+    "p_value": 0.0,
+    "passes_h1": true,
+    "note": null,
+    "h1_overall_passed": true
+   },
+   {
+    "region": "SA1",
+    "extreme_count": 2779,
+    "normal_count": 17756,
+    "mae_extreme": 3265.876,
+    "mae_normal": 744.2568,
+    "ratio": 4.3881,
+    "t_statistic": 23.2231,
+    "p_value": 0.0,
+    "passes_h1": true,
+    "note": null,
+    "h1_overall_passed": true
+   },
+   {
+    "region": "TAS1",
+    "extreme_count": 1457,
+    "normal_count": 19078,
+    "mae_extreme": 1517.424,
+    "mae_normal": 190.4157,
+    "ratio": 7.969,
+    "t_statistic": 12.9317,
+    "p_value": 0.0,
+    "passes_h1": true,
+    "note": null,
+    "h1_overall_passed": true
+   }
+  ],
+  "H2": [
+   {
+    "label": "OVERALL_NEM",
+    "total_intervals": 102675,
+    "extreme_count": 12897,
+    "normal_count": 89778,
+    "aggregate_mae": 491.6273,
+    "extreme_mae": 2163.4081,
+    "normal_mae": 251.4687,
+    "masking_pct": 77.28,
+    "passes_h2": true,
+    "note": null,
+    "h2_overall_passed": true
+   },
+   {
+    "label": "NSW1",
+    "total_intervals": 20535,
+    "extreme_count": 3012,
+    "normal_count": 17523,
+    "aggregate_mae": 300.6542,
+    "extreme_mae": 1583.9625,
+    "normal_mae": 80.0684,
+    "masking_pct": 81.02,
+    "passes_h2": true,
+    "note": null,
+    "h2_overall_passed": true
+   },
+   {
+    "label": "VIC1",
+    "total_intervals": 20535,
+    "extreme_count": 2403,
+    "normal_count": 18132,
+    "aggregate_mae": 383.3841,
+    "extreme_mae": 2479.8978,
+    "normal_mae": 105.5371,
+    "masking_pct": 84.54,
+    "passes_h2": true,
+    "note": null,
+    "h2_overall_passed": true
+   },
+   {
+    "label": "QLD1",
+    "total_intervals": 20535,
+    "extreme_count": 3246,
+    "normal_count": 17289,
+    "aggregate_mae": 404.0212,
+    "extreme_mae": 1812.886,
+    "normal_mae": 139.5076,
+    "masking_pct": 77.71,
+    "passes_h2": true,
+    "note": null,
+    "h2_overall_passed": true
+   },
+   {
+    "label": "SA1",
+    "total_intervals": 20535,
+    "extreme_count": 2779,
+    "normal_count": 17756,
+    "aggregate_mae": 1085.5073,
+    "extreme_mae": 3265.876,
+    "normal_mae": 744.2568,
+    "masking_pct": 66.76,
+    "passes_h2": true,
+    "note": null,
+    "h2_overall_passed": true
+   },
+   {
+    "label": "TAS1",
+    "total_intervals": 20535,
+    "extreme_count": 1457,
+    "normal_count": 19078,
+    "aggregate_mae": 284.5696,
+    "extreme_mae": 1517.424,
+    "normal_mae": 190.4157,
+    "masking_pct": 81.25,
+    "passes_h2": true,
+    "note": null,
+    "h2_overall_passed": true
+   }
+  ],
+  "H1H2_genuine": [
+   {
+    "region": "NSW1",
+    "ratio": 16.88939282356493,
+    "p_value": 9.92535337426906e-79,
+    "extreme_n": 3001,
+    "normal_n": 17477
+   },
+   {
+    "region": "QLD1",
+    "ratio": 12.045262475232322,
+    "p_value": 1.7590557987867168e-105,
+    "extreme_n": 3162,
+    "normal_n": 17316
+   },
+   {
+    "region": "SA1",
+    "ratio": 4.411978179217237,
+    "p_value": 2.7257280868723186e-113,
+    "extreme_n": 2800,
+    "normal_n": 17678
+   },
+   {
+    "region": "TAS1",
+    "ratio": 9.444289679484625,
+    "p_value": 5.838379689972707e-42,
+    "extreme_n": 1429,
+    "normal_n": 19049
+   },
+   {
+    "region": "VIC1",
+    "ratio": 19.711197963320625,
+    "p_value": 2.8739242050741587e-100,
+    "extreme_n": 2310,
+    "normal_n": 18168
+   }
+  ],
+  "H3_wilcoxon": [
+   {
+    "label": "OVERALL_NEM",
+    "extreme_count": 12897,
+    "p5_count": 12887,
+    "p30_count": 12887,
+    "p5_mean": 2165.0335,
+    "p30_mean": 2158.7768,
+    "w_statistic": 2972.5,
+    "p_value": 0.012316,
+    "passes_h3": true,
+    "note": null,
+    "h3_overall_passed": true
+   },
+   {
+    "label": "NSW1",
+    "extreme_count": 3012,
+    "p5_count": 3012,
+    "p30_count": 3012,
+    "p5_mean": 1583.9625,
+    "p30_mean": 1589.2449,
+    "w_statistic": 1.0,
+    "p_value": 0.285049,
+    "passes_h3": false,
+    "note": null,
+    "h3_overall_passed": true
+   },
+   {
+    "label": "VIC1",
+    "extreme_count": 2403,
+    "p5_count": 2399,
+    "p30_count": 2399,
+    "p5_mean": 2483.9416,
+    "p30_mean": 2477.8016,
+    "w_statistic": 3.0,
+    "p_value": 1.0,
+    "passes_h3": false,
+    "note": null,
+    "h3_overall_passed": true
+   },
+   {
+    "label": "QLD1",
+    "extreme_count": 3246,
+    "p5_count": 3246,
+    "p30_count": 3246,
+    "p5_mean": 1812.886,
+    "p30_mean": 1779.983,
+    "w_statistic": 1044.5,
+    "p_value": 0.002387,
+    "passes_h3": true,
+    "note": null,
+    "h3_overall_passed": true
+   },
+   {
+    "label": "SA1",
+    "extreme_count": 2779,
+    "p5_count": 2773,
+    "p30_count": 2773,
+    "p5_mean": 3272.7734,
+    "p30_mean": 3282.7304,
+    "w_statistic": 76.0,
+    "p_value": 0.278965,
+    "passes_h3": false,
+    "note": null,
+    "h3_overall_passed": true
+   },
+   {
+    "label": "TAS1",
+    "extreme_count": 1457,
+    "p5_count": 1457,
+    "p30_count": 1457,
+    "p5_mean": 1517.424,
+    "p30_mean": 1515.6265,
+    "w_statistic": 45.5,
+    "p_value": 0.08147,
+    "passes_h3": false,
+    "note": null,
+    "h3_overall_passed": true
    }
   ]
  }

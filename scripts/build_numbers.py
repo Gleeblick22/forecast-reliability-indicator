@@ -16,7 +16,9 @@ F = {"eval_c2_30": T / "c2_30_label_v2_eval.csv", "eval_c2_31": T / "c2_31_final
      "alpha": T / "c3_53_alpha_sensitivity.csv", "R": T / "c4_03_R_outcomes.csv",
      "R1_regions": T / "c4_03_R1_regions.csv", "R6": T / "c4_03_R6.csv",
      "R_exploratory": T / "c4_03_exploratory.csv", "agents_2325": T / "c4_04_agents_summary_2023_2025.csv",
-     "hypotheses": R / "hypothesis_outcomes.csv", "coverage": PROCESSED_DIR / "coverage_2023_2025.csv"}
+     "hypotheses": R / "hypothesis_outcomes.csv", "coverage": PROCESSED_DIR / "coverage_2023_2025.csv",
+     "H1": T / "c1_04_h1_amplification_results.csv", "H2": T / "c1_05_h2_masking_results.csv",
+     "H1H2_genuine": T / "h1_h2_genuine_error_results.csv", "H3_wilcoxon": T / "c1_06_h3_horizon_results.csv"}
 missing = [k for k, p in F.items() if not p.exists()]
 if missing:
     print("MISSING:", missing); sys.exit(1)
@@ -92,6 +94,16 @@ h["rep_net_change_pct"] = round((f_["net_revenue"] / b["net_revenue"] - 1) * 100
 b2, f2 = h["agent_2022_baseline"], h["agent_2022_fri_3band"]
 h["exposure_reduction_2022_pct"] = round((1 - f2["mwh_into_overforecast"] / b2["mwh_into_overforecast"]) * 100, 1)
 
+h1 = pd.DataFrame(src["H1"]); h2 = pd.DataFrame(src["H2"]); hg = pd.DataFrame(src["H1H2_genuine"])
+h["H1_ratio_min"], h["H1_ratio_max"] = round(h1.ratio.min(), 2), round(h1.ratio.max(), 2)
+h["H1_regions_passed"] = int(h1.passes_h1.sum())
+n2 = h2[h2.label == "OVERALL_NEM"].iloc[0]
+h["H2_nem"] = {"masking_pct": float(n2.masking_pct), "aggregate_mae": round(float(n2.aggregate_mae), 2),
+               "extreme_mae": round(float(n2.extreme_mae), 2), "n": int(n2.total_intervals)}
+r2 = h2[h2.label != "OVERALL_NEM"]
+h["H2_masking_min"], h["H2_masking_max"] = float(r2.masking_pct.min()), float(r2.masking_pct.max())
+h["H1_genuine_ratio_min"], h["H1_genuine_ratio_max"] = round(hg.ratio.min(), 2), round(hg.ratio.max(), 2)
+h["H1_genuine_p_max"] = float(hg.p_value.max())
 json.dump({"headline": h, "sources": src}, open(R / "numbers.json", "w"), indent=1, default=str)
 print(json.dumps(h, indent=1, default=str)[:4000])
 print(f"\nSaved {R / 'numbers.json'}")
