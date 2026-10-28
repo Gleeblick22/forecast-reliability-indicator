@@ -2800,7 +2800,7 @@
     "set": "original",
     "short": "Horizon",
     "registered_criterion": "p < 0.05 NEM-level t-test",
-    "result": "Welch t = 0.106, p = 0.915 (c1_22)",
+    "result": "Welch t = 0.106, p = 0.915",
     "outcome": "not supported",
     "note": "Wilcoxon signed-rank (c1_06; not the registered test) gives p = 0.012; mean error 2,165 vs 2,159 AUD/MWh. CHECK OSF test wording"
    },
@@ -2845,8 +2845,8 @@
     "set": "original",
     "short": "Cross-market transfer",
     "registered_criterion": "|dF1| <= 0.15",
-    "result": "SA1 passes; NZ, GB fail (original label)",
-    "outcome": "partially supported via substitutes",
+    "result": "SA1 within tolerance; NZ and GB not (original label)",
+    "outcome": "partially supported (original label)",
     "note": "ERCOT inaccessible; evaluated with the original label, not re-run"
    },
    {
@@ -2854,7 +2854,7 @@
     "set": "replication",
     "short": "Error amplification (settled price)",
     "registered_criterion": "ratio > 1.5 and p < 0.05 in >= 4/5 regions",
-    "result": "5/5 regions; ratios 28-56",
+    "result": "5/5 regions; ratios 28\u201356",
     "outcome": "supported",
     "note": "2023-25 frozen model"
    },
@@ -2872,7 +2872,7 @@
     "set": "replication",
     "short": "Exposure reduction",
     "registered_criterion": ">= 30% vs baseline and (vol - FRI) CI > 0",
-    "result": "-47.0%; vol - FRI 557.6 MWh [387.7, 744.6]",
+    "result": "\u221247.0% vs. baseline; vol-matched \u2212 FRI = 557.6 MWh [387.7, 744.6]",
     "outcome": "supported",
     "note": null
    },
@@ -2881,7 +2881,7 @@
     "set": "replication",
     "short": "Beats raw volatility",
     "registered_criterion": "dAP > 0, CI excludes 0",
-    "result": "dAP 0.363 [0.344, 0.382]",
+    "result": "\u0394AP = 0.363 [0.344, 0.382]",
     "outcome": "supported",
     "note": null
    },
@@ -2899,7 +2899,7 @@
     "set": "replication",
     "short": "Degradation boundary",
     "registered_criterion": "descriptive",
-    "result": "const x0.25 - FRI: +4.95M (beta 2.03), +3.19M (1.5), -0.65M (1.0)",
+    "result": "Constant \u00d70.25 \u2212 FRI: +4.95M (\u03b2 = 2.03), +3.19M (\u03b2 = 1.5), \u22120.65M (\u03b2 = 1.0)",
     "outcome": "as expected",
     "note": "No pass/fail registered"
    }

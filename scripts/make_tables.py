@@ -61,11 +61,26 @@ save("I", "Datasets", t1, ["All NEM sets: five regions, 30-min trading intervals
                            "† Test partition = intervals ending on or after 1 Oct 2022. The October 2022 AEMO archive holds only the latest pre-dispatch run per interval (PREDISPATCHPRICE_D), so no decision run can be built; the partition holds 10 intervals on 1 Oct (00:00–04:30, none unreliable) and 9 intervals early on 1 Nov have no decision run."])
 
 # ---------- Table III: hypotheses ----------
-t3 = pd.DataFrame([[r["id"], r["short"], r["registered_criterion"], r["result"], r["outcome"]] for r in S["hypotheses"]],
-                  columns=["ID", "Hypothesis", "Registered criterion", "Result", "Outcome"])
+REG = {  # H1-H8: registered wording (v1.1 Table III, from OSF jpfwh); R1-R6: OSF amendment section 5
+ "H1": ("Forecast error amplification", "Welch's t-test", "ρ > 1.5, p < 0.05 in ≥ 4/5 regions"),
+ "H2": ("Aggregate error masking", "Paired MAE comparison", "m > 0.50 at NEM level"),
+ "H3": ("Horizon difference (P5 vs. P30)", "Independent-samples t-test", "p < 0.05 at NEM level"),
+ "H4": ("FRI classifier performance", "F1 on held-out test set", "F1 ≥ 0.60"),
+ "H5": ("Silent-failure reduction", "McNemar's test", "≥ 20% reduction vs. baseline"),
+ "H6": ("Dispatch correlation", "Pearson r, Fisher z CI", "Positive, significant (p < 0.05)"),
+ "H7": ("Revenue improvement", "Revenue comparison, Cohen's d", "≥ 15% higher revenue than baseline"),
+ "H8": ("Cross-market generalisation", "|F1 difference| vs. NEM", "Within 0.15 of NEM test F1"),
+ "R1": ("Error amplification against settled price", "Welch t-test per region; ratio of means", "Ratio > 1.5 and p < 0.05 in ≥ 4 of 5 regions"),
+ "R2": ("Temporal transfer of detection", "AUC, stratified bootstrap 95% CI (1,000)", "AUC ≥ 0.80 and CI lower bound > 0.70"),
+ "R3": ("Exposure reduction", "MWh into over-forecast intervals; paired daily bootstrap (2,000)", "≥ 30% vs. baseline and 95% CI of (vol-matched − FRI) excludes 0"),
+ "R4": ("Beats raw volatility", "ΔAP, bootstrap 95% CI (1,000)", "ΔAP > 0, CI excludes 0"),
+ "R5": ("Decision at 60-min lead", "AUC, bootstrap 95% CI", "AUC ≥ 0.75"),
+ "R6": ("Degradation boundary", "Descriptive", "Direction and size reported; no pass/fail")}
+t3 = pd.DataFrame([[r["id"], *REG[r["id"]], r["result"], r["outcome"]] for r in S["hypotheses"]],
+                  columns=["ID", "Hypothesis", "Test", "Registered criterion", "Result", "Outcome"])
 save("III", "Registered hypotheses and outcomes", t3,
-     ["H1–H8: original registration (OSF). R1–R6: amendment filed before 2023–25 data access. "
-      "CHECK (B5): wording must match OSF verbatim."])
+     ["H1–H8: original registration (OSF, osf.io/jpfwh). R1–R6: amendment registered on 28 October 2026, before the 2023–25 data were downloaded. "
+      "H1–H3 use the registered error definition (Eq. (2)); see Section IV.A."])
 
 # ---------- Table IV: deviations ----------
 t4 = pd.DataFrame([

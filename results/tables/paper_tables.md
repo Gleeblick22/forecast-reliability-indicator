@@ -15,24 +15,24 @@ All NEM sets: five regions, 30-min trading intervals. Replication 60-min-lead se
 
 ## Table III. Registered hypotheses and outcomes
 
-| ID | Hypothesis | Registered criterion | Result | Outcome |
-|---|---|---|---|---|
-| H1 | Error amplification | rho > 1.5, p < 0.05 in >= 4/5 regions | 5/5 regions (revision-based error, 2021-22) | supported |
-| H2 | Masking | m > 0.50 NEM-level | 77.28% (revision-based error) | supported |
-| H3 | Horizon | p < 0.05 NEM-level t-test | Welch t = 0.106, p = 0.915 (c1_22) | not supported |
-| H4 | Classifier | F1 >= 0.60 on held-out test | F1 0.476 (corrected label, 2022 test; AUC 0.900) | not supported |
-| H5 | Silent failures | >= 20% reduction vs baseline | 0 vs 0 (corrected agent) | not testable |
-| H6 | Dispatch vs confidence | r > 0, p < 0.05 | r = 0.318 [0.243, 0.389], p = 3.1e-15, n = 587 | supported |
-| H7 | Revenue | >= +15% revenue | gross +0.17%, CI includes 0; net +1.0% | not supported |
-| H8 | Cross-market transfer | \|dF1\| <= 0.15 | SA1 passes; NZ, GB fail (original label) | partially supported via substitutes |
-| R1 | Error amplification (settled price) | ratio > 1.5 and p < 0.05 in >= 4/5 regions | 5/5 regions; ratios 28-56 | supported |
-| R2 | Temporal transfer | AUC >= 0.80 and CI lower bound > 0.70 | AUC 0.955 [0.948, 0.961] | supported |
-| R3 | Exposure reduction | >= 30% vs baseline and (vol - FRI) CI > 0 | -47.0%; vol - FRI 557.6 MWh [387.7, 744.6] | supported |
-| R4 | Beats raw volatility | dAP > 0, CI excludes 0 | dAP 0.363 [0.344, 0.382] | supported |
-| R5 | 60-min decision lead | AUC >= 0.75 | AUC 0.959 [0.954, 0.965] | supported |
-| R6 | Degradation boundary | descriptive | const x0.25 - FRI: +4.95M (beta 2.03), +3.19M (1.5), -0.65M (1.0) | as expected |
+| ID | Hypothesis | Test | Registered criterion | Result | Outcome |
+|---|---|---|---|---|---|
+| H1 | Forecast error amplification | Welch's t-test | ρ > 1.5, p < 0.05 in ≥ 4/5 regions | 5/5 regions (revision-based error, 2021-22) | supported |
+| H2 | Aggregate error masking | Paired MAE comparison | m > 0.50 at NEM level | 77.28% (revision-based error) | supported |
+| H3 | Horizon difference (P5 vs. P30) | Independent-samples t-test | p < 0.05 at NEM level | Welch t = 0.106, p = 0.915 | not supported |
+| H4 | FRI classifier performance | F1 on held-out test set | F1 ≥ 0.60 | F1 0.476 (corrected label, 2022 test; AUC 0.900) | not supported |
+| H5 | Silent-failure reduction | McNemar's test | ≥ 20% reduction vs. baseline | 0 vs 0 (corrected agent) | not testable |
+| H6 | Dispatch correlation | Pearson r, Fisher z CI | Positive, significant (p < 0.05) | r = 0.318 [0.243, 0.389], p = 3.1e-15, n = 587 | supported |
+| H7 | Revenue improvement | Revenue comparison, Cohen's d | ≥ 15% higher revenue than baseline | gross +0.17%, CI includes 0; net +1.0% | not supported |
+| H8 | Cross-market generalisation | \|F1 difference\| vs. NEM | Within 0.15 of NEM test F1 | SA1 within tolerance; NZ and GB not (original label) | partially supported (original label) |
+| R1 | Error amplification against settled price | Welch t-test per region; ratio of means | Ratio > 1.5 and p < 0.05 in ≥ 4 of 5 regions | 5/5 regions; ratios 28–56 | supported |
+| R2 | Temporal transfer of detection | AUC, stratified bootstrap 95% CI (1,000) | AUC ≥ 0.80 and CI lower bound > 0.70 | AUC 0.955 [0.948, 0.961] | supported |
+| R3 | Exposure reduction | MWh into over-forecast intervals; paired daily bootstrap (2,000) | ≥ 30% vs. baseline and 95% CI of (vol-matched − FRI) excludes 0 | −47.0% vs. baseline; vol-matched − FRI = 557.6 MWh [387.7, 744.6] | supported |
+| R4 | Beats raw volatility | ΔAP, bootstrap 95% CI (1,000) | ΔAP > 0, CI excludes 0 | ΔAP = 0.363 [0.344, 0.382] | supported |
+| R5 | Decision at 60-min lead | AUC, bootstrap 95% CI | AUC ≥ 0.75 | AUC 0.959 [0.954, 0.965] | supported |
+| R6 | Degradation boundary | Descriptive | Direction and size reported; no pass/fail | Constant ×0.25 − FRI: +4.95M (β = 2.03), +3.19M (β = 1.5), −0.65M (β = 1.0) | as expected |
 
-H1–H8: original registration (OSF). R1–R6: amendment filed before 2023–25 data access. CHECK (B5): wording must match OSF verbatim.
+H1–H8: original registration (OSF, osf.io/jpfwh). R1–R6: amendment registered on 28 October 2026, before the 2023–25 data were downloaded. H1–H3 use the registered error definition (Eq. (2)); see Section IV.A.
 
 ## Table IV. Deviations from registration
 
@@ -94,7 +94,7 @@ Test prevalence 2022: 0.64% (94 of 14,650). F1/precision/recall at θ = 0.849089
 
 2022: exposure reduction FRI vs baseline 68.5% (95% CI: [0.0, 100.8]); net FRI − baseline 3,058 [205, 7,754]; random band-matched net mean 308,812 [307,219, 310,857], FRI above 94% of draws.
 
-2023–25: exposure reduction 47.0%; vol - FRI 557.6 MWh [387.7, 744.6] (R3); net change -0.29%.
+2023–25: exposure reduction 47.0%; vol-matched − FRI = 557.6 MWh [387.7, 744.6] (R3); net change -0.29%.
 
 Over-forecast: f_decision − settled > AUD 300/MWh. The binary volatility control of c3_50 flagged no 2022 test intervals and is not shown.
 
@@ -169,7 +169,7 @@ Error = |earliest run − realised price|; extreme if realised price ≥ AUD 300
 | SA1 | 2,779 | 3,272.77 | 3,282.73 | 76.0 | 0.279 |
 | TAS1 | 1,457 | 1,517.42 | 1,515.63 | 45.5 | 0.081 |
 
-Registered test (Welch t-test, NEM level): Welch t = 0.106, p = 0.915 (c1_22) → not supported. Wilcoxon results rest on few non-tied pairs (3 of 3,012 in NSW1; 3 of 2,399 in VIC1).
+Registered test (Welch t-test, NEM level): Welch t = 0.106, p = 0.915 → not supported. Wilcoxon results rest on few non-tied pairs (3 of 3,012 in NSW1; 3 of 2,399 in VIC1).
 
 ## Table A.6. Degradation α: simulation value (5.04 × 10⁻⁴) against the source value of [57] (5.24 × 10⁻⁴)
 
