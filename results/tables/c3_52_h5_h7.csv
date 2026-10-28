@@ -1,0 +1,5 @@
+H,criterion,result,outcome
+H5,>= 20% fewer silent failures,"baseline 0, FRI 0; not testable (0 baseline events)",not testable
+H6,"r > 0, p < 0.05","r = 0.3177 [0.2430, 0.3886], p = 3.11e-15, n = 587",supported
+H7,gross revenue >= +15%,"gross 1,331,723 -> 1,334,008 (+0.17%), daily-bootstrap diff 2,285 [-539, 6,207]; net 307,230 -> 310,287 (+1.00%)",not supported
+A2 exposure 2022,descriptive,"MWh into over-forecast: baseline 65.0, FRI 20.5 (68.5% less); baseline - FRI 44.5 [0.0, 100.8]",—
