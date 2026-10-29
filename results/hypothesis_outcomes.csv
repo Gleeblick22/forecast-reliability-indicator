@@ -3,7 +3,7 @@ H1,original,Error amplification,"rho > 1.5, p < 0.05 in >= 4/5 regions","5/5 reg
 H2,original,Masking,m > 0.50 NEM-level,77.28% (revision-based error),supported,Same caveat as H1
 H3,original,Horizon,p < 0.05 NEM-level t-test,"Welch t = 0.106, p = 0.915",not supported,"Wilcoxon signed-rank (c1_06; not the registered test) gives p = 0.012; mean error 2,165 vs 2,159 AUD/MWh. CHECK OSF test wording"
 H4,original,Classifier,F1 >= 0.60 on held-out test,"F1 0.476 (corrected label, 2022 test; AUC 0.900)",not supported,Original label gave F1 0.89 but was near-circular; corrected label reported
-H5,original,Silent failures,>= 20% reduction vs baseline,0 vs 0 (corrected agent),not testable,No qualifying events in the 2022 test window
+H5,original,Silent failures,>= 20% reduction vs baseline,94 -> 54 unwarned unreliable intervals (-42.6%); McNemar exact p = 1.8e-12; registered definition (c3_54),supported,"Equals the share of unreliable intervals flagged by the model (recall). Dispatch-based silent failures (secondary, unregistered): 0 vs 0 in 2022"
 H6,original,Dispatch vs confidence,"r > 0, p < 0.05","r = 0.318 [0.243, 0.389], p = 3.1e-15, n = 587",supported,Manipulation check: dispatch is scaled from the FRI score by design
 H7,original,Revenue,>= +15% revenue,"gross +0.17%, CI includes 0; net +1.0%",not supported,
 H8,original,Cross-market transfer,|dF1| <= 0.15,SA1 within tolerance; NZ and GB not (original label),partially supported (original label),"ERCOT inaccessible; evaluated with the original label, not re-run"

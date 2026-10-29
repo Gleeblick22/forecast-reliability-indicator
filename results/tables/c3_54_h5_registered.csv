@@ -1,0 +1,2 @@
+H,definition,theta,baseline,fri,reduction_pct,criterion,mcnemar_exact_p,supported
+H5,registered: error > 300 and no FRI warning,0.849089,94,54,42.6,reduction >= 20%,1.82e-12,True
