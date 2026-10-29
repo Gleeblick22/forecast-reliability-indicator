@@ -1,7 +1,7 @@
-hypothesis,threshold,regions_passing,passes,masking_pct,p_value,all_hypotheses_robust
-H1,150.0,0.0,False,,,False
-H2,150.0,,False,,,False
-H3,150.0,,False,,,False
-H1,500.0,0.0,False,,,False
-H2,500.0,,False,,,False
-H3,500.0,,False,,,False
+hypothesis,threshold,regions_passing,passes,masking_pct,p5_mean,p30_mean,p_value,all_hypotheses_robust
+H1,150.0,5.0,True,,,,,False
+H2,150.0,,True,58.3,,,,False
+H3,150.0,,False,,1179.0058,1185.3052,0.826154,False
+H1,500.0,5.0,True,,,,,False
+H2,500.0,,True,86.95,,,,False
+H3,500.0,,False,,3767.8983,3759.9393,0.95408,False

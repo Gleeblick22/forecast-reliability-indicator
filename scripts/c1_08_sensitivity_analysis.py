@@ -75,24 +75,15 @@ def reclassify_regime(
     threshold: float
 ) -> pd.DataFrame:
     """
-    Reclassify extreme/normal regime using alternative threshold.
-    Recalculates last_forecast from raw data for accuracy.
+    Reclassify extreme/normal regime at an alternative threshold, from the
+    processed file's last_forecast (latest pre-dispatch run), the same quantity
+    used for the main regime label.
+    Fix (29 Oct 2026): the earlier version merged raw runs on DATETIME, whose
+    format differs between the raw and processed files, so no rows matched and
+    every interval was classed as normal.
     """
-    latest_runs = (
-        raw.sort_values("PREDISPATCH_RUN_DATETIME")
-        .groupby(["DATETIME", "REGIONID"])
-        .last()
-        .reset_index()
-    )[["DATETIME", "REGIONID", "RRP"]]
-    latest_runs = latest_runs.rename(columns={"RRP": "latest_rrp"})
-
-    df = processed.merge(latest_runs, on=["DATETIME", "REGIONID"], how="left")
-    df["regime_alt"] = np.where(
-        df["latest_rrp"] >= threshold,
-        "extreme",
-        "normal"
-    )
-
+    df = processed.copy()
+    df["regime_alt"] = np.where(df["last_forecast"] >= threshold, "extreme", "normal")
     extreme_count = (df["regime_alt"] == "extreme").sum()
     logger.info(
         f"Threshold ${threshold:.0f}: "
