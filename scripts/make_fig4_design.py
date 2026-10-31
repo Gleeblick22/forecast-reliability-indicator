@@ -1,5 +1,5 @@
 """make_fig4_design.py (Step D): Fig. 4 study design: research questions, the hypotheses that test them, and the data each uses.
-Redrawn from the v1.1 Fig. 4 (same gate structure and names); contains no results. PNG (300 dpi), SVG, PDF."""
+Contains no results; every label matches Table III. PNG (300 dpi), SVG, PDF."""
 from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
@@ -12,13 +12,15 @@ try:
     FIG = TABLES_DIR.parent / "figures"
 except ImportError:
     FIG = Path("figures")
+FIG = Path(__file__).resolve().parents[1] / "results" / "figures"   # always the repo results/figures folder
 FIG.mkdir(parents=True, exist_ok=True)
-plt.rcParams.update({"font.family": "sans-serif", "font.sans-serif": ["Arial", "Liberation Sans", "Helvetica", "DejaVu Sans"],
-                     "mathtext.fontset": "dejavusans", "savefig.dpi": 300, "pdf.fonttype": 42, "svg.fonttype": "none"})
-print("Font used:", Path(font_manager.findfont(font_manager.FontProperties(family=["sans-serif"]))).name)
+import sys; sys.path.insert(0, str(Path(__file__).resolve().parent))
+import fri_style as FS
+FS.use()
+print("Font used:", Path(font_manager.findfont(font_manager.FontProperties(family=["serif"]))).name)
 
-INK, MUTED, LINE, PANEL = "#1F2933", "#52606D", "#9AA5B1", "#F5F7FA"
-HEAD, HEAD4 = "#1F3A5F", "#0F766E"
+INK, MUTED, LINE, PANEL = FS.C["ink"], FS.C["ink2"], FS.C["box_line"], FS.C["box_fill"]
+HEAD, HEAD4 = FS.C["box_head"], FS.C["box_head_rep"]
 fig, ax = plt.subplots(figsize=(7.16, 4.8))
 ax.set_xlim(0, 100); ax.set_ylim(-4, 66); ax.axis("off")
 RH = 3.4
@@ -75,14 +77,14 @@ def tag(x, y, text, kind="yes"):
 
 
 A = rq(1, 29, 65, "NEM Signal Failures (RQ1)",
-       [("H1  Error amplification", "error data"), ("H2  Error masking", "error data"), ("H3  Horizon difference", "error data"),
-        ("R1  Against settled price", "test 2")])
+       [("H1  Error amplification", ""), ("H2  Error masking", ""), ("H3  Horizon difference", ""),
+        ("R1  Against settled price", "")])
 B = rq(36, 64, 65, "FRI Detection (RQ2)",
-       [("H4  Classifier accuracy", "test 1"), ("R2  Detection on new data", "test 2"),
-        ("R4  Versus raw volatility", "test 2"), ("R5  60-min decision lead", "test 2")])
+       [("H4  Classifier accuracy", ""), ("R2  Detection on new data", ""),
+        ("R4  Versus raw volatility", ""), ("R5  60-min decision lead", "")])
 C = rq(71, 99, 65, "Battery Dispatch Value (RQ3)",
-       [("H5  Silent failures", "test 1"), ("H6  Dispatch vs. score", "test 1"), ("H7  Revenue", "test 1"),
-        ("R3  Energy at risk", "test 2"), ("R6  Degradation curve", "test 2")])
+       [("H5  Silent failures", ""), ("H6  Dispatch vs. score", ""), ("H7  Revenue", ""),
+        ("R3  Energy at risk", ""), ("R6  Degradation curve", "")])
 dA = diamond(A["cx"], 40, 22, 11, "Is the problem real\nand learnable?")
 dB = diamond(B["cx"], 40, 22, 11, "Can FRI detect it\nbefore dispatch?")
 dC = diamond(C["cx"], 38, 22, 9, "Does it add value\nin dispatch?")
@@ -98,7 +100,7 @@ path([(C["cx"], 32.2), (oN["cx"], 32.2), (oN["cx"], oN["t"])]); tag(oN["cx"], 30
 
 D = rq(35, 65, 21.5, "Replication and Transfer (RQ4)",
        [("R1–R6  registered before 2023–25 data", ""), ("Code  model, θ and code frozen", ""),
-        ("H8  Transfer (SA1, NZ, GB)", "transfer data")], head=HEAD4)
+        ("H8  Transfer (SA1, NZ, GB)", "")], head=HEAD4)
 path([(oY["cx"], oY["b"]), (oY["cx"], 19.4), (D["r"], 19.4)])
 path([(oN["cx"], oN["b"]), (oN["cx"], 19.4), (oY["cx"], 19.4)], head=False)
 dD = diamond(D["cx"], 0.3, 22, 8.4, "Do results hold\non new data?")
@@ -110,8 +112,8 @@ path([(dD["r"], dD["cy"]), (oD2["l"], dD["cy"])]); tag((dD["r"] + oD2["l"]) / 2,
 
 for ext in ("png", "svg", "pdf"):
     fig.savefig(FIG / f"fig_4_design.{ext}", bbox_inches="tight", facecolor="white")
-cap = ("Fig. 4. Study design: the four research questions, the hypotheses that test each one and the part of the data each "
-       "uses (Table I). H1–H8 were registered before the original analysis; R1–R6 were registered, with the model, threshold and "
-       "code frozen, before the test-2 data (2023–2025) were downloaded. Outcomes are reported in Table III and Section IV.")
+cap = ("Fig. 4. Study design: the four research questions and the hypotheses that test each one. "
+       "H1–H8 use the 2021–22 data and R1–R6 the 2023–25 data (Table I). R1–R6 were registered, with the model, "
+       "threshold and code frozen, before the 2023–25 data were downloaded. Outcomes are reported in Table III and Section IV.")
 (FIG / "fig_4_design_caption.txt").write_text(cap + "\n")
 print("Saved fig_4_design.png/.svg/.pdf and caption to", FIG)
