@@ -50,3 +50,11 @@ tests/
 utils/
 data/*
 !data/.gitkeep
+
+# local backups and helper files (not part of the paper's code)
+*.bak
+*.bak_*
+scripts/*_block.py
+scripts/make_figures_bw_backup.py
+results/figures/old_bw/
+results/tables/*_OLD.csv
