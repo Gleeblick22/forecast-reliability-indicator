@@ -251,7 +251,10 @@ if "recent_std_3h" in rep.columns:
     v = rep.recent_std_3h.values.astype(float); v = np.where(np.isnan(v), np.nanmin(v) - 1, v)
     check("dAP 2023-25 (R4)", average_precision_score(y25, p25) - average_precision_score(y25, v), float(S["R"][3]["result"].split()[1]))
     S6.append(("vol", y25, v, dict(color=C["vol"], ls="-", lw=1.1), 2))
-fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.6))
+fig = plt.figure(figsize=(7.2, 4.1))
+gs6 = fig.add_gridspec(2, 2, height_ratios=[1, 0.17])
+a, b = fig.add_subplot(gs6[0, 0]), fig.add_subplot(gs6[0, 1])
+lax = fig.add_subplot(gs6[1, :]); lax.axis("off")             # legend row: tight_layout keeps it clear of the axis labels
 met = {}
 for k, y_, s_, st, z_ in S6:
     f_, t_, _ = roc_curve(y_, s_); pr, rc, _ = precision_recall_curve(y_, s_)
@@ -262,16 +265,14 @@ print("  Fig.6 AUC/AP:", {k: (round(x_, 3), round(y__, 3)) for k, (x_, y__) in m
 a.plot([0, 1], [0, 1], color=C["axis"], ls=":", lw=0.8)
 a.text(0.62, 0.55, "Chance", rotation=38, fontsize=7, color=C["axis"], ha="center")
 prev = float(y25.mean()); b.axhline(prev, color=C["axis"], ls=":", lw=0.8)
-b.text(0.45, prev + 0.015, f"No skill, test 2 (AP = {prev:.3f})", fontsize=7, color=C["axis"], ha="center", va="bottom",
-       bbox=dict(fc="white", ec="none", pad=1.0), zorder=6)
+b.text(0.06, prev + 0.012, f"No skill, test 2 (AP = {prev:.3f})", fontsize=7, color=C["axis"], ha="left", va="bottom")
 for ax_, t_, xl, yl in [(a, "(a) ROC", "False positive rate", "True positive rate"), (b, "(b) Precision–recall", "Recall", "Precision")]:
     ax_.set_title(t_, loc="left", fontstyle="italic"); ax_.set_xlabel(xl); ax_.set_ylabel(yl)
     ax_.set_xlim(0, 1); ax_.set_ylim(0, 1.02); ax_.set_box_aspect(1)
 LAB = {"fri25": "FRI, test 2 (2023–25): AUC {0:.3f}, AP {1:.3f}", "fri22": "FRI, test 1 (2022): AUC {0:.3f}, AP {1:.3f}",
        "flev": "$|f(w_t)|$ alone*, test 2: AUC {0:.3f}, AP {1:.3f}", "vol": "Recent volatility, test 2: AP {1:.3f} (R4)"}
 H6 = [Line2D([], [], label=LAB[k].format(*met[k]), **st) for k, _, _, st, _ in S6]
-fig.legend(handles=H6, loc="lower center", bbox_to_anchor=(0.5, -0.04), ncol=2, fontsize=7.5, columnspacing=1.5)
-fig.subplots_adjust(wspace=0.25, bottom=0.2)
+lax.legend(handles=H6, loc="center", ncol=2, fontsize=7.5, columnspacing=1.5)
 save(fig, 6, f"Fig. 6. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and frozen, on test 2 (2023–25, "
      f"{h['rep_lead30']:,} intervals; solid) and test 1 (2022, {h['n_test']:,} intervals, {h['n_test_pos']} unreliable; dashed). "
      f"Orange: intervals ranked by raw recent volatility (recent_std_3h), the R4 comparison. *Aqua: ranked by the decision forecast "
