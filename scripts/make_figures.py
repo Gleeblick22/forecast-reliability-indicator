@@ -20,6 +20,9 @@ plt.rcParams.update({"font.family": "serif", "font.size": 8, "axes.labelsize": 8
                      "legend.fontsize": 7, "xtick.labelsize": 7, "ytick.labelsize": 7, "axes.edgecolor": "black",
                      "axes.linewidth": 0.6, "grid.color": "0.88", "grid.linewidth": 0.5, "lines.linewidth": 1.2,
                      "savefig.dpi": 300, "mathtext.fontset": "dejavuserif", "pdf.fonttype": 42, "svg.fonttype": "none", "legend.frameon": True, "legend.edgecolor": "0.7", "hatch.linewidth": 0.5})
+import fri_style as FS
+FS.use()
+C = FS.C
 W1, W2 = 3.5, 7.0
 CAP = {}
 KEYS = ["DATETIME", "REGIONID"]
@@ -64,74 +67,151 @@ check("AUC 2022", roc_auc_score(y22, p22), h["det2022"]["auc"])
 check("AP 2022", average_precision_score(y22, p22), h["det2022"]["ap"])
 check("AUC 2023-25 (R2)", roc_auc_score(y25, p25), R2_AUC)
 
-# ---------- Fig. 1: data overview ----------
+# ---------- Fig. 1: monthly share of unreliable decision forecasts (single panel; fri_style.py) ----------
 import matplotlib.dates as mdates
+import matplotlib.ticker as mticker
 per = np.where(lab.partition == "test", "test", np.where(lab.DATETIME < "2022-08-01", "fit", "val"))
 m = pd.concat([pd.DataFrame({"DATETIME": lab.DATETIME, "y": lab.y_v2.values, "period": per}),
                pd.DataFrame({"DATETIME": rep.DATETIME, "y": y25, "period": "replication"})])
+tot = m.groupby("period").y.agg(n="size", pos="sum", rate="mean")
 m["month"] = (m.DATETIME - pd.Timedelta(minutes=30)).dt.to_period("M")
 g = m.groupby(["period", "month"]).agg(n=("y", "size"), rate=("y", "mean")).reset_index()
+drop = m.groupby(["period", "month"]).y.size().reset_index(name="n")
+drop = drop[drop.n < 1000]
 g = g[g.n >= 1000].reset_index(drop=True)
-YCAP = 5.0
-fig, ax = plt.subplots(figsize=(W2, 2.3))
-ax.axvspan(pd.Timestamp("2022-10-01"), pd.Timestamp("2022-11-01"), facecolor="white", edgecolor="0.55", hatch="xxxx", lw=0, zorder=0)
-spans = [("fit", "2021-10-01", "2022-08-01", "0.95", "Fit"), ("val", "2022-08-01", "2022-10-01", "0.87", "Val."),
-         ("test", "2022-11-01", "2023-01-01", "0.80", "Test"), ("replication", "2023-01-01", "2026-01-01", "0.975", "Replication (frozen model)")]
-for p_, a_, b_, c_, t_ in spans:
-    A_, B_ = pd.Timestamp(a_), pd.Timestamp(b_)
-    ax.axvspan(A_, B_, color=c_, lw=0, zorder=0)
-    ax.text(A_ + (B_ - A_) / 2, 0.97, t_, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=7)
+# ---- data checks for Fig. 1: stop if anything differs from numbers.json ----
+for key, p_ in (("n_fit", "fit"), ("n_val", "val"), ("n_test", "test"), ("rep_lead30", "replication")):
+    got, want = int(tot.loc[p_, "n"]), int(h[key])
+    print(f"  check Fig.1 observations {p_:<11}: {got:>7,} vs numbers.json {want:>7,} -> {'OK' if got == want else 'MISMATCH'}")
+    if got != want: sys.exit("Stop: Fig. 1 data do not match numbers.json")
+got = int(tot.loc["test", "pos"])
+print(f"  check Fig.1 unreliable in test 1: {got} vs numbers.json {int(h['n_test_pos'])} -> {'OK' if got == int(h['n_test_pos']) else 'MISMATCH'}")
+if got != int(h["n_test_pos"]): sys.exit("Stop: Fig. 1 data do not match numbers.json")
+print(f"  check Fig.1 rows left out of monthly points (day edges only): {int(drop.n.sum())} in {len(drop)} part-months, "
+      f"largest {int(drop.n.max()) if len(drop) else 0} -> {'OK' if (len(drop) == 0 or drop.n.max() < 100) else 'MISMATCH'}")
+if len(drop) and drop.n.max() >= 100: sys.exit("Stop: a real month would be dropped from Fig. 1")
+print("  Fig.1 totals:", {p_: (int(tot.loc[p_, 'n']), int(tot.loc[p_, 'pos']), round(tot.loc[p_, 'rate'] * 100, 2)) for p_ in tot.index})
+print(f"  Fig.1 peak: {g.loc[g.rate.idxmax(), 'month']} {g.rate.max() * 100:.2f}%")
+T = pd.Timestamp
+ORDER = ["fit", "val", "test", "replication"]
+SHADE = {"fit": C["part_fit"], "val": C["part_val"], "test": C["part_test1"], "replication": C["part_test2"]}
+SPAN = {"fit": ("2021-10-01", "2022-08-01"), "val": ("2022-08-01", "2022-10-01"), "test": ("2022-11-01", "2023-01-01"),
+        "replication": ("2023-01-01", "2026-01-01")}
+OCT = (T("2022-10-01"), T("2022-11-01"))
+num = lambda p_: f"{int(tot.loc[p_, 'n']):,} obs., {tot.loc[p_, 'rate'] * 100:.2f}%"
+
+fig, (axs, ax) = plt.subplots(2, 1, figsize=(7.2, 3.3), sharex=True,
+                              gridspec_kw={"height_ratios": [1.35, 4.2], "hspace": 0.05})
+# timeline strip: parts of the data with their size and unreliable share
+axs.set_ylim(0, 4.2); axs.axis("off")
+for p_ in ORDER:
+    axs.axvspan(T(SPAN[p_][0]), T(SPAN[p_][1]), ymin=0, ymax=0.45, color=SHADE[p_], ec="white", lw=1.2)
+axs.axvspan(*OCT, ymin=0, ymax=0.45, facecolor="white", edgecolor=C["axis"], hatch="////", lw=0)
+mid = lambda a, b: T(a) + (T(b) - T(a)) / 2
+axs.text(mid(*SPAN["fit"]), 0.95, f"Fit\n{num('fit')}", ha="center", va="center", fontsize=7.5, linespacing=1.1)
+axs.text(mid(*SPAN["replication"]), 0.95, f"Test 2 (replication, model frozen)\n{num('replication')}",
+         ha="center", va="center", fontsize=7.5, linespacing=1.1)
+def lead(x_bar, x_txt, y_txt, text, ha):
+    axs.annotate(text, xy=(x_bar, 1.92), xytext=(x_txt, y_txt), ha=ha, va="center", fontsize=8,
+                 arrowprops=dict(arrowstyle="-", lw=0.5, color=C["ink2"], shrinkA=1, shrinkB=0))
+lead(T("2022-09-01"), T("2022-06-20"), 2.75, f"Validation: {num('val')}", "right")
+lead(T("2022-10-16"), T("2022-10-16"), 3.75, "Oct 2022 excluded", "center")
+lead(T("2022-12-01"), T("2023-03-10"), 2.75, f"Test 1: {num('test')}", "left")
+
+# main panel
+for p_ in ORDER:
+    ax.axvspan(T(SPAN[p_][0]), T(SPAN[p_][1]), color=SHADE[p_], lw=0, zorder=0)
+ax.axvspan(*OCT, facecolor="white", edgecolor=C["axis"], hatch="////", lw=0, zorder=0)
+ax.set_yscale("log"); ax.set_ylim(0.04, 60)
+ax.yaxis.set_major_locator(mticker.FixedLocator([0.1, 0.3, 1, 3, 10, 30]))
+ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{v:g}%"))
+ax.yaxis.set_minor_locator(mticker.NullLocator())
+for k_, p_ in enumerate(ORDER):
     d_ = g[g.period == p_]
-    ax.plot(d_.month.dt.to_timestamp() + pd.Timedelta(days=14), np.minimum(d_.rate * 100, YCAP),
-            color="black", marker="o", ms=2.5, lw=0.9, zorder=3)
+    ax.plot(d_.month.dt.to_timestamp() + pd.Timedelta(days=14), d_.rate * 100, color=C["extreme"], marker="o",
+            ms=3, lw=1.2, zorder=3, label="Monthly share of unreliable intervals" if k_ == 0 else None)
 pk = g.loc[g.rate.idxmax()]
-cap_note = ""
-if pk.rate * 100 > YCAP:
-    xp = pk.month.to_timestamp() + pd.Timedelta(days=14)
-    ax.plot([xp], [YCAP], marker="^", color="black", ms=5, zorder=4)
-    ax.annotate(f"{pk.rate * 100:.1f}% ({pk.month.strftime('%b %Y')})", xy=(xp, YCAP), xytext=(xp + pd.Timedelta(days=45), YCAP * 0.85),
-                fontsize=7, va="center", arrowprops=dict(arrowstyle="-", lw=0.5))
-    cap_note = (f" The y-axis is cut at {YCAP:.0f}%; the {pk.month.strftime('%B %Y')} value ({pk.rate * 100:.1f}%, marked ▲) "
-                f"falls in the administered-pricing period.")
-ax.set_ylabel("Unreliable intervals (%)")
-ax.set_xlim(pd.Timestamp("2021-10-01"), pd.Timestamp("2026-01-01"))
-ax.set_ylim(0, YCAP * 1.3)
+xp = pk.month.to_timestamp() + pd.Timedelta(days=14)
+ax.annotate(f"{pk.month.strftime('%b %Y')}: {pk.rate * 100:.1f}%\n(administered pricing)", xy=(xp, pk.rate * 100),
+            xytext=(T("2022-09-10"), 14.0), fontsize=8, va="center", ha="left",
+            bbox=dict(boxstyle="square,pad=0.25", fc="white", ec="none", alpha=0.9),
+            arrowprops=dict(arrowstyle="-", lw=0.5, color=C["ink2"], shrinkA=0, shrinkB=3), zorder=5)
+ax.legend(loc="upper right")
+ax.set_ylabel("Unreliable intervals (%, log scale)")
+ax.set_xlim(T("2021-10-01"), T("2026-01-01"))
 ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=[1, 7]))
 ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
-save(fig, 1, f"Fig. 1. Monthly share of unreliable decision forecasts (|f(w_t) − p̄_t| > AUD 300/MWh) across the five NEM regions. "
-     f"Shading marks the fit ({h['n_fit']:,} intervals), validation ({h['n_val']:,}), test ({h['n_test']:,}) and 2023–25 "
-     f"replication ({h['rep_lead30']:,}) periods. October 2022 (hatched) is excluded because the AEMO archive holds only the "
-     f"latest pre-dispatch run for that month.{cap_note}")
+save(fig, 1, f"Fig. 1. Monthly share of unreliable decision forecasts (|f(w_t) − p̄_t| > AUD 300/MWh) across the five NEM regions "
+     f"(log scale). The strip above gives each part of the data (Table I) with its number of interval-region observations and "
+     f"share of unreliable ones. October 2022 is excluded because the AEMO archive holds only the latest pre-dispatch run for "
+     f"that month; the {pk.month.strftime('%B %Y')} peak ({pk.rate * 100:.1f}%) falls in the administered-pricing period.")
 
-# ---------- Fig. 3: decision timeline ----------
-fig, (a, b) = plt.subplots(1, 2, figsize=(W2, 2.3), sharey=True, gridspec_kw={"width_ratios": [3, 2]})
-runs = np.arange(-27.5, -0.49, 0.5)
-for ax_ in (a, b):
-    ax_.grid(False)
-    ax_.axvspan(-28.5, -0.5, color="0.92", lw=0, zorder=0)
-    ax_.scatter(runs, np.full(len(runs), 2), marker="|", s=60, color="0.35", zorder=2)
-a.set_xlim(-28.5, -1.25); b.set_xlim(-1.25, 1.75)
-a.spines["right"].set_visible(False); b.spines["left"].set_visible(False); b.tick_params(left=False)
-for ax_, x0 in ((a, 1), (b, 0)):
-    for y0 in (0, 1):
-        ax_.plot([x0 - 0.012, x0 + 0.012], [y0 - 0.04, y0 + 0.04], transform=ax_.transAxes, color="black", lw=0.6, clip_on=False)
-b.scatter([-0.5], [2], marker="D", s=30, color="black", zorder=3)
-b.axvline(-0.5, color="black", ls="--", lw=0.8)
-b.axvspan(0, 0.5, color="0.75", lw=0, zorder=0)
-b.scatter(np.arange(1, 7) / 12, np.full(6, 1), marker="o", s=14, facecolor="white", edgecolor="black", zorder=3)
-a.annotate("Earliest run (median lead ≈ 27.5 h)", xy=(-27.5, 2.1), xytext=(-27.9, 2.75), ha="left", va="center", fontsize=7,
-           arrowprops=dict(arrowstyle="-", lw=0.5, relpos=(0, 0.5)))
-a.text(-24, 2.38, "Revision path: all runs up to the decision run (features)", ha="left", fontsize=7)
-a.text(-14.5, 1.0, "No settled price for interval $t$ exists before decision time", ha="center", va="center",
-       fontsize=7, color="0.4", style="italic")
-b.text(-0.42, 2.62, "Decision run $f(w_t)$\nlead 30 min", ha="left", va="center", fontsize=7)
-b.text(0.25, 1.4, "Interval $t$", ha="center", fontsize=7)
-b.text(0.62, 1.0, "Six settled\n5-min prices\n" + r"$\rightarrow \bar{p}_t$ (label)", ha="left", va="center", fontsize=7)
-a.set_ylim(0.4, 3.0); a.set_yticks([1, 2]); a.set_yticklabels(["Settlement\n(label only)", "Pre-dispatch runs\n(features)"])
-fig.supxlabel("Hours relative to the start of trading interval $t$", fontsize=8)
-save(fig, 3, "Fig. 3. Information timeline for one trading interval. Features use only pre-dispatch runs published up to the decision run "
-     "(shaded). The label compares the decision forecast f(w_t) with the mean of the six settled 5-min DISPATCHPRICE values "
-     "(INTERVENTION = 0): Y_t = 1[|f(w_t) − p̄_t| > δ_Y], δ_Y = AUD 300/MWh. Run spacing is schematic; the time axis is broken.")
+# ---------- Fig. 3: one real interval (TAS1, interval ending 24 Dec 2022 17:00), colour, fri_style.py ----------
+REG3, END3 = "TAS1", pd.Timestamp("2022-12-24 17:00")
+row3 = pd.read_csv(PROCESSED_DIR / "aemo_nem_label_v2.csv", parse_dates=["DATETIME"])
+row3 = row3[(row3.REGIONID == REG3) & (row3.DATETIME == END3)].iloc[0]
+parts3 = []
+for ch in pd.read_csv(PROCESSED_DIR.parent / "raw" / "aemo_nem" / "aemo_nem_all_2021_2022_raw.csv", chunksize=2_000_000,
+                      usecols=["REGIONID", "DATETIME", "RRP", "INTERVENTION", "LASTCHANGED", "PREDISPATCH_RUN_DATETIME"]):
+    ch = ch[(ch.REGIONID == REG3) & (ch.DATETIME.astype(str).str.startswith(END3.strftime("%Y-%m-%d %H:%M")))]
+    if len(ch): parts3.append(ch)
+r3 = pd.concat(parts3)
+for c_ in ("DATETIME", "LASTCHANGED", "PREDISPATCH_RUN_DATETIME"): r3[c_] = pd.to_datetime(r3[c_])
+r3 = r3[r3.INTERVENTION == 0].sort_values("PREDISPATCH_RUN_DATETIME").drop_duplicates("PREDISPATCH_RUN_DATETIME", keep="last")
+r3["lead_min"] = (r3.DATETIME - r3.PREDISPATCH_RUN_DATETIME).dt.total_seconds() / 60
+r3 = r3[r3.lead_min >= row3.decision_lead_min]                       # runs available up to the decision run
+dec3 = r3[r3.lead_min == row3.decision_lead_min].iloc[0]
+pub3 = (dec3.LASTCHANGED - dec3.PREDISPATCH_RUN_DATETIME).total_seconds() / 60
+# ---- data checks for Fig. 3 ----
+for name_, got_, want_ in (("first forecast", r3.RRP.iloc[0], row3.f_first), ("decision forecast", dec3.RRP, row3.f_decision),
+                           ("runs up to decision", len(r3), row3.n_runs)):
+    ok_ = abs(float(got_) - float(want_)) < 1e-6
+    print(f"  check Fig.3 {name_}: raw {float(got_):.4f} vs label file {float(want_):.4f} -> {'OK' if ok_ else 'MISMATCH'}")
+    if not ok_: sys.exit("Stop: Fig. 3 data do not match the label file")
+gap3 = row3.f_decision - row3.p_disp30
+print(f"  Fig.3: settled {row3.p_disp30:.2f}, gap {gap3:.1f}, unreliable={int(row3.y_v2)}, decision run published {pub3:.1f} min after its run time")
+
+YTOP = max(540.0, float(r3.RRP.max()) * 1.12)                       # adapts if any run forecast is higher
+BRK = -4.0                                                            # axis break: compressed early runs, expanded last hours
+fig, (axL, ax) = plt.subplots(1, 2, figsize=(7.2, 3.0), sharey=True, gridspec_kw={"width_ratios": [1.6, 3], "wspace": 0.06})
+x3 = -r3.lead_min.values / 60                                        # hours relative to the end of interval t
+xd = -row3.decision_lead_min / 60
+for a_ in (axL, ax):
+    a_.axvspan(x3[0], xd, color="#eaf2fc", lw=0, zorder=0)
+    a_.step(x3, r3.RRP.values, where="post", color=C["fri"], lw=1.2, zorder=3)
+    a_.plot(x3, r3.RRP.values, "o", color=C["fri"], ms=2.2, zorder=3)
+axL.set_xlim(x3[0] - 0.8, BRK); ax.set_xlim(BRK, 1.45); ax.set_xticks([-3, -2, -1, 0])
+axL.spines["right"].set_visible(False); ax.spines["left"].set_visible(False); ax.tick_params(left=False)
+for a_, x0 in ((axL, 1), (ax, 0)):
+    for y0 in (0,):
+        a_.plot([x0 - 0.015, x0 + 0.015], [y0 - 0.03, y0 + 0.03], transform=a_.transAxes, color=C["axis"], lw=0.7, clip_on=False)
+ax.axvspan(-0.5, 0, color=C["part_test1"], lw=0, zorder=0)
+ax.step([], [], color=C["fri"], lw=1.2, label="Forecast for interval $t$ (each run)")
+ax.plot([xd], [row3.f_decision], "D", color=C["fri_dark"], ms=6, zorder=5)
+ax.hlines(row3.p_disp30, -0.5, 0, color=C["extreme"], lw=2.4, zorder=4, label=r"Settled price $\bar{p}_t$")
+ax.annotate("", xy=(-0.25, row3.p_disp30), xytext=(-0.25, row3.f_decision),
+            arrowprops=dict(arrowstyle="<->", lw=0.8, color=C["ink"], shrinkA=0, shrinkB=0), zorder=6)
+ax.text(0.12, (row3.p_disp30 + row3.f_decision) / 2, f"$|f-\\bar{{p}}_t|$ = {abs(gap3):.0f}\n> 300: unreliable",
+        ha="left", va="center", fontsize=8, color="#a32d2d")
+ax.annotate(f"Decision forecast $f(w_t)$ = {row3.f_decision:.0f}\n(run at the start of interval $t$)",
+            xy=(xd, row3.f_decision), xytext=(-3.85, row3.f_decision * 0.97), ha="left", va="center",
+            fontsize=8, color=C["fri_dark"], arrowprops=dict(arrowstyle="-", lw=0.5, color=C["ink2"], shrinkA=0, shrinkB=4))
+axL.annotate(f"First forecast {r3.RRP.iloc[0]:.0f}\n({r3.lead_min.iloc[0] / 60:.1f} h ahead)", xy=(x3[0], r3.RRP.iloc[0]),
+             xytext=(x3[0] + 0.5, 175), ha="left", va="center", fontsize=8,
+             arrowprops=dict(arrowstyle="-", lw=0.5, color=C["ink2"], shrinkA=0, shrinkB=3))
+axL.text((x3[0] + BRK) / 2, 300, "Revision path:\nruns available before\nthe decision (FRI features)", ha="center", fontsize=8,
+         color=C["fri_dark"], style="italic", linespacing=1.15)
+ax.text(-0.25, YTOP * 0.955, "Interval $t$", ha="center", fontsize=8)
+axL.set_ylim(min(0.0, float(r3.RRP.min()) * 1.1), YTOP)
+axL.set_ylabel("Price (AUD/MWh)")
+fig.supxlabel("Hours relative to the end of trading interval $t$ (AEMO timestamp); the axis is broken at 4 h", fontsize=9, y=-0.03)
+ax.legend(loc="center left", bbox_to_anchor=(0.0, 0.47))
+save(fig, 3, f"Fig. 3. Information available for one unreliable interval ({REG3}, trading interval ending "
+     f"{END3.strftime('%d %B %Y %H:%M')}). The {len(r3)} pre-dispatch runs published before the decision (shaded blue) form the "
+     f"revision path used as features; the decision run, issued at the start of the interval, forecast AUD {row3.f_decision:.0f}/MWh. "
+     f"The settled price, the mean of the six 5-min DISPATCHPRICE values (INTERVENTION = 0), was AUD {row3.p_disp30:.0f}/MWh, so "
+     f"|f(w_t) − p̄_t| = {abs(gap3):.0f} > δ_Y = 300 and the interval is labelled unreliable. The time axis is broken at 4 h. Runs are plotted at their run time; "
+     f"AEMO published the decision run {pub3:.0f} min later.")
 
 # ---------- Fig. 4: error amplification (R1) ----------
 r1 = pd.DataFrame(S["R1_regions"])
