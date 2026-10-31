@@ -273,7 +273,7 @@ LAB = {"fri25": "FRI, test 2 (2023–25): AUC {0:.3f}, AP {1:.3f}", "fri22": "FR
        "flev": "$|f(w_t)|$ alone*, test 2: AUC {0:.3f}, AP {1:.3f}", "vol": "Recent volatility, test 2: AP {1:.3f} (R4)"}
 H6 = [Line2D([], [], label=LAB[k].format(*met[k]), **st) for k, _, _, st, _ in S6]
 lax.legend(handles=H6, loc="center", ncol=2, fontsize=7.5, columnspacing=1.5)
-save(fig, 6, f"Fig. 6. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and frozen, on test 2 (2023–25, "
+save(fig, 6, f"Fig. 6. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and then held fixed, on test 2 (2023–25, "
      f"{h['rep_lead30']:,} intervals; solid) and test 1 (2022, {h['n_test']:,} intervals, {h['n_test_pos']} unreliable; dashed). "
      f"Orange: intervals ranked by raw recent volatility (recent_std_3h), the R4 comparison. *Aqua: ranked by the decision forecast "
      f"alone, |f(w_t)| (exploratory, not registered). Dotted lines: chance (a) and the no-skill precision, equal to the share of "
@@ -418,7 +418,7 @@ ax.text(1.03, len(reg) - 0.45, "$n^+$\n(test 2 / test 1)", transform=tr, fontsiz
 for y_, p_, q_ in zip(yy, reg.pos, n22):
     ax.text(1.03, y_, f"{p_:,} / {q_}" if q_ is not None else f"{p_:,}", transform=tr, fontsize=7, ha="left", va="center")
 ax.legend(loc="upper left", fontsize=7, borderpad=0.4, handletextpad=0.4)
-save(fig, "A1", f"Fig. A.1. AUC by region for the frozen FRI model (exploratory). n⁺ is the number of unreliable intervals in test 2 (2023–25) "
+save(fig, "A1", f"Fig. A.1. AUC by region for the fixed FRI model (exploratory). n⁺ is the number of unreliable intervals in test 2 (2023–25) "
      f"and test 1 (2022). 2022 AUC is shown only for regions with at least {MIN_POS} unreliable intervals. "
      f"The dashed line is the pooled test-2 AUC (R2).")
 

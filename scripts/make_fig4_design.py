@@ -111,7 +111,7 @@ path([(C["cx"], 32.2), (oN["cx"], 32.2), (oN["cx"], oN["t"])]); tag(oN["cx"], 30
 
 # ---------- row 2 ----------
 D = rq(33, 67, 21.5, "Replication and Transfer (RQ4)",
-       [("R1–R6  registered before 2023–25 data", ""), ("Code  model, θ and code frozen", ""), ("H8  Transfer (SA1, NZ, GB)", "")], head=HEAD4)
+       [("R1–R6  registered before 2023–25 data", ""), ("Code  model, θ and code fixed in advance", ""), ("H8  Transfer (SA1, NZ, GB)", "")], head=HEAD4)
 path([(oY["cx"], oY["b"]), (oY["cx"], 19.4), (D["r"], 19.4)])
 path([(oN["cx"], oN["b"]), (oN["cx"], 19.4), (oY["cx"], 19.4)], head=False)
 
@@ -119,6 +119,6 @@ for ext in ("png", "svg", "pdf"):
     fig.savefig(FIG / f"fig_4_design.{ext}", bbox_inches="tight", facecolor="white")
 cap = ("Fig. 4. Study design: the four research questions and the hypotheses that test each one. H1–H3 use the NEM error "
        "dataset, H4–H7 test 1 (2022), R1–R6 test 2 (2023–25) and H8 the transfer data (Table I). R1–R6 were registered, with "
-       "the model, threshold and code frozen, before the 2023–25 data were downloaded. Outcomes are reported in Table III and Section IV.")
+       "the model, threshold and code fixed, before the 2023–25 data were downloaded. Outcomes are reported in Table III and Section IV.")
 (FIG / "fig_4_design_caption.txt").write_text(cap + "\n")
 print("Saved fig_4_design.png/.svg/.pdf and caption to", FIG)

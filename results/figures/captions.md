@@ -6,7 +6,7 @@ Fig. 3. Information available for one unreliable interval (TAS1, trading interva
 
 Fig. 5. Mean absolute error of the decision forecast against the settled price in extreme and normal intervals, test 2 (2023–25; R1; log scale). Bars show the mean error (AUD/MWh); bold labels give the ratio of means (28–56); Welch p < 10⁻⁷ in every region.
 
-Fig. 6. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and frozen, on test 2 (2023–25, 261,635 intervals; solid) and test 1 (2022, 14,650 intervals, 94 unreliable; dashed). Orange: intervals ranked by raw recent volatility (recent_std_3h), the R4 comparison. *Aqua: ranked by the decision forecast alone, |f(w_t)| (exploratory, not registered). Dotted lines: chance (a) and the no-skill precision, equal to the share of unreliable intervals (b).
+Fig. 6. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and then held fixed, on test 2 (2023–25, 261,635 intervals; solid) and test 1 (2022, 14,650 intervals, 94 unreliable; dashed). Orange: intervals ranked by raw recent volatility (recent_std_3h), the R4 comparison. *Aqua: ranked by the decision forecast alone, |f(w_t)| (exploratory, not registered). Dotted lines: chance (a) and the no-skill precision, equal to the share of unreliable intervals (b).
 
 Fig. 7. Feature importance of the FRI model (17 features; mean |SHAP value| (TreeSHAP) on the 2022 test set, as % of the total). The decision forecast accounts for 44.2% and the revision-path group for 37.1%.
 
@@ -14,4 +14,4 @@ Fig. 8. Energy discharged into over-forecast intervals (f(w_t) − p̄_t > AUD 3
 
 Fig. 9. Net-revenue advantage of constant ×0.25 dispatch over FRI as degradation becomes less convex (R6), as a percentage of FRI net revenue. α is rescaled at each β so that baseline degradation cost is unchanged. The advantage falls from +115% (test 1) and +35% (test 2) at β = 2.03 to −3% and −5% at β = 1.0. FRI and baseline net revenue differ by at most 1.0% at any β (Table VII).
 
-Fig. A.1. AUC by region for the frozen FRI model (exploratory). n⁺ is the number of unreliable intervals in test 2 (2023–25) and test 1 (2022). 2022 AUC is shown only for regions with at least 10 unreliable intervals. The dashed line is the pooled test-2 AUC (R2).
+Fig. A.1. AUC by region for the fixed FRI model (exploratory). n⁺ is the number of unreliable intervals in test 2 (2023–25) and test 1 (2022). 2022 AUC is shown only for regions with at least 10 unreliable intervals. The dashed line is the pooled test-2 AUC (R2).
