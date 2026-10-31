@@ -1,5 +1,5 @@
-"""make_fig4_design.py (Step D): Fig. 4 study design: research questions, the hypotheses that test them, and the data each uses.
-Contains no results; every label matches Table III. PNG (300 dpi), SVG, PDF."""
+"""make_fig4_design.py: Fig. 4 study design: the research questions and the hypotheses that test them.
+Contains no results; every label matches Table III; the data parts are named in the caption (Table I). PNG (300 dpi), SVG, PDF."""
 from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
@@ -7,11 +7,6 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager
 from matplotlib.patches import Polygon, FancyBboxPatch
 
-try:
-    from config.settings import TABLES_DIR
-    FIG = TABLES_DIR.parent / "figures"
-except ImportError:
-    FIG = Path("figures")
 FIG = Path(__file__).resolve().parents[1] / "results" / "figures"   # always the repo results/figures folder
 FIG.mkdir(parents=True, exist_ok=True)
 import sys; sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -20,9 +15,12 @@ FS.use()
 print("Font used:", Path(font_manager.findfont(font_manager.FontProperties(family=["serif"]))).name)
 
 INK, MUTED, LINE, PANEL = FS.C["ink"], FS.C["ink2"], FS.C["box_line"], FS.C["box_fill"]
-HEAD, HEAD4 = FS.C["box_head"], FS.C["box_head_rep"]
-fig, ax = plt.subplots(figsize=(7.16, 4.8))
-ax.set_xlim(0, 100); ax.set_ylim(-4, 66); ax.axis("off")
+HEAD, HEAD4 = FS.C["box_head"], FS.C["box_head_rep"]                 # RQ1-3 header; RQ4 (prospective) header
+STATUS = {"supported": ("#1E6B34", "#E3F2E7"), "not supported": ("#A61B1B", "#FBE7E7"),
+          "not testable": ("#52606D", "#EEF1F4"), "descriptive": ("#52606D", "#EEF1F4"), "": (MUTED, "white")}
+
+fig, ax = plt.subplots(figsize=(7.16, 4.0))
+ax.set_xlim(0, 100); ax.set_ylim(5.5, 66); ax.axis("off")
 RH = 3.4
 
 
@@ -31,20 +29,32 @@ def rbox(x0, y0, x1, y1, fc, ec, lw=0.7, r=0.9, ls="-", z=2):
                                 facecolor=fc, edgecolor=ec, lw=lw, ls=ls, zorder=z))
 
 
-def rq(x0, x1, ytop, title, rows, head=HEAD):
+def badge(x_right, y, text):
+    fg, bg = STATUS[text]
+    if not text:
+        return
+    ax.text(x_right, y, text, ha="right", va="center", fontsize=5.4, color=fg, fontweight="bold", zorder=5,
+            bbox=dict(boxstyle="round,pad=0.25,rounding_size=0.5", fc=bg, ec="none"))
+
+
+def rq(x0, x1, ytop, title, rows, head=HEAD, extra=None):
     n = len(rows)
     rbox(x0, ytop - 4.2 - n * RH - 0.6, x1, ytop, "white", LINE, lw=0.7)
     rbox(x0, ytop - 4.2, x1, ytop, head, head, r=0.9, z=3)
-    ax.text((x0 + x1) / 2, ytop - 2.1, title, ha="center", va="center", fontsize=7, color="white", fontweight="bold", zorder=4)
+    ax.text((x0 + x1) / 2, ytop - 2.1, title, ha="center", va="center", fontsize=6.4, color="white", fontweight="bold", zorder=4)
     y = ytop - 4.2 - 0.3
+    off = 8.2 if any(len(l.partition("  ")[0]) > 2 for l, _ in rows) else 4.6   # one text column per box
     for k, (lab, out) in enumerate(rows):
         yc = y - RH / 2
         if k:
             ax.plot([x0 + 0.8, x1 - 0.8], [y, y], color="#E4E7EB", lw=0.6, zorder=3)
         code, _, rest = lab.partition("  ")
         ax.text(x0 + 1.0, yc, code, ha="left", va="center", fontsize=6.3, color=head, fontweight="bold", zorder=4)
-        ax.text(x0 + (4.6 if len(code) <= 2 else 8.2), yc, rest, ha="left", va="center", fontsize=6.1, color=INK, zorder=4)
-        ax.text(x1 - 0.9, yc, out, ha="right", va="center", fontsize=5.6, color=MUTED, style="italic", zorder=4)
+        ax.text(x0 + off, yc, rest, ha="left", va="center", fontsize=6.1, color=INK, zorder=4)
+        if out in STATUS:
+            badge(x1 - 0.9, yc, out)
+        else:
+            ax.text(x1 - 0.9, yc, out, ha="right", va="center", fontsize=5.6, color=MUTED, style="italic", zorder=4)
         y -= RH
     return dict(l=x0, r=x1, t=ytop, b=y - 0.3, cx=(x0 + x1) / 2)
 
@@ -57,8 +67,8 @@ def diamond(cx, cy, w, h, text):
 
 
 def outbox(x0, x1, y0, y1, text, kind):
-    fg, bg = {"good": ("#1E6B34", "#E3F2E7"), "rep": (HEAD4, "#E0F2F1"), "lim": ("#52606D", "#EEF1F4")}[kind]
-    rbox(x0, y0, x1, y1, bg, fg, lw=0.8, ls=(0, (3, 2)) if kind == "lim" else "-")
+    fg, bg = {"good": ("#1E6B34", "#E3F2E7"), "bad": ("#A61B1B", "#FBE7E7"), "rep": (HEAD4, "#E0F2F1"), "lim": ("#52606D", "#EEF1F4")}[kind]
+    rbox(x0, y0, x1, y1, bg, fg, lw=0.8, ls=(0, (3, 2)) if kind in ("bad", "lim") else "-")
     ax.text((x0 + x1) / 2, (y0 + y1) / 2, text, ha="center", va="center", fontsize=6.1, color=INK, linespacing=1.25, zorder=4)
     return dict(l=x0, r=x1, t=y1, b=y0, cx=(x0 + x1) / 2, cy=(y0 + y1) / 2)
 
@@ -71,11 +81,12 @@ def path(pts, head=True):
 
 
 def tag(x, y, text, kind="yes"):
-    bg = {"yes": "#1E6B34", "lim": "#52606D"}[kind]
-    ax.text(x, y, text, ha="center", va="center", fontsize=5.4, fontweight="bold", color="white", zorder=6,
+    fg, bg = {"yes": ("white", "#1E6B34"), "no": ("white", "#A61B1B"), "lim": ("white", "#52606D")}[kind]
+    ax.text(x, y, text, ha="center", va="center", fontsize=5.4, fontweight="bold", color=fg, zorder=6,
             bbox=dict(boxstyle="round,pad=0.3,rounding_size=0.6", fc=bg, ec="none"))
 
 
+# ---------- row 1 ----------
 A = rq(1, 29, 65, "NEM Signal Failures (RQ1)",
        [("H1  Error amplification", ""), ("H2  Error masking", ""), ("H3  Horizon difference", ""),
         ("R1  Against settled price", "")])
@@ -98,22 +109,16 @@ path([(C["cx"], dC["b"]), (C["cx"], 32.2)], head=False)
 path([(C["cx"], 32.2), (oY["cx"], 32.2), (oY["cx"], oY["t"])]); tag(oY["cx"], 30.0, "RISK")
 path([(C["cx"], 32.2), (oN["cx"], 32.2), (oN["cx"], oN["t"])]); tag(oN["cx"], 30.0, "REVENUE", "lim")
 
-D = rq(35, 65, 21.5, "Replication and Transfer (RQ4)",
-       [("R1–R6  registered before 2023–25 data", ""), ("Code  model, θ and code frozen", ""),
-        ("H8  Transfer (SA1, NZ, GB)", "")], head=HEAD4)
+# ---------- row 2 ----------
+D = rq(33, 67, 21.5, "Replication and Transfer (RQ4)",
+       [("R1–R6  registered before 2023–25 data", ""), ("Code  model, θ and code frozen", ""), ("H8  Transfer (SA1, NZ, GB)", "")], head=HEAD4)
 path([(oY["cx"], oY["b"]), (oY["cx"], 19.4), (D["r"], 19.4)])
 path([(oN["cx"], oN["b"]), (oN["cx"], 19.4), (oY["cx"], 19.4)], head=False)
-dD = diamond(D["cx"], 0.3, 22, 8.4, "Do results hold\non new data?")
-path([(D["cx"], D["b"]), (D["cx"], dD["t"])])
-oD1 = outbox(6, 26, -2.4, 3.6, "Main results:\nSections IV.A–IV.C", "rep")
-oD2 = outbox(74, 99.5, -2.4, 3.6, "Tests not supported or\nnot re-run: Section IV.D", "lim")
-path([(dD["l"], dD["cy"]), (oD1["r"], dD["cy"])]); tag((dD["l"] + oD1["r"]) / 2, dD["cy"] + 2.0, "YES")
-path([(dD["r"], dD["cy"]), (oD2["l"], dD["cy"])]); tag((dD["r"] + oD2["l"]) / 2, dD["cy"] + 2.0, "LIMITS", "lim")
 
 for ext in ("png", "svg", "pdf"):
     fig.savefig(FIG / f"fig_4_design.{ext}", bbox_inches="tight", facecolor="white")
-cap = ("Fig. 4. Study design: the four research questions and the hypotheses that test each one. "
-       "H1–H8 use the 2021–22 data and R1–R6 the 2023–25 data (Table I). R1–R6 were registered, with the model, "
-       "threshold and code frozen, before the 2023–25 data were downloaded. Outcomes are reported in Table III and Section IV.")
+cap = ("Fig. 4. Study design: the four research questions and the hypotheses that test each one. H1–H3 use the NEM error "
+       "dataset, H4–H7 test 1 (2022), R1–R6 test 2 (2023–25) and H8 the transfer data (Table I). R1–R6 were registered, with "
+       "the model, threshold and code frozen, before the 2023–25 data were downloaded. Outcomes are reported in Table III and Section IV.")
 (FIG / "fig_4_design_caption.txt").write_text(cap + "\n")
 print("Saved fig_4_design.png/.svg/.pdf and caption to", FIG)
