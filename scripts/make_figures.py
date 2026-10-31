@@ -213,26 +213,32 @@ save(fig, 3, f"Fig. 3. Information available for one unreliable interval ({REG3}
      f"|f(w_t) − p̄_t| = {abs(gap3):.0f} > δ_Y = 300 and the interval is labelled unreliable. The time axis is broken at 4 h. Runs are plotted at their run time; "
      f"AEMO published the decision run {pub3:.0f} min later.")
 
-# ---------- Fig. 4: error amplification (R1) ----------
+# ---------- Fig. 5 (file fig_5): error amplification (R1), colour, fri_style.py ----------
 r1 = pd.DataFrame(S["R1_regions"])
+print(f"  check Fig.5 R1 ratios: {r1.ratio.min():.2f}-{r1.ratio.max():.2f} vs numbers.json {h['R1_ratio_min']:.2f}-{h['R1_ratio_max']:.2f} -> "
+      f"{'OK' if abs(r1.ratio.min() - h['R1_ratio_min']) < 0.01 and abs(r1.ratio.max() - h['R1_ratio_max']) < 0.01 else 'MISMATCH'}")
+if abs(r1.ratio.min() - h["R1_ratio_min"]) >= 0.01 or abs(r1.ratio.max() - h["R1_ratio_max"]) >= 0.01: sys.exit("Stop: Fig. 5 data")
+print("  Fig.5 per region:", r1[["region", "mean_err_extreme", "mean_err_normal", "ratio"]].round(1).to_dict("records"))
 x = np.arange(len(r1)); w = 0.38
-fig, ax = plt.subplots(figsize=(W1, 2.5))
-ax.bar(x - w / 2, r1.mean_err_extreme, w, color="black", label=r"Extreme ($\bar{p}_t \geq$ AUD 300/MWh)")
-ax.bar(x + w / 2, r1.mean_err_normal, w, color="white", edgecolor="black", hatch="////", lw=0.6, label="Normal")
+fig, ax = plt.subplots(figsize=(3.5, 2.7))
+ax.set_axisbelow(True); ax.grid(axis="x", visible=False)
+ax.bar(x - w / 2, r1.mean_err_extreme, w, color=C["extreme"], label=r"Extreme ($\bar{p}_t \geq$ AUD 300/MWh)")
+ax.bar(x + w / 2, r1.mean_err_normal, w, color=C["normal"], label="Normal")
 for i, r in r1.iterrows():
-    ax.text(i - w / 2, r.mean_err_extreme * 1.15, f"×{r.ratio:.0f}", ha="center", fontsize=7)
-ax.set_yscale("log"); ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:,.0f}")); ax.set_xticks(x); ax.set_xticklabels(r1.region.str.replace("1", "", regex=False))
+    ax.text(i - w / 2, r.mean_err_extreme * 1.15, f"×{r.ratio:.0f}", ha="center", fontsize=8)
+ax.set_yscale("log"); ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:,.0f}"))
+ax.set_xticks(x); ax.set_xticklabels(r1.region.str.replace("1", "", regex=False))
 ax.set_ylabel(r"Mean $|f(w_t) - \bar{p}_t|$ (AUD/MWh)")
 ax.set_ylim(10, r1.mean_err_extreme.max() * 3)
-ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False)
-save(fig, 4, f"Fig. 4. Mean absolute error of the decision forecast against the settled price in extreme and normal intervals, "
-     f"2023–25 (R1; log scale). Labels give the ratio of means ({h['R1_ratio_min']:.0f}–{h['R1_ratio_max']:.0f}); Welch p < 0.001 in every region.")
+ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, fontsize=7.5)
+save(fig, 5, f"Fig. 5. Mean absolute error of the decision forecast against the settled price in extreme and normal intervals, "
+     f"test 2 (2023–25; R1; log scale). Labels give the ratio of means ({h['R1_ratio_min']:.0f}–{h['R1_ratio_max']:.0f}); Welch p < 0.001 in every region.")
 
-# ---------- Fig. 5: ROC and PR ----------
-fig, (a, b) = plt.subplots(1, 2, figsize=(W2, 3.3))
-for y_, p_, ls, lbl in [(y22, p22, "-", "2022 test"), (y25, p25, "--", "2023–25")]:
-    f_, t_, _ = roc_curve(y_, p_); a.plot(f_, t_, color="black", ls=ls, label=f"{lbl} (AUC {roc_auc_score(y_, p_):.3f})")
-    pr, rc, _ = precision_recall_curve(y_, p_); b.step(rc, pr, where="post", color="black", ls=ls, label=f"{lbl} (AP {average_precision_score(y_, p_):.3f})")
+# ---------- Fig. 6 (file fig_6): ROC and PR, colour ----------
+fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.4))
+for y_, p_, ls, lbl in [(y25, p25, "-", "test 2 (2023–25)"), (y22, p22, "--", "test 1 (2022)")]:
+    f_, t_, _ = roc_curve(y_, p_); a.plot(f_, t_, color=C["fri"], ls=ls, lw=1.4, label=f"FRI, {lbl} (AUC {roc_auc_score(y_, p_):.3f})")
+    pr, rc, _ = precision_recall_curve(y_, p_); b.step(rc, pr, where="post", color=C["fri"], ls=ls, lw=1.4, label=f"FRI, {lbl} (AP {average_precision_score(y_, p_):.3f})")
 vol_note = ""
 if "recent_std_3h" in rep.columns:
     v = rep.recent_std_3h.values.astype(float)
@@ -240,23 +246,24 @@ if "recent_std_3h" in rep.columns:
     ap_v = average_precision_score(y25, v)
     check("dAP 2023-25 (R4)", average_precision_score(y25, p25) - ap_v, float(S["R"][3]["result"].split()[1]))
     pr, rc, _ = precision_recall_curve(y25, v)
-    b.step(rc, pr, where="post", color="0.5", ls="-.", label=f"recent_std_3h, 2023–25 (AP {ap_v:.3f})")
-    vol_note = " The dash-dot curve is raw recent_std_3h on 2023–25 (R4 comparison)."
+    b.step(rc, pr, where="post", color=C["vol"], lw=1.2, label=f"Recent volatility, test 2 (AP {ap_v:.3f})")
+    vol_note = " The orange curve ranks intervals by raw recent volatility (recent_std_3h) on test 2 (R4 comparison)."
 if "f_decision" in rep.columns:
     fa = np.abs(rep.f_decision.values)
     ap_f, auc_f = average_precision_score(y25, fa), roc_auc_score(y25, fa)
     check("AP |f| 2023-25 (c4_05)", ap_f, h["fdec"]["2023-25"]["ap"])
-    f_, t_, _ = roc_curve(y25, fa); a.plot(f_, t_, color="0.3", ls=":", lw=1.4, label=f"$|f(w_t)|$, 2023–25 (AUC {auc_f:.3f})")
+    f_, t_, _ = roc_curve(y25, fa); a.plot(f_, t_, color=C["flevel"], lw=1.2, label=f"$|f(w_t)|$, test 2 (AUC {auc_f:.3f})")
     pr, rc, _ = precision_recall_curve(y25, fa)
-    b.step(rc, pr, where="post", color="0.3", ls=":", lw=1.4, label=f"$|f(w_t)|$, 2023–25 (AP {ap_f:.3f})")
-    vol_note += " Dotted curves rank intervals by the decision forecast alone, |f(w_t)| (exploratory, not registered)."
-a.plot([0, 1], [0, 1], color="0.8", ls="-", lw=0.6)
-for ax_, t_, xl, yl, loc in [(a, "(a) ROC", "False positive rate", "True positive rate", "lower right"),
-                             (b, "(b) Precision–recall", "Recall", "Precision", "upper right")]:
-    ax_.set_title(t_, loc="left"); ax_.set_xlabel(xl); ax_.set_ylabel(yl)
-    ax_.set_xlim(0, 1); ax_.set_ylim(0, 1.02); ax_.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2), frameon=False)
-save(fig, 5, f"Fig. 5. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and frozen, on the 2022 test set "
-     f"({h['n_test']:,} intervals, {h['n_test_pos']} unreliable) and the 2023–25 replication ({h['rep_lead30']:,} intervals).{vol_note}")
+    b.step(rc, pr, where="post", color=C["flevel"], lw=1.2, label=f"$|f(w_t)|$, test 2 (AP {ap_f:.3f})")
+    vol_note += " Aqua curves rank intervals by the decision forecast alone, |f(w_t)| (exploratory, not registered)."
+a.plot([0, 1], [0, 1], color=C["axis"], ls=":", lw=0.8)
+for ax_, t_, xl, yl in [(a, "(a) ROC", "False positive rate", "True positive rate"),
+                        (b, "(b) Precision–recall", "Recall", "Precision")]:
+    ax_.set_title(t_, loc="left", fontstyle="italic"); ax_.set_xlabel(xl); ax_.set_ylabel(yl)
+    ax_.set_xlim(0, 1); ax_.set_ylim(0, 1.02); ax_.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2), fontsize=7.5)
+save(fig, 6, f"Fig. 6. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and frozen, on test 2 (2023–25, "
+     f"{h['rep_lead30']:,} intervals; solid) and test 1 (2022, {h['n_test']:,} intervals, {h['n_test_pos']} unreliable; "
+     f"dashed).{vol_note}")
 
 FEAT_LABEL = {
     "f_decision": "Decision forecast $f(w_t)$",
@@ -270,49 +277,66 @@ FEAT_LABEL = {
     "f_hour_of_day": "Hour of day", "f_day_of_week": "Day of week", "f_is_peak_hour": "Peak hour (16–20 h)"}
 IMP_MEASURE = "mean |SHAP value| (TreeSHAP) on the 2022 test set, as % of the total"   # c2_31 step 4, pred_contribs=True
 
-# ---------- Fig. 6: feature attribution ----------
+# ---------- Fig. 7 (file fig_7): feature attribution, colour ----------
 PATH = ["rev_abs", "rev_signed", "n_runs", "n_sign_flips", "max_abs_step", "run_std", "recent_std_3h"]
 imp = pd.Series(S["importance"]).sort_values()
-fig, ax = plt.subplots(figsize=(W1, 3.4))
+sd, sp = float(imp["f_decision"]), float(imp[[k for k in PATH if k in imp.index]].sum())
+for nm_, got_, want_ in (("decision forecast share", sd, h["attr_f_decision"]), ("revision-path share", sp, h["attr_path_group"]),
+                         ("total of shares", float(imp.sum()), 100.0)):
+    ok_ = abs(got_ - want_) < 0.15
+    print(f"  check Fig.7 {nm_}: {got_:.2f} vs {want_:.2f} -> {'OK' if ok_ else 'MISMATCH'}")
+    if not ok_: sys.exit("Stop: Fig. 7 data")
+fig, ax = plt.subplots(figsize=(3.5, 3.8))
+ax.set_axisbelow(True)
 for i, (k, v) in enumerate(imp.items()):
-    st = dict(color="black") if k == "f_decision" else (dict(facecolor="0.6", edgecolor="black", lw=0.5) if k in PATH
-                                                        else dict(facecolor="white", edgecolor="black", hatch="....", lw=0.5))
-    ax.barh(i, v, height=0.7, **st); ax.text(v + 0.6, i, f"{v:.1f}", va="center", fontsize=6.5)
-ax.set_yticks(range(len(imp))); ax.set_yticklabels([FEAT_LABEL.get(k, k) for k in imp.index], fontsize=6.5)
-ax.set_xlabel("Share of mean |SHAP value| (%)"); ax.set_xlim(0, imp.max() * 1.18); ax.grid(axis="y", visible=False)
-ax.legend(handles=[Patch(color="black", label="Decision forecast"), Patch(facecolor="0.6", edgecolor="black", label="Revision path"),
-                   Patch(facecolor="white", edgecolor="black", hatch="....", label="Price and calendar (earliest run)")], loc="lower right")
-save(fig, 6, f"Fig. 6. Feature importance of the FRI model ({len(imp)} features; {IMP_MEASURE}). The decision forecast accounts for {h['attr_f_decision']:.1f}% "
+    col = C["feat_decision"] if k == "f_decision" else (C["feat_revision"] if k in PATH else C["feat_other"])
+    ax.barh(i, v, height=0.7, color=col); ax.text(v + 0.6, i, f"{v:.1f}", va="center", fontsize=7)
+ax.set_yticks(range(len(imp))); ax.set_yticklabels([FEAT_LABEL.get(k, k) for k in imp.index], fontsize=7)
+ax.set_xlabel("Share of mean |SHAP value| (%)"); ax.set_xlim(0, imp.max() * 1.2); ax.grid(axis="y", visible=False)
+ax.legend(handles=[Patch(color=C["feat_decision"], label=f"Decision forecast ({sd:.1f}%)"),
+                   Patch(color=C["feat_revision"], label=f"Revision path ({sp:.1f}%)"),
+                   Patch(color=C["feat_other"], label=f"Earliest-run price,\ncalendar ({100 - sd - sp:.1f}%)")],
+          loc="center right", bbox_to_anchor=(1.0, 0.42), fontsize=7, handlelength=1.4, borderpad=0.5)
+save(fig, 7, f"Fig. 7. Feature importance of the FRI model ({len(imp)} features; {IMP_MEASURE}). The decision forecast accounts for {h['attr_f_decision']:.1f}% "
      f"and the revision-path group for {h['attr_path_group']:.1f}%.")
 
-# ---------- Fig. 7: exposure by agent ----------
+# ---------- Fig. 8 (file fig_8): exposure by agent, colour ----------
 ORDER = [("baseline", "Baseline"), ("vol_matched", "Volatility-matched"), ("fdec_matched", "Forecast-level-matched*"), ("const_0.75", "Constant ×0.75"),
          ("const_0.25", "Constant ×0.25"), ("fri_3band", "FRI three-band")]
+COL = {"baseline": C["baseline"], "vol_matched": C["vol"], "fdec_matched": C["flevel"], "const_0.75": C["const75"],
+       "const_0.25": C["const25"], "fri_3band": C["fri"]}
 g22 = {r["agent"]: r for r in S["gateA"] if abs(r["beta"] - 2.03) < 1e-9}
 g25 = {r["agent"]: r for r in S["agents_2325"]}
 for r in S["fdec_ctrl"]:
     if r["agent"] == "fdec_matched":
         (g22 if r["period"] == "2022 test" else g25)["fdec_matched"] = r
-fig, axs = plt.subplots(1, 2, figsize=(W2, 2.5), sharey=True)
-for ax_, g_, t_ in [(axs[0], g22, "(a) 2022 test"), (axs[1], g25, "(b) 2023–25 replication")]:
+for nm_, g_, want_ in (("2022", g22, h["exposure_reduction_2022_pct"]), ("2023-25", g25, h["rep_exposure_reduction_pct"])):
+    got_ = (1 - g_["fri_3band"]["mwh_into_overforecast"] / g_["baseline"]["mwh_into_overforecast"]) * 100
+    print(f"  check Fig.8 exposure reduction {nm_}: {got_:.1f}% vs numbers.json {want_}% -> {'OK' if abs(got_ - want_) < 0.06 else 'MISMATCH'}")
+    if abs(got_ - want_) >= 0.06: sys.exit("Stop: Fig. 8 data")
+fig, axs = plt.subplots(1, 2, figsize=(7.2, 2.7), sharey=True)
+for ax_, g_, t_ in [(axs[0], g22, "(a) Test 1 (2022)"), (axs[1], g25, "(b) Test 2 (2023–25)")]:
+    ax_.set_axisbelow(True)
     vals = [g_[k]["mwh_into_overforecast"] for k, _ in ORDER]
+    base_ = g_["baseline"]["mwh_into_overforecast"]
     for i, (k, _) in enumerate(ORDER):
-        ax_.barh(i, vals[i], height=0.65, color="black" if k == "fri_3band" else "0.82", edgecolor="black", lw=0.5)
-        base_ = g_["baseline"]["mwh_into_overforecast"]
-        lbl_ = f"{vals[i]:,.1f}" if k == "baseline" else f"{vals[i]:,.1f} ({(vals[i] / base_ - 1) * 100:+.0f}%)"
-        ax_.text(vals[i] + max(vals) * 0.02, i, lbl_, va="center", fontsize=7)
-    from matplotlib.ticker import FuncFormatter
-    ax_.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
-    ax_.set_title(t_, loc="left"); ax_.set_xlim(0, max(vals) * 1.35)
+        ax_.barh(i, vals[i], height=0.65, color=COL[k], hatch="////" if k == "fdec_matched" else None,
+                 edgecolor="white" if k == "fdec_matched" else None, lw=0)
+        pc_ = (vals[i] / base_ - 1) * 100
+        lbl_ = f"{vals[i]:,.1f}" if k == "baseline" else f"{vals[i]:,.1f} ({pc_:+.1f}%)" if abs(pc_) < 1 else f"{vals[i]:,.1f} ({pc_:+.0f}%)"
+        ax_.text(vals[i] + max(vals) * 0.02, i, lbl_, va="center", fontsize=7.5,
+                 fontweight="bold" if k == "fri_3band" else "normal")
+    ax_.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:,.0f}"))
+    ax_.set_title(t_, loc="left", fontstyle="italic"); ax_.set_xlim(0, max(vals) * 1.42)
     ax_.set_xlabel("MWh into over-forecast intervals"); ax_.grid(axis="y", visible=False)
 axs[0].set_yticks(range(len(ORDER))); axs[0].set_yticklabels([l for _, l in ORDER]); axs[0].invert_yaxis()
 a2 = re.findall(r"\[[-\d., ]+\]", h["h5_h7"]["A2 exposure 2022"]["result"])[-1]
 r3 = [r for r in S["hypotheses"] if r["id"] == "R3"][0]["result"].split("; ", 1)[1]
-save(fig, 7, f"Fig. 7. Energy discharged into over-forecast intervals (f(w_t) − p̄_t > AUD 300/MWh) by agent, β = 2.03. "
-     f"FRI reduces exposure against the baseline by {h['exposure_reduction_2022_pct']}% in 2022 (95% CI {a2} MWh) and by "
-     f"{h['rep_exposure_reduction_pct']}% in 2023–25 ({r3}; R3). * Exploratory control, not registered: same band counts as FRI, assigned by highest f(w_t).")
+save(fig, 8, f"Fig. 8. Energy discharged into over-forecast intervals (f(w_t) − p̄_t > AUD 300/MWh) by agent, β = 2.03. "
+     f"FRI reduces exposure against the baseline by {h['exposure_reduction_2022_pct']}% in test 1 (95% CI {a2} MWh) and by "
+     f"{h['rep_exposure_reduction_pct']}% in test 2 ({r3}; R3). * Exploratory control, not registered (hatched): same band counts as FRI, assigned by highest f(w_t).")
 
-# ---------- Fig. 8: R6 degradation curvature ----------
+# ---------- Fig. 9 (file fig_9): R6 degradation curvature, colour ----------
 B = [1.0, 1.5, 2.03]
 gb = lambda b_, a_: next(r for r in S["gateA"] if abs(r["beta"] - b_) < 1e-9 and r["agent"] == a_)["net_revenue"]
 r6 = {round(r["beta"], 2): r for r in S["R6"]}
@@ -320,23 +344,25 @@ adv22 = [(gb(b_, "const_0.25") / gb(b_, "fri_3band") - 1) * 100 for b_ in B]
 adv25 = [(r6[b_]["net_const025"] / r6[b_]["net_fri"] - 1) * 100 for b_ in B]
 fb = [abs(gb(b_, "fri_3band") / gb(b_, "baseline") - 1) * 100 for b_ in B] + \
      [abs(r6[b_]["net_fri"] / r6[b_]["net_baseline"] - 1) * 100 for b_ in B]
-fig, ax = plt.subplots(figsize=(W1, 2.6))
-ax.axhline(0, color="0.5", lw=0.8)
-ax.plot(B, adv22, color="black", ls="-", marker="o", ms=4, label="2022 test")
-ax.plot(B, adv25, color="black", ls="--", marker="s", ms=4, mfc="white", label="2023–25 replication")
+print("  Fig.9 constant x0.25 advantage (%): 2022", [round(v, 1) for v in adv22], "| 2023-25", [round(v, 1) for v in adv25])
+fig, ax = plt.subplots(figsize=(3.5, 2.7))
+ax.axhline(0, color=C["axis"], lw=0.8)
+ax.plot(B, adv25, color=C["const25"], ls="-", marker="o", ms=5, lw=1.4, label="Test 2 (2023–25)")
+ax.plot(B, adv22, color=C["const25"], ls="--", marker="s", ms=5, mfc="white", lw=1.4, label="Test 1 (2022)")
 for b_, v in zip(B, adv22):
-    ax.annotate(f"{v:+.0f}%", (b_, v), textcoords="offset points", xytext=(0, 6), ha="center", fontsize=6.5)
+    ax.annotate(f"{v:+.0f}%", (b_, v), textcoords="offset points", xytext=(0, 7), ha="center", fontsize=7.5)
 for b_, v in zip(B, adv25):
-    ax.annotate(f"{v:+.0f}%", (b_, v), textcoords="offset points", xytext=(0, -11), ha="center", fontsize=6.5)
-ax.set_xticks(B); ax.set_xlim(0.9, 2.13); ax.set_xlabel(r"Degradation exponent $\beta$")
+    ax.annotate(f"{v:+.0f}%", (b_, v), textcoords="offset points", xytext=(0, -13), ha="center", fontsize=7.5)
+ax.set_xticks(B); ax.set_xticklabels(["1.0", "1.5", "2.03"]); ax.set_xlim(0.9, 2.13); ax.set_xlabel(r"Degradation exponent $\beta$")
+ax.set_ylim(min(adv22 + adv25) - 18, max(adv22 + adv25) * 1.15)
 ax.set_ylabel("Constant ×0.25 advantage\n(% of FRI net revenue)")
 ax.legend(loc="upper left")
-save(fig, 8, f"Fig. 8. Net-revenue advantage of constant ×0.25 dispatch over FRI as degradation becomes less convex (R6), as a "
+save(fig, 9, f"Fig. 9. Net-revenue advantage of constant ×0.25 dispatch over FRI as degradation becomes less convex (R6), as a "
      f"percentage of FRI net revenue. α is rescaled at each β so that baseline degradation cost is unchanged. The advantage falls "
-     f"from {adv22[2]:+.0f}% (2022) and {adv25[2]:+.0f}% (2023–25) at β = 2.03 to {adv22[0]:+.0f}% and {adv25[0]:+.0f}% at β = 1.0. "
+     f"from {adv22[2]:+.0f}% (test 1) and {adv25[2]:+.0f}% (test 2) at β = 2.03 to {adv22[0]:+.0f}% and {adv25[0]:+.0f}% at β = 1.0. "
      f"FRI and baseline net revenue differ by at most {max(fb):.1f}% at any β (Table VII).")
 
-# ---------- Fig. 9: per-region AUC ----------
+# ---------- Fig. A.1 (file fig_A1): per-region AUC, colour ----------
 MIN_POS = 10
 reg = []
 for r in S["R_exploratory"]:
@@ -344,9 +370,11 @@ for r in S["R_exploratory"]:
     if mm:
         reg.append((mm.group(1), float(r["value"]), int(mm.group(2))))
 reg = pd.DataFrame(reg, columns=["region", "auc", "pos"]).sort_values("region").reset_index(drop=True)
+print(f"  check Fig.A1 regions: {len(reg)}, positives sum {int(reg.pos.sum()):,} (2023-25 total 1,684) -> {'OK' if int(reg.pos.sum()) == 1684 else 'CHECK'}")
 yy = np.arange(len(reg))
-fig, ax = plt.subplots(figsize=(W1, 2.9))
-ax.scatter(reg.auc, yy, marker="o", s=28, color="black", zorder=3, label="2023–25 (frozen model)")
+fig, ax = plt.subplots(figsize=(3.5, 3.0))
+ax.axvline(R2_AUC, color=C["axis"], ls="--", lw=0.8, label=f"Pooled, test 2 ({R2_AUC:.3f})")
+ax.scatter(reg.auc, yy, marker="o", s=34, color=C["fri"], zorder=3, label="Test 2 (2023–25)")
 rc22 = next((c for c in ["REGIONID", "region"] if c in s22.columns), None)
 n22 = [None] * len(reg)
 if rc22:
@@ -354,19 +382,18 @@ if rc22:
     for r_ in reg.region:
         d_ = s22[s22[rc22] == r_]; yv = d_[Y22].values; n_ = int(yv.sum()); n22.append(n_)
         a22.append(roc_auc_score(yv, d_[P22].values) if MIN_POS <= n_ < len(yv) else np.nan)
-    ax.scatter(a22, yy, marker="o", s=28, facecolor="white", edgecolor="black", zorder=3,
-               label=f"2022 test (regions with ≥ {MIN_POS} unreliable intervals)")
-ax.axvline(R2_AUC, color="0.5", ls="--", lw=0.8, label=f"Pooled 2023–25 ({R2_AUC:.3f})")
+    ax.scatter(a22, yy, marker="s", s=30, facecolor="white", edgecolor=C["fri"], linewidths=1.2, zorder=3,
+               label=f"Test 1 (2022; regions with ≥ {MIN_POS} unreliable)")
 ax.set_yticks(yy); ax.set_yticklabels(reg.region.str.replace("1", "", regex=False))
-ax.set_xlabel("AUC"); ax.set_xlim(0.5, 1.0); ax.set_ylim(-0.6, len(reg) - 0.4)
+ax.set_xlabel("AUC"); ax.set_xlim(0.5, 1.0); ax.set_ylim(-0.6, len(reg) - 0.4); ax.grid(axis="y", visible=False)
 tr = ax.get_yaxis_transform()
-ax.text(1.03, len(reg) - 0.4, "n+\n(2023–25 / 2022)", transform=tr, fontsize=6.5, ha="left", va="bottom")
+ax.text(1.03, len(reg) - 0.4, "n+\n(test 2 / test 1)", transform=tr, fontsize=7, ha="left", va="bottom")
 for y_, p_, q_ in zip(yy, reg.pos, n22):
-    ax.text(1.03, y_, f"{p_:,} / {q_}" if q_ is not None else f"{p_:,}", transform=tr, fontsize=6.5, ha="left", va="center")
-ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.22), frameon=False)
-save(fig, 9, f"Fig. 9. AUC by region for the frozen FRI model (exploratory). n+ is the number of unreliable intervals in 2023–25 "
-     f"and in the 2022 test. 2022 AUC is shown only for regions with at least {MIN_POS} unreliable intervals. "
-     f"The dashed line is the pooled 2023–25 AUC (R2).")
+    ax.text(1.03, y_, f"{p_:,} / {q_}" if q_ is not None else f"{p_:,}", transform=tr, fontsize=7, ha="left", va="center")
+ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.22), fontsize=7.5)
+save(fig, "A1", f"Fig. A.1. AUC by region for the frozen FRI model (exploratory). n+ is the number of unreliable intervals in test 2 (2023–25) "
+     f"and test 1 (2022). 2022 AUC is shown only for regions with at least {MIN_POS} unreliable intervals. "
+     f"The dashed line is the pooled test-2 AUC (R2).")
 
-(FIG / "captions.md").write_text("# Figure captions (generated by make_figures.py)\n\n" + "\n\n".join(CAP[k] for k in sorted(CAP)) + "\n")
+(FIG / "captions.md").write_text("# Figure captions (generated by make_figures.py)\n\n" + "\n\n".join(CAP[k] for k in sorted(CAP, key=lambda k: (isinstance(k, str), str(k).zfill(3)))) + "\n")
 print(f"Saved {len(CAP)} figures and captions.md to {FIG}")
