@@ -19,8 +19,8 @@ HEAD, HEAD4 = FS.C["box_head"], FS.C["box_head_rep"]                 # RQ1-3 hea
 STATUS = {"supported": ("#1E6B34", "#E3F2E7"), "not supported": ("#A61B1B", "#FBE7E7"),
           "not testable": ("#52606D", "#EEF1F4"), "descriptive": ("#52606D", "#EEF1F4"), "": (MUTED, "white")}
 
-fig, ax = plt.subplots(figsize=(7.16, 4.0))
-ax.set_xlim(0, 100); ax.set_ylim(5.5, 66); ax.axis("off")
+fig, ax = plt.subplots(figsize=(7.16, 4.55))
+ax.set_xlim(0, 100); ax.set_ylim(-4.5, 66); ax.axis("off")
 RH = 3.4
 
 
@@ -111,14 +111,26 @@ path([(C["cx"], 32.2), (oN["cx"], 32.2), (oN["cx"], oN["t"])]); tag(oN["cx"], 30
 
 # ---------- row 2 ----------
 D = rq(33, 67, 21.5, "Replication and Transfer (RQ4)",
-       [("R1–R6  registered before 2023–25 data", ""), ("Code  model, θ and code fixed in advance", ""), ("H8  Transfer (SA1, NZ, GB)", "")], head=HEAD4)
+       [("R1–R6  replication of RQ1–RQ3 on test 2", ""), ("Fixed  model, θ and code before test 2", ""), ("H8  Transfer (SA1, NZ, GB)", "")], head=HEAD4)
 path([(oY["cx"], oY["b"]), (oY["cx"], 19.4), (D["r"], 19.4)])
 path([(oN["cx"], oN["b"]), (oN["cx"], 19.4), (oY["cx"], 19.4)], head=False)
+
+# ---------- registration timeline (mirrors Section III.G, parts 1-3) ----------
+ax.plot([1, 99], [3.6, 3.6], color="#E4E7EB", lw=0.6)
+steps = [(1, 24, "1  28 Apr 2026", "H1–H8 registered (Table III)", HEAD),
+         (27, 50, "2  2021–22 analysis", "errors corrected (Table IV)", MUTED),
+         (53, 76, "3  28 Oct 2026", "R1–R6 registered (Table V)", HEAD4),
+         (79, 99, "4  Test 2", "2023–25 data downloaded", MUTED)]
+for k, (x0, x1, top, bot, col) in enumerate(steps):
+    rbox(x0, -3.8, x1, 2.4, "white", col, lw=0.8)
+    ax.text((x0 + x1) / 2, 0.7, top, ha="center", va="center", fontsize=6.1, color=col, fontweight="bold")
+    ax.text((x0 + x1) / 2, -1.9, bot, ha="center", va="center", fontsize=5.8, color=INK)
+    if k: path([(steps[k - 1][1], -0.7), (x0, -0.7)])
 
 for ext in ("png", "svg", "pdf"):
     fig.savefig(FIG / f"fig_4_design.{ext}", bbox_inches="tight", facecolor="white")
 cap = ("Fig. 4. Study design: the four research questions and the hypotheses that test each one. H1–H3 use the NEM error "
        "dataset, H4–H7 test 1 (2022), R1–R6 test 2 (2023–25) and H8 the transfer data (Table I). R1–R6 were registered, with "
-       "the model, threshold and code fixed, before the 2023–25 data were downloaded. Outcomes are reported in Table III and Section IV.")
+       "the model, threshold and code fixed, before the 2023–25 data were downloaded. The lower strip shows the order of registration (Section III.G). Outcomes are reported in Section IV.")
 (FIG / "fig_4_design_caption.txt").write_text(cap + "\n")
 print("Saved fig_4_design.png/.svg/.pdf and caption to", FIG)
