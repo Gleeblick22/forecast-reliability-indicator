@@ -117,9 +117,9 @@ path([(oN["cx"], oN["b"]), (oN["cx"], 19.4), (oY["cx"], 19.4)], head=False)
 
 # ---------- registration timeline (mirrors Section III.G, parts 1-3) ----------
 ax.plot([1, 99], [3.6, 3.6], color="#E4E7EB", lw=0.6)
-steps = [(1, 24, "1  28 Apr 2026", "H1–H8 registered (Table III)", HEAD),
-         (27, 50, "2  2021–22 analysis", "errors corrected (Table IV)", MUTED),
-         (53, 76, "3  28 Oct 2026", "R1–R6 registered (Table V)", HEAD4),
+steps = [(1, 24, "1  28 Apr 2026", "H1–H8 registered", HEAD),
+         (27, 50, "2  2021–22 analysis", "errors corrected", MUTED),
+         (53, 76, "3  28 Oct 2026", "R1–R6 registered", HEAD4),
          (79, 99, "4  Test 2", "2023–25 data downloaded", MUTED)]
 for k, (x0, x1, top, bot, col) in enumerate(steps):
     rbox(x0, -3.8, x1, 2.4, "white", col, lw=0.8)
