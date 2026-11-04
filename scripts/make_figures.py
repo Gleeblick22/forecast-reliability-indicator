@@ -109,7 +109,7 @@ for p_ in ORDER:
 axs.axvspan(*OCT, ymin=0, ymax=0.45, facecolor="white", edgecolor=C["axis"], hatch="////", lw=0)
 mid = lambda a, b: T(a) + (T(b) - T(a)) / 2
 axs.text(mid(*SPAN["fit"]), 0.95, f"Fit\n{num('fit')}", ha="center", va="center", fontsize=7.5, linespacing=1.1)
-axs.text(mid(*SPAN["replication"]), 0.95, f"Test 2 (replication, model frozen)\n{num('replication')}",
+axs.text(mid(*SPAN["replication"]), 0.95, f"Test 2 (replication, model fixed in advance)\n{num('replication')}",
          ha="center", va="center", fontsize=7.5, linespacing=1.1)
 def lead(x_bar, x_txt, y_txt, text, ha):
     axs.annotate(text, xy=(x_bar, 1.92), xytext=(x_txt, y_txt), ha=ha, va="center", fontsize=8,
