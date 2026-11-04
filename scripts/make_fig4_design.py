@@ -128,7 +128,7 @@ for k, (x0, x1, top, bot, col, fill) in enumerate(steps):
     if k: path([(steps[k - 1][1], -0.7), (x0, -0.7)])
 
 for ext in ("png", "svg", "pdf"):
-    fig.savefig(FIG / f"fig_4_design.{ext}", bbox_inches="tight", facecolor="white")
+    fig.savefig(FIG / f"fig_4_design.{ext}", bbox_inches="tight", facecolor="white", dpi=600)
 cap = ("Fig. 4. Study design: the four research questions and the hypotheses that test each one. H1–H3 use the NEM error "
        "dataset, H4–H7 test 1 (2022), R1–R6 test 2 (2023–25) and H8 the transfer data (Table I). R1–R6 were registered, with "
        "the model, threshold and code fixed, before the 2023–25 data were downloaded. The lower strip shows the order of registration (Section III.G). Outcomes are reported in Section IV.")
