@@ -117,12 +117,12 @@ path([(oN["cx"], oN["b"]), (oN["cx"], 19.4), (oY["cx"], 19.4)], head=False)
 
 # ---------- registration timeline (mirrors Section III.G, parts 1-3) ----------
 ax.plot([1, 99], [3.6, 3.6], color="#E4E7EB", lw=0.6)
-steps = [(1, 24, "1  28 Apr 2026", "H1–H8 registered", HEAD),
-         (27, 50, "2  2021–22 analysis", "errors corrected", MUTED),
-         (53, 76, "3  28 Oct 2026", "R1–R6 registered", HEAD4),
-         (79, 99, "4  Test 2", "2023–25 data downloaded", MUTED)]
-for k, (x0, x1, top, bot, col) in enumerate(steps):
-    rbox(x0, -3.8, x1, 2.4, "white", col, lw=0.8)
+steps = [(1, 24, "1. 28 April 2026", "H1–H8 registered", HEAD, "#E3EDFA"),
+         (27, 50, "2. 2021–22 analysis", "errors corrected", MUTED, "#EEF1F4"),
+         (53, 76, "3. 28 October 2026", "R1–R6 registered", HEAD4, "#E0F2F1"),
+         (79, 99, "4. Test 2", "2023–25 data downloaded", "#1E6B34", "#E3F2E7")]
+for k, (x0, x1, top, bot, col, fill) in enumerate(steps):
+    rbox(x0, -3.8, x1, 2.4, fill, col, lw=0.8)
     ax.text((x0 + x1) / 2, 0.7, top, ha="center", va="center", fontsize=6.1, color=col, fontweight="bold")
     ax.text((x0 + x1) / 2, -1.9, bot, ha="center", va="center", fontsize=5.8, color=INK)
     if k: path([(steps[k - 1][1], -0.7), (x0, -0.7)])
