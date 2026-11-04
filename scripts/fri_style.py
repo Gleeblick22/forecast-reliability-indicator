@@ -40,6 +40,6 @@ def use():
         "axes.spines.top": False, "axes.spines.right": False,
         "grid.linewidth": 0.4, "grid.color": "#e0e0e0", "lines.linewidth": 1.2, "lines.markersize": 4,
         "axes.prop_cycle": mpl.cycler(color=[C["fri"], C["vol"], C["flevel"], C["const75"], C["const25"]]),
-        "figure.dpi": 300, "savefig.dpi": 300, "savefig.bbox": "tight", "savefig.facecolor": "white",
+        "figure.dpi": 300, "savefig.dpi": 600, "savefig.bbox": "tight", "savefig.facecolor": "white",
         "pdf.fonttype": 42, "svg.fonttype": "none",
     })
