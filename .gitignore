@@ -58,3 +58,4 @@ scripts/*_block.py
 scripts/make_figures_bw_backup.py
 results/figures/old_bw/
 results/tables/*_OLD.csv
+results/figures/*.zip
