@@ -1,0 +1,6 @@
+stat,theta,test2_F1_at_theta
+theta_p2.5,0.7852,0.63
+theta_p25,0.8491,0.63
+theta_median,0.8491,0.63
+theta_p75,0.8803,0.619
+theta_p97.5,0.9711,0.512
