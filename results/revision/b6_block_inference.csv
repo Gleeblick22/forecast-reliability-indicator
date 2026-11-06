@@ -1,0 +1,4 @@
+test,estimate,stat,ci_lo,ci_hi,criterion,met_by_ci_lower,n_boot
+H5 (test 1),94 -> 54 (-42.6%),0.426,0.279,0.582,reduction >= 0.20,True,2000
+H6 (test 1),"r = 0.318, n = 587",0.318,0.026,0.498,r > 0,True,2000
+R4 (test 2),dAP = 0.363,0.363,0.328,0.395,dAP > 0 and CI lower > 0,True,2000
