@@ -1,0 +1,9 @@
+test,agent,n_x025,n_x075,over_mwh,over_intervals,net,over_change_vs_base_pct,net_change_vs_base_pct
+test 1,baseline,0,0,65.0,3,307230,0.0,0.0
+test 1,fri_3band,74,168,20.5,5,310287,-68.5,1.0
+test 1,one_sided_3band,21,38,30.9,4,308474,-52.5,0.4
+test 1,one_sided_matched,74,168,18.4,4,308875,-71.7,0.54
+test 2,baseline,0,0,1800.0,88,14027569,0.0,0.0
+test 2,fri_3band,1197,2583,954.0,138,13986806,-47.0,-0.29
+test 2,one_sided_3band,654,749,1240.9,117,14036966,-31.1,0.07
+test 2,one_sided_matched,1197,2583,828.2,146,14042744,-54.0,0.11
