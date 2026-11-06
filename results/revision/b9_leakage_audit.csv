@@ -1,0 +1,27 @@
+data,check,value,expected,passed
+2021-22,decision run lead < required (intervals),0,0,True
+2021-22,decision lead median / max (min),30 / 60,>= 30,True
+2021-22,history run later than decision run (intervals),0,0,True
+2021-22 raw,"rows sharing (interval, region, run time)",0,0 after de-duplication,True
+2021-22,raw runs issued after the decision run (excluded),"24,782",excluded from features,True
+2021-22,n_runs differs from runs <= decision (intervals),0,0,True
+2021-22,f_first differs from earliest run <= decision (intervals),0,0,True
+2021-22,run_std differs from runs <= decision (intervals),15,0,False
+2023-25 lead30,decision run lead < required (intervals),0,0,True
+2023-25 lead30,decision lead median / max (min),30 / 60,>= 30,True
+2023-25 lead30,history run later than decision run (intervals),0,0,True
+2023-25 raw,"rows sharing (interval, region, run time)",0,0 after de-duplication,True
+2023-25 lead30,raw runs issued after the decision run (excluded),"367,549",excluded from features,True
+2023-25 lead30,n_runs differs from runs <= decision (intervals),0,0,True
+2023-25 lead30,f_first differs from earliest run <= decision (intervals),0,0,True
+2023-25 lead30,run_std differs from runs <= decision (intervals),0,0,True
+2023-25 lead30,earliest-run price used with lead < 30 min (intervals),0,0,True
+2023-25 lead60,decision run lead < required (intervals),0,0,True
+2023-25 lead60,decision lead median / max (min),60 / 60,>= 60,True
+2023-25 lead60,history run later than decision run (intervals),0,0,True
+2023-25 lead60,raw runs issued after the decision run (excluded),"522,325",excluded from features,True
+2023-25 lead60,n_runs differs from runs <= decision (intervals),0,0,True
+2023-25 lead60,f_first differs from earliest run <= decision (intervals),0,0,True
+2023-25 lead60,run_std differs from runs <= decision (intervals),0,0,True
+2023-25 lead60,earliest-run price used with lead < 30 min (intervals),0,0,True
+2023-25,cutoff shift: AUC lead30 (R2) vs lead60 (R5),"AUC 0.9545 [0.9480, 0.9608] | AUC (60-min lead) 0.9591 [0.9539, 0.9646]",no drop,True
