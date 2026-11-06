@@ -1,0 +1,23 @@
+test,agent,over_mwh,over_intervals,net,on_frontier,breakeven_vs_fri_aud_per_mwh
+test 1,baseline,65.0,3,307230,False,-69.0
+test 1,fri_3band,20.5,5,310287,True,
+test 1,vol_matched,45.2,4,308758,False,-62.0
+test 1,forecast_level_matched,18.4,4,309424,True,411.0
+test 1,const_0.75,61.7,6,436705,True,3068.0
+test 1,const_0.25,64.7,31,666678,True,8063.0
+test 1,threshold_f>=300_x0.25,18.4,4,304450,False,2780.0
+test 1,threshold_f>=500_x0.25,53.8,3,307197,False,-93.0
+test 1,threshold_f>=1000_x0.25,65.0,3,307230,False,-69.0
+test 1,threshold_f>=2000_x0.25,65.0,3,307230,False,-69.0
+test 1,threshold_f>=5000_x0.25,65.0,3,307230,False,-69.0
+test 2,baseline,1800.0,88,14027569,False,48.0
+test 2,fri_3band,954.0,138,13986806,True,
+test 2,vol_matched,1511.6,117,14023851,False,66.0
+test 2,forecast_level_matched,1245.2,118,13942805,False,-151.0
+test 2,const_0.75,1677.0,174,16195343,False,3055.0
+test 2,const_0.25,1368.8,503,18941294,True,11944.0
+test 2,threshold_f>=300_x0.25,695.2,141,13778958,True,803.0
+test 2,threshold_f>=500_x0.25,1446.4,96,14005995,False,39.0
+test 2,threshold_f>=1000_x0.25,1655.2,93,14010525,False,34.0
+test 2,threshold_f>=2000_x0.25,1697.8,89,14013984,False,37.0
+test 2,threshold_f>=5000_x0.25,1706.2,88,14155710,False,225.0

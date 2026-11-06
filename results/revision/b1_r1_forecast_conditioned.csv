@@ -1,0 +1,11 @@
+region,regime,n_extreme,n_normal,mae_extreme,mae_normal,ratio_of_means,ci_lo,ci_hi,ratio_of_medians,rel_mae_vs_naive_extreme,rel_mae_vs_naive_normal
+NSW1,settled (registered),787,51540,1850.39,32.82,56.38,43.2,71.06,14.55,1.384,0.793
+NSW1,forecast-conditioned,713,51614,2367.43,28.28,83.7,64.37,106.78,14.68,2.177,0.606
+QLD1,settled (registered),801,51526,1165.02,28.59,40.74,31.17,52.05,11.62,1.234,0.709
+QLD1,forecast-conditioned,1046,51281,1138.5,23.71,48.03,36.4,60.5,11.18,1.624,0.579
+SA1,settled (registered),1313,51014,891.86,31.7,28.13,21.09,35.73,6.49,1.074,0.742
+SA1,forecast-conditioned,1629,50698,775.65,30.08,25.79,19.65,33.0,6.54,1.291,0.666
+TAS1,settled (registered),261,52066,900.45,22.27,40.44,22.51,62.85,13.73,0.982,0.988
+TAS1,forecast-conditioned,864,51463,436.26,19.77,22.07,16.26,30.39,28.95,2.156,0.822
+VIC1,settled (registered),493,51834,847.19,23.83,35.55,21.17,48.85,6.44,1.064,0.704
+VIC1,forecast-conditioned,642,51685,734.95,22.85,32.17,20.25,43.59,8.25,1.24,0.669
