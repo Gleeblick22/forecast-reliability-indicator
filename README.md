@@ -63,6 +63,10 @@ The FRI is best used as a **risk signal alongside a dispatch or bidding policy**
 
 ## Study design and registration
 
+![Study design](results/figures/fig_4_design.png)
+
+*Fig. 4. Study design: research questions, hypotheses and order of registration.*
+
 | Stage | Date | What was fixed or tested |
 |---|---|---|
 | Original registration (H1–H8) | 28 April 2026 | Hypotheses and criteria, registered on OSF (doi:[10.17605/OSF.IO/Z89HD](https://doi.org/10.17605/OSF.IO/Z89HD)) |
@@ -171,38 +175,58 @@ Test 1 contains only three baseline over-forecast intervals, so its percentages 
 ```
 forecast-reliability-indicator/
 │
-├── README.md                     this file
-├── LICENSE                       Apache License 2.0
-├── requirements.txt              Python dependencies
+├── README.md                 this file
+├── LICENSE                   Apache License 2.0
+├── requirements.txt          Python dependencies
+├── run.sh                    runs a script with the project root on PYTHONPATH
 │
-├── scripts/                      analysis pipeline and figure scripts
-│   ├── make_figures.py           manuscript figures (Figs. 1–9, Fig. A.1)
-│   ├── fig_frontier.py           Fig. 8 (fig_8_frontier): risk–revenue trade-off of the dispatch agents
-│   └── figs5to9_block.py         Figs. 5–9 support, incl. TreeSHAP attributions (Fig. 7)
+├── config/
+│   ├── settings.py           paths, regions, label threshold, battery settings (single source of all constants)
+│   └── logging_config.py     logging set-up
+│
+├── data/
+│   └── samples/              one-week samples of each market (nem_sample.csv, nz_sample.csv, gb_sample.csv);
+│                             full data are downloaded by the c1_/c3_/c4_ download scripts
+│
+├── scripts/                  analysis pipeline, numbered in run order
+│   ├── c1_*.py   (27)        Component 1: NEM download, validation, preprocessing, labels, H1–H3
+│   ├── c2_*.py   (25)        Component 2: features, model fitting, evaluation, SHAP, H4
+│   ├── c3_*.py   (51)        Component 3: battery agents, H5–H7, NZ/GB download and H8 transfer
+│   ├── c4_*.py   (10)        Replication: 2023–2025 download, rebuild, R1–R6, block bootstrap
+│   ├── block_inference.py, detection_baselines.py, r1_forecast_conditioned.py,
+│   │   one_sided_dispatch.py, frontier_threshold_rule.py, theta_sensitivity.py,
+│   │   leakage_timestamp_audit.py         exploratory analyses added in revision
+│   ├── build_numbers.py      collects every number reported in the manuscript
+│   ├── make_tables.py        manuscript tables
+│   ├── make_figures.py       manuscript figures (Figs. 1, 3, 5–7, 9, A.1)
+│   ├── make_fig2.py          Fig. 2 (FRI pipeline)
+│   ├── make_fig4_design.py   Fig. 4 (study design)
+│   ├── fig_frontier.py       Fig. 8 (risk–revenue trade-off)
+│   ├── fri_style.py          shared figure style
+│   └── figure_*.py           figures of the first version (superseded)
 │
 ├── results/
-│   ├── figures/                  manuscript figures (PNG, PDF, SVG)
-│   │   ├── fig_1 … fig_9         main-text figures (fig_2: FRI pipeline)
-│   │   ├── fig_8_frontier        Fig. 8 as in the manuscript (risk–revenue trade-off)
-│   │   ├── fig_A1                Appendix Fig. A.1 (AUC by region)
-│   │   └── v1_1_archive/         figures of the first version (superseded)
-│   ├── tables/                   result tables (CSV), one file per analysis step
-│   │   ├── c2_31_test_scores.csv           FRI scores on the test sets
-│   │   ├── c3_39_p5_fri_relabeled_results.csv  results under the corrected label
-│   │   └── c4_03_scores.csv                replication (2023–2025) scores
-│   └── models/                   frozen XGBoost models (.pkl)
-│       ├── fri_model_relabeled.pkl         final FRI model (corrected label)
-│       └── fri_model_v2_no_june2022.pkl    sensitivity model without June 2022
+│   ├── figures/              manuscript figures (PNG, PDF, SVG) and captions.md
+│   │   ├── fig_1 … fig_9, fig_A1
+│   │   ├── fig_2             FRI pipeline
+│   │   ├── fig_4_design      study design (manuscript Fig. 4)
+│   │   ├── fig_8_frontier    risk–revenue trade-off (manuscript Fig. 8)
+│   │   └── v1_1_archive/     figures of the first version (superseded)
+│   ├── tables/               result tables (CSV), prefixed by component (c1_ … c4_)
+│   └── models/               frozen XGBoost models (.pkl)
+│
+├── audit/
+│   └── gate_A_decision.md    dated decision record of 28 October 2026 (interim numbers)
 │
 └── docs/
-    ├── DATA_CARD.md              data sources, download paths and access details per market
-    ├── COMPLIANCE.md             chronological decision and compliance log
-    ├── FRI_MASTER_REFERENCES.md  reference list
-    ├── README_v1.1_archive.md    README of the first version (superseded)
-    └── archived/                 superseded material from the first version (incl. RESULTS_v1.1.md)
+    ├── DATA_CARD.md          provenance, access, coverage and licence of every dataset
+    ├── COMPLIANCE.md         chronological decision and compliance log
+    ├── FRI_MASTER_REFERENCES.md   reference list of the manuscript
+    ├── README_v1.1_archive.md     README of the first version (superseded)
+    └── archived/             superseded material from the first version (incl. RESULTS_v1.1.md)
 ```
 
-Table files are prefixed by analysis stage (`c2_` original study, `c3_` corrected pipeline, `c4_` replication).
+Scripts are prefixed by component (`c1_` problem and data, `c2_` model, `c3_` dispatch and transfer, `c4_` replication).
 
 ---
 
@@ -235,6 +259,8 @@ pip install -r requirements.txt
 # manuscript figures
 PYTHONPATH=.:scripts python3 scripts/make_figures.py
 PYTHONPATH=.:scripts python3 scripts/fig_frontier.py
+PYTHONPATH=.:scripts python3 scripts/make_fig2.py
+PYTHONPATH=.:scripts python3 scripts/make_fig4_design.py
 ```
 
 Figures are written to `results/figures/`.
@@ -250,7 +276,7 @@ All data are public. Raw market data are not redistributed in this repository; t
 | Item | Detail |
 |---|---|
 | Provider | Australian Energy Market Operator (AEMO) |
-| Archive | NEMweb, https://nemweb.com.au (MMSDM monthly archive and current reports) |
+| Archive | NEMweb, https://nemweb.com.au: pre-dispatch archive (PREDISP_ALL_DATA) and MMSDM historical archive |
 | Pre-dispatch forecasts | `PREDISPATCHPRICE`: 30-min regional price forecasts from every pre-dispatch run, used for the decision forecast f(w_t) and the revision-path features |
 | Settled prices | `DISPATCHPRICE`: 5-min regional dispatch prices, averaged to the 30-min settled price p̄_t |
 | Regions | NSW1, QLD1, SA1, TAS1, VIC1 |
@@ -262,18 +288,29 @@ All data are public. Raw market data are not redistributed in this repository; t
 | Item | Detail |
 |---|---|
 | Provider | Electricity Authority (Te Mana Hiko) |
-| Archive | EMI datasets, https://www.emi.ea.govt.nz/Wholesale/Datasets |
-| Storage | Azure Blob Storage, https://emidatasets.blob.core.windows.net/publicdata |
-| Access | Public read-only, through the shared public access token published by the Electricity Authority (`si=publicdata`) |
+| Dataset | Predispatch Revised Schedule and Sensitivity (PRSS), North and South Island, 30-min runs |
+| Archive | EMI, https://www.emi.ea.govt.nz/Wholesale/Datasets/DispatchAndPricing/CaseFiles/PRSS/ |
+| Storage | Azure Blob Storage mirror, https://emidatasets.blob.core.windows.net/publicdata (public read-only access token published by the Electricity Authority) |
+| Period | February 2021 – October 2022 |
+| Licence | Creative Commons Attribution 4.0 International |
 | Use | Cross-market transfer test (H8), initial label only |
 
 ### Great Britain (H8 transfer)
 
 | Item | Detail |
 |---|---|
-| Source | Public GB wholesale market price archives |
+| Provider | Elexon Limited |
+| Dataset | Settlement System Prices, BMRS Insights Solution API, https://data.elexon.co.uk/bmrs/api/v1/balancing/settlement/system-prices |
+| Period | January 2021 – December 2022 |
+| Licence | BMRS open-data licence: personal, academic or non-commercial use with attribution ("Contains BMRS data © Elexon Limited") |
 | Limitation | No published sequence of pre-dispatch runs, so the revision-path features and the decision forecast cannot be formed; the transfer model uses the remaining nine features |
 | Use | Cross-market transfer test (H8), initial label only, with the original and a harmonised threshold |
+
+### Australia — licence
+
+AEMO data are used under the AEMO Copyright Permissions Notice (general permission for any purpose, with attribution).
+
+Full provenance, coverage and processing details are in [docs/DATA_CARD.md](docs/DATA_CARD.md).
 
 ---
 

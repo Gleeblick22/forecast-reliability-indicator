@@ -1,3 +1,5 @@
+> **Note (November 2026).** This data card (v3.0, August 2026) documents the first version of the study. Since then, the label was redefined as |f(w_t) − p̄_t| > AUD 300/MWh, using the decision forecast and the settled 30-min DISPATCHPRICE (scripts/c1_30_build_label_v2.py), which replaces the f⁽¹⁾/P5MIN label of Sections 3.3 and 4; the 2023–2025 NEM replication data were added (scripts/c4_01a–c4_02, 261,635 test-2 intervals); and the counts, rates and manuscript section, table and reference numbers below refer to the first version. Provenance, access and licence details remain valid. Current results are in the main README and the manuscript.
+
 # DATA CARD
 ## forecast-reliability-indicator (FRI)
 
@@ -10,7 +12,7 @@
 
 ## 1. Document Purpose
 
-This data card documents every dataset used in the FRI research project: provenance, access method, coverage, processing pipeline, leakage-control methodology, corrections, and licensing terms. It covers **four** datasets. For academic literature discussing similar data sources, see `docs/FRI_master_references.md`; this document covers dataset provenance and processing only.
+This data card documents every dataset used in the FRI research project: provenance, access method, coverage, processing pipeline, leakage-control methodology, corrections, and licensing terms. It covers **four** datasets. For academic literature discussing similar data sources, see `docs/FRI_MASTER_REFERENCES.md`; this document covers dataset provenance and processing only.
 
 ---
 

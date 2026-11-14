@@ -1,3 +1,5 @@
+> **Note.** Interim decision record written on 28 October 2026, before the final analysis. Some numbers here (for example test AUC 0.891 and FRI exposure 18.8 MWh) were later updated; final values are in the main README and the manuscript.
+
 # Gate A decision — 28 Oct 2026
 
 ## Decision
