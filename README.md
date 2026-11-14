@@ -222,8 +222,9 @@ forecast-reliability-indicator/
     ├── DATA_CARD.md          provenance, access, coverage and licence of every dataset
     ├── COMPLIANCE.md         chronological decision and compliance log
     ├── FRI_MASTER_REFERENCES.md   reference list of the manuscript
-    ├── archived/README_v1.1.md  README of the first version (superseded)
-    └── archived/             superseded material from the first version (incl. RESULTS_v1.1.md)
+    └── archived/             superseded material from the first version
+        ├── README_v1.1.md    README of the first version
+        └── RESULTS_v1.1.md   results summary of the first version
 ```
 
 Scripts are prefixed by component (`c1_` problem and data, `c2_` model, `c3_` dispatch and transfer, `c4_` replication).
