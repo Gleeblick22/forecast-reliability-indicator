@@ -2,97 +2,141 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-yellow)](https://python.org)
-[![Pre-registered](https://img.shields.io/badge/Pre--registered-OSF-lightblue)](https://osf.io/jpfwh)
+[![Pre-registered](https://img.shields.io/badge/Pre--registered-OSF-lightblue)](https://doi.org/10.17605/OSF.IO/Z89HD)
 
-**An interpretable classifier that predicts, ex ante, whether a pre-dispatch electricity price forecast will prove unreliable, and demonstrates its economic value for autonomous battery dispatch in Australia's National Electricity Market (NEM).**
+Code, frozen models and result tables for the manuscript:
 
-> Pre-dispatch price forecasts fail hardest exactly when accurate dispatch matters most: error amplifies up to 23.50x (13.73x on average) during extreme price events in Australia's NEM, yet aggregate metrics mask 77.28% of this degradation. We introduce the Forecast Reliability Indicator (FRI), an interpretable classifier predicting ex ante whether a pre-dispatch forecast will prove unreliable (AUC = 0.9666), driven largely by forecast revision across successive pre-dispatch runs. A stale-information baseline overstates FRI's value; once information timing is held constant, it instead delivers value through asset economics, raising net revenue from AUD 187,603 to AUD 299,614 (59.7%) over an equally-informed baseline by scaling dispatch commitment to reliability confidence, a signal-free control agent confirms 65.1% of this advantage is genuinely attributable to the reliability signal rather than conservative scaling alone, under a physically grounded degradation and charging-economics model. A pre-registered revenue test returned null, the result tracing to underpowered testing rather than a true absence of effect. FRI transfers with negligible loss within a scale-identical market but hits two cross-market limits: ranking holds where price scales differ though the threshold needs recalibration, while structural transfer fails under harmonized comparison where the revision signal cannot be built. FRI serves as a reliability instrument for autonomous dispatch, separating reliability prediction from forecast accuracy improvement as orthogonal objectives.
+> D. P. Ghale, manuscript under review (2026). Citation details will be added after acceptance.
 
-📄 **Paper**: [to be added on submission]
-🔗 **Pre-registration (OSF)**: 10.17605/OSF.IO/Z89HD
-
----
-## Hypothesis structure
-
-The eight hypotheses form a dependency chain across four research gates, not eight independent tests:
-
-![Hypothesis dependency chain](results/figures/fig04_hypothesis_chain.png)
-
-- **Gate 1 — Does the problem exist?** (H1, H2, H3): forecast error amplifies and is masked during extreme events
-- **Gate 2 — Can it be detected?** (H4): a classifier can predict forecast unreliability ex ante
-- **Gate 3 — Does detection add value?** (H5, H6, H7): conditioning dispatch on the signal protects the asset economically
-- **Gate 4 — Does it generalise?** (H8): the classifier transfers within-market (SA1), but hits real boundaries, structural (GB) and scale (NZ)
-
-Each gate depends on the one before it holding; H4 only matters because H1–H3 establish there is a real problem to detect, and H5–H7 only matter because H4 confirms detection is genuinely possible.
-## Key results at a glance
-
-| Hypothesis | Description | Result | Key metric |
-|---|---|---|---|
-| H1 | Forecast error amplification during extreme events | **Confirmed** | 4.39×–23.50× across 5 NEM regions, p<0.001 |
-| H2 | Aggregate metrics mask extreme forecast failures | **Confirmed** | 77.28% of failures masked |
-| H3 | P5 vs. P30 horizon difference | Null (pre-registered) | Exploratory: universal P30→P60 amplification jump |
-| H4 | FRI model detects unreliable forecasts (F1 ≥ 0.60) | **Confirmed** | F1 = 0.8898, AUC = 0.9666, θ = 0.856818 |
-| H5 | Reliability-conditioned dispatch reduces degradation cost | **Confirmed** | +59.7% net revenue vs. a fairly-timed baseline |
-| H6 | Dispatch scaling correlates with reliability confidence | **Confirmed** | r = 0.3223, 95% CI [0.2639, 0.3783] |
-| H7 | Reliability signal increases raw trading revenue (≥15%) | Null | −1.55%, underpowered test (achieved power 5.3%) |
-| H8 | Classifier transfers across markets (F1 diff ≤ 0.15) | Mixed | SA1 pass (F1=0.8577); NZ, GB fail (mechanistically explained) |
-
+A battery that acts on pre-dispatch price forecasts needs to know, at the moment it commits, whether the forecast it is about to act on can be trusted. The **Forecast Reliability Indicator (FRI)** estimates this from information published before each 30-min interval in Australia's National Electricity Market (NEM). It was evaluated in a pre-registered, out-of-sample replication on three years of NEM data (2023–2025), with the model fixed before the data were downloaded.
 
 ---
-### Result tables and figures, direct links
 
-| Hypothesis | Result table (CSV) | Figure |
+## Contents
+
+1. [Summary of findings](#summary-of-findings)
+2. [Study design and registration](#study-design-and-registration)
+3. [Method](#method)
+4. [Results](#results)
+5. [Repository structure](#repository-structure)
+6. [Versions and tags](#versions-and-tags)
+7. [Reproducing the results](#reproducing-the-results)
+8. [Data sources](#data-sources)
+9. [Correction history](#correction-history)
+10. [Citation](#citation)
+11. [Licence](#licence)
+
+---
+
+## Summary of findings
+
+- Pre-dispatch forecast error against the settled price was **28 to 56 times larger** in extreme intervals than in normal ones (2023–2025), and **22 to 84 times larger** when extreme intervals were identified by the forecast itself, before the outcome was known.
+- The FRI detected unreliable decision forecasts with an **AUC of 0.955** and an average precision of **0.643**, against 0.279 for raw recent volatility.
+- Scaling battery dispatch by the score cut the energy committed to intervals over-forecast by more than AUD 300/MWh by **47.0%** (954.0 vs 1,800.0 MWh), more than a volatility-matched control (−16.0%), at a net-revenue cost of **0.29%**.
+- Not every registered test was supported: the score missed its F1 criterion on the short 2022 window (H4), did not raise revenue (H7), and blanket derating earned more when degradation was convex.
+
+The FRI is best used as a **risk signal alongside a dispatch or bidding policy**, not as a strategy on its own.
+
+![Risk–revenue trade-off of the dispatch agents](results/figures/fig_8.png)
+
+*Fig. 8. Exposure reduction and net-revenue change of the dispatch agents relative to the baseline on (a) test 1 and (b) test 2. Shaded: better than the baseline on both.*
+
+---
+
+## Study design and registration
+
+| Stage | Date | What was fixed or tested |
 |---|---|---|
-| H1 — Amplification | [`c1_04_h1_amplification_results.csv`](results/tables/c1_04_h1_amplification_results.csv) | [Fig. 5](results/figures/fig05_h1_amplification.png) |
-| H2 — Masking | [`c1_05_h2_masking_results.csv`](results/tables/c1_05_h2_masking_results.csv) | [Fig. 6](results/figures/fig06_h2_masking.png) |
-| H3 — Horizon | [`c1_06_h3_horizon_results.csv`](results/tables/c1_06_h3_horizon_results.csv) | [Fig. 7](results/figures/fig07_h3_horizon.png) |
-| H4 — Classifier performance | [`c2_23_roc_pr_summary_relabeled.csv`](results/tables/c2_23_roc_pr_summary_relabeled.csv) | [Fig. 8 (ROC)](results/figures/fig08_h4_roc.png) · [Fig. 9 (SHAP)](results/figures/fig09_h4_shap.png) |
-| H5 — Economic value | [`c3_41_charging_economics_relabeled_results.csv`](results/tables/c3_41_charging_economics_relabeled_results.csv) | [Fig. 10](results/figures/fig10_h5_four_agent.png) |
-| Signal attribution (M2) | [`c3_49_charging_economics_control_results.csv`](results/tables/c3_49_charging_economics_control_results.csv) | [Fig. 10](results/figures/fig10_h5_four_agent.png) |
-| H6 — Dispatch correlation | [`c3_42_h6_relabeled_results.csv`](results/tables/c3_42_h6_relabeled_results.csv) | [Fig. 11](results/figures/fig11_h6_correlation.png) |
-| H7 — Revenue comparison | [`c3_43_h7_relabeled_results.csv`](results/tables/c3_43_h7_relabeled_results.csv) | [Fig. 13](results/figures/fig13_h7_revenue_by_regime.png) · [Fig. 14](results/figures/fig14_h7_mcnemar_power.png) |
-| H8 — SA1 / NZ / GB transfer | [`c2_19_h8_sa1_relabeled_results.csv`](results/tables/c2_19_h8_sa1_relabeled_results.csv) · [`c3_45_h8_nz_relabeled_harmonized_results.csv`](results/tables/c3_45_h8_nz_relabeled_harmonized_results.csv) · [`c3_46_h8_gb_relabeled_results.csv`](results/tables/c3_46_h8_gb_relabeled_results.csv) | [Fig. 16](results/figures/fig16_gb_harmonization.png) · [Fig. 17](results/figures/fig17_crossmarket.png) |
+| Original registration (H1–H8) | 28 April 2026 | Hypotheses and criteria, registered on OSF (doi:[10.17605/OSF.IO/Z89HD](https://doi.org/10.17605/OSF.IO/Z89HD)) |
+| Original analysis | 2026 | H1–H3 on 2021–22 error data; H4–H7 on test 1 (Nov–Dec 2022); H8 on transfer data |
+| Pipeline correction | Oct 2026 | Errors in the initial pipeline corrected on 2021–22 data (see [Correction history](#correction-history)) |
+| Replication registration (R1–R6) | 28 October 2026 | OSF amendment; model, label threshold, battery settings and code fixed and tagged **13 minutes before** the first 2023–2025 file was downloaded |
+| Replication | Oct 2026 | R1–R6 tested out of sample on 2023–2025 (test 2) |
 
-Trained classifier: [`results/models/fri_model_relabeled.pkl`](results/models/fri_model_relabeled.pkl)
-Full results, confidence intervals, and supporting detail: [`docs/RESULTS.md`](docs/RESULTS.md)
-
-
-## Research context
-
-Australia's National Electricity Market (NEM) runs predispatch every 30 minutes, producing price forecasts that battery operators rely on for dispatch decisions. During extreme price events (≥ AUD 300/MWh), these forecasts fail dramatically, but standard aggregate accuracy metrics hide this failure because extreme events are rare in the test partition.
-
-This creates **silent failures**: battery operators dispatch confidently based on unreliable forecasts, missing high-value opportunities and incurring preventable degradation costs.
-
-**FRI addresses this gap** by monitoring forecast revision patterns across predispatch runs to detect when the forecast signal is unreliable — before dispatch decisions are made, and conditioning dispatch magnitude on that reliability score.
+Analyses added during peer review are labelled **exploratory** and are not part of the registered tests.
 
 ---
 
-## FRI framework
+## Method
+
+**Label.** An interval is *unreliable* when the decision forecast misses the settled price by more than AUD 300/MWh in either direction:
 
 ```
-Predispatch runs (every 30 min)
-        │
-        ▼
-┌─────────────────────────┐
-│   Feature Engineering   │  10 features; dominant signal is
-│   (forecast revision)   │  forecast revision (52.32% SHAP contribution)
-└──────────┬──────────────┘
-           │
-           ▼
-┌─────────────────────────┐
-│   XGBoost Classifier    │  Relabelled against genuine
-│   θ = 0.856818           │  reliability target; AUC = 0.9666
-└──────────┬──────────────┘
-           │
-           ▼
-┌─────────────────────────┐
-│   FRI Score [0, 1]      │  HIGH   ≥ 0.75 → dispatch 100%
-│   Decision Bands         │  MEDIUM ≥ 0.50 → dispatch 75%
-│                          │  LOW    < 0.50 → dispatch 25%
-└─────────────────────────┘
+|f(w_t) − p̄_t| > 300 AUD/MWh
 ```
 
-FRI requires **predispatch revision sequences** to construct its dominant feature. This is the structural requirement that explains why FRI works in NEM and SA1 but fails to transfer to GB (a settlement-only market lacking this data) and requires recalibration for NZ (a scale, not structural, mismatch).
+The label is two-sided because it scores the reliability of the forecast itself. A one-sided variant (over-forecasts only) is examined as an exploratory analysis.
+
+**Model.** XGBoost classifier on 17 features available before each interval, grouped into the decision forecast, the revision path across successive pre-dispatch runs, and other context. In TreeSHAP attributions on test 2, the decision forecast accounts for 44.2% of mean absolute attribution, the revision path for 37.1% and other features for 18.7%.
+
+**Threshold.** θ = 0.849089, chosen at maximum F1 on the validation precision–recall curve.
+
+**Data partitions (five NEM regions).**
+
+| Partition | Period | Intervals | Unreliable |
+|---|---|---|---|
+| Fitting | 2021–2022 | 72,865 | 2,371 (3.25%) |
+| Validation | 2022 | 14,640 | 60 (0.41%) |
+| Test 1 | Nov–Dec 2022 | 14,650 | 94 (0.64%) |
+| Test 2 (replication) | 2023–2025 | 261,635 | 1,684 (0.64%) |
+
+**Dispatch agents.** A battery (β = 2.03) dispatched by:
+
+| Agent | Rule |
+|---|---|
+| Baseline | Unscaled dispatch |
+| FRI three-band | Dispatch scaled ×1, ×0.75 or ×0.25 by the FRI score |
+| Volatility-matched | Same band counts as FRI, assigned by recent volatility |
+| Forecast-level-matched* | Same band counts as FRI, assigned by the highest decision forecast |
+| Constant derating | All intervals scaled ×0.75 or ×0.25 |
+| Forecast-threshold rules* | ×0.25 whenever the decision forecast reaches X, X = AUD 300–5,000/MWh |
+
+\* Exploratory controls, not registered.
+
+**Inference.** 95% confidence intervals from 1,000 bootstrap resamples drawn separately from unreliable and reliable intervals; exploratory day-block bootstrap (whole days resampled) because unreliable intervals cluster in time.
+
+---
+
+## Results
+
+### Replication hypotheses (2023–2025, test 2)
+
+| Hypothesis | Criterion | Result | Outcome |
+|---|---|---|---|
+| R1 | Extreme-interval error exceeds normal-interval error | Ratio 28–56× by region | Supported |
+| R2 | AUC ≥ 0.75 | AUC 0.955 | Supported |
+| R3 | FRI reduces over-forecast exposure vs volatility-matched control | Difference 557.6 MWh [387.7, 744.6] | Supported |
+| R4 | FRI AP exceeds raw volatility | ΔAP 0.363 [0.344, 0.382] (0.643 vs 0.279) | Supported |
+| R5 | AUC ≥ 0.75 at a 60-min lead | AUC 0.959 [0.954, 0.965] | Supported |
+| R6 | Ranking under alternative degradation shapes | Reported descriptively | Descriptive |
+
+### Original hypotheses
+
+| Hypothesis | Data | Result | Outcome |
+|---|---|---|---|
+| H1 | 2021–22 | Extreme/normal MAE ratio 4.39 (SA1) to 23.50 (VIC1), p < 0.001 in every region | Supported |
+| H2 | 2021–22 | NEM-wide MAE understated extreme-interval MAE by 77.28% | Supported |
+| H3 | 2021–22 | Final vs earlier run error, t = 0.106, p = 0.915 | Not supported |
+| H4 | Test 1 | F1 0.476 < 0.60 (AUC 0.900) | Not supported |
+| H5 | Test 1 | Unwarned unreliable intervals 94 → 54 (−42.6%) | Supported |
+| H6 | Test 1 | r = 0.318 [0.243, 0.389] (manipulation check) | Supported |
+| H7 | Test 1 | Revenue criterion not met | Not supported |
+| H8 | Transfer | Met for SA1 (F1 0.858, AUC 0.967); not met for New Zealand (0.079, 0.840) or Great Britain (0.078, 0.980) | Partially supported |
+
+H8 was evaluated with the initial label only; the final pipeline was not re-run on the transfer data.
+
+### Battery exposure (over-forecast energy, MWh)
+
+| Agent | Test 1 (2022) | Test 2 (2023–25) |
+|---|---|---|
+| Baseline | 65.0 | 1,800.0 |
+| FRI three-band | 20.5 (−68.5%) | 954.0 (−47.0%) |
+| Volatility-matched | 45.2 (−30.5%) | 1,511.6 (−16.0%) |
+| Forecast-level-matched* | 18.4 (−71.7%) | 1,245.2 (−30.8%) |
+| Constant ×0.75 | 61.7 (−5.1%) | 1,677.0 (−6.8%) |
+| Constant ×0.25 | 64.7 (−0.5%) | 1,368.8 (−24.0%) |
+
+Test 1 contains only three baseline over-forecast intervals, so its percentages are indicative.
 
 ---
 
@@ -100,153 +144,128 @@ FRI requires **predispatch revision sequences** to construct its dominant featur
 
 ```
 forecast-reliability-indicator/
-├── README.md
-├── LICENSE
-├── requirements.txt
-├── run.sh
 │
-├── config/                     configuration and settings
+├── README.md                     this file
+├── LICENSE                       Apache License 2.0
+├── requirements.txt              Python dependencies
+├── config.py                     paths, regions, label threshold, battery settings
 │
-├── data/samples/                representative one-week samples per market
-│
-├── scripts/                     full analysis pipeline
-│   ├── c1_*.py                  preprocessing, H1/H2/H3
-│   ├── c2_*.py                  classifier training, SHAP, calibration
-│   ├── c3_*.py                  dispatch agents, degradation/charging economics
-│   └── figure_*.py               all figure-generation scripts
+├── scripts/                      analysis pipeline and figure scripts
+│   ├── make_figures.py           manuscript figures (Figs. 1–9, Fig. A.1)
+│   ├── fig_frontier.py           Fig. 8: risk–revenue trade-off of the dispatch agents
+│   └── figs5to9_block.py         Figs. 5–9 support, incl. TreeSHAP attributions (Fig. 7)
 │
 ├── results/
-│   ├── tables/                  output CSVs
-│   ├── figures/                 final figures (fig01, fig05–fig17)
-│   └── models/                  trained, relabelled classifier
+│   ├── figures/                  manuscript figures (PNG, PDF, SVG)
+│   │   ├── fig_1 … fig_9         main-text figures
+│   │   ├── fig_A1                Appendix Fig. A.1 (AUC by region)
+│   │   └── v1_1_archive/         figures of the first version (superseded)
+│   ├── tables/                   result tables (CSV), one file per analysis step
+│   │   ├── c2_31_test_scores.csv           FRI scores on the test sets
+│   │   ├── c3_39_p5_fri_relabeled_results.csv  results under the corrected label
+│   │   └── c4_03_scores.csv                replication (2023–2025) scores
+│   └── models/                   frozen XGBoost models (.pkl)
+│       ├── fri_model_relabeled.pkl         final FRI model (corrected label)
+│       └── fri_model_v2_no_june2022.pkl    sensitivity model without June 2022
 │
 └── docs/
-    ├── RESULTS.md               complete, verified results
-    ├── COMPLIANCE.md            deviations D-001 through D-030
-    ├── DATA_CARD.md             dataset provenance and licensing
-    └── FRI_MASTER_REFERENCES.md complete reference list
+    ├── DATA_CARD.md              data sources, download paths and access details per market
+    ├── RESULTS.md                results summary
+    ├── COMPLIANCE.md             pre-registration compliance record
+    ├── FRI_MASTER_REFERENCES.md  reference list
+    ├── README_v1.1_archive.md    README of the first version (superseded)
+    └── archived/                 superseded material from the first version
+```
+
+Table files are prefixed by analysis stage (`c2_` original study, `c3_` corrected pipeline, `c4_` replication).
+
+---
+
+## Versions and tags
+
+| Tag | Commit | Contents |
+|---|---|---|
+| `R-prereg-2026-10-28-clean` | `3b1723c` | Code fixed at the replication registration, before 2023–2025 data were downloaded |
+| `R-results-2026-10-28` | `23a6096` | Replication results |
+| `R-revision-2026-11` | `c0f4543` | Intermediate revision state |
+| `R-revision-final-2026-11` | `13c51a4` | Code, figures and results of the revised manuscript |
+
+To check out the registered code exactly as it was fixed:
+
+```bash
+git checkout R-prereg-2026-10-28-clean
 ```
 
 ---
 
-## Datasets
+## Reproducing the results
 
-Four datasets were used (primary NEM, an AEMO validation dataset, and two secondary cross-market datasets). See [`docs/DATA_CARD.md`](docs/DATA_CARD.md) for full documentation, citations, processing steps, and reproducibility checklists.
-
-| Dataset | Role | Source | Size | H8 result |
-|---|---|---|---|---|
-| AEMO NEM 2021–2022 | Primary (training + testing) | [NEMWEB](https://www.nemweb.com.au/REPORTS/ARCHIVE/PREDISP_ALL_DATA/) | 810 MB / 102,675 intervals | Training |
-| AEMO DISPATCHPRICE | Validation (test partition only) | [MMSDM Archive](https://nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/) | Test partition | Proxy confirmed adequate (99.58% label agreement) |
-| GB Elexon 2021–2022 | Secondary (structural boundary) | [BMRS API](https://data.elexon.co.uk/bmrs/api/v1/) | 1.6 MB / 35,035 intervals | Fail (structural) |
-| NZ EMI 2021–2022 | Secondary (cross-market) | [Azure Blob](https://emidatasets.blob.core.windows.net/publicdata) | 673 MB / 57,814 intervals | Fail (scale mismatch) |
-
-**Attribution:**
-- AEMO NEM / DISPATCHPRICE: AEMO Copyright Permissions Notice — general permission for any purpose, with attribution
-- GB Elexon: "Contains BMRS data © Elexon Limited 2021–2022" — personal/academic/non-commercial use; commercial use requires separate terms
-- NZ EMI: © New Zealand Crown copyright, CC-BY 4.0 — commercial use permitted with attribution
-
----
-
-## Reproduce the results
-
-### Prerequisites
+Requires Python 3.10 or later.
 
 ```bash
-Python 3.10+
-8 GB RAM minimum
-20 GB disk space (for full raw data; data/samples/ works for a quick test without this)
-```
-
-### Installation
-
-```bash
-git clone https://github.com/YOUR_USERNAME/forecast-reliability-indicator.git
+git clone https://github.com/Gleeblick22/forecast-reliability-indicator.git
 cd forecast-reliability-indicator
-python3 -m venv venv
-source venv/bin/activate
 pip install -r requirements.txt
+
+# manuscript figures
+PYTHONPATH=.:scripts python3 scripts/make_figures.py
+PYTHONPATH=.:scripts python3 scripts/fig_frontier.py
 ```
 
-### Quick test, using included samples
-
-```bash
-python scripts/c2_18_retrain_relabeled_full_scores.py   # loads data/samples/
-```
-
-### Full pipeline — Component 1: NEM data, H1/H2/H3
-
-```bash
-./run.sh scripts/c1_01_download_aemo_nem.py
-./run.sh scripts/c1_03_preprocess_data.py
-./run.sh scripts/c1_04_test_h1_amplification.py
-./run.sh scripts/c1_05_test_h2_masking.py
-./run.sh scripts/c1_06_test_h3_horizon.py
-```
-
-### Full pipeline — Component 2: classifier, H4
-
-```bash
-./run.sh scripts/c2_01_feature_engineering.py
-./run.sh scripts/c2_02_train_test_split.py
-./run.sh scripts/c2_18_retrain_relabeled_full_scores.py
-# Expected: AUC=0.9666, F1=0.8898, threshold=0.856818
-```
-
-### Full pipeline — Component 3: dispatch agents, H5/H6/H7/H8
-
-```bash
-./run.sh scripts/c3_00_download_gb_elexon.py
-./run.sh scripts/c3_20_download_nz_emi.py
-./run.sh scripts/c3_39_p5_fri_relabeled.py
-./run.sh scripts/c3_40_p5_baseline_relabeled_match.py
-./run.sh scripts/c3_42_h6_relabeled.py
-./run.sh scripts/c3_43_h7_relabeled.py
-./run.sh scripts/c2_19_h8_sa1_relabeled.py
-./run.sh scripts/c3_45_h8_nz_relabeled_harmonized.py
-./run.sh scripts/c3_46_h8_gb_relabeled.py
-./run.sh scripts/c3_48_depth_matched_control.py
-./run.sh scripts/c3_49_charging_economics_control.py
-```
-
-See `run.sh` for the complete, ordered sequence across all components.
+Figures are written to `results/figures/`.
 
 ---
 
-## Documentation
+## Data sources
 
-| Document | Description |
-|---|---|
-| [`docs/RESULTS.md`](docs/RESULTS.md) | Complete, verified results for all H1–H8, organised by topic, with every headline and supporting figure |
-| [`docs/COMPLIANCE.md`](docs/COMPLIANCE.md) | Every deviation from the pre-registered plan (D-001 through D-030) fully disclosed, including the classifier relabelling and two rounds of pre-submission review response |
-| [`docs/DATA_CARD.md`](docs/DATA_CARD.md) | Dataset provenance, licensing, leakage-control methodology, and attribution for all four datasets |
-| [`docs/FRI_MASTER_REFERENCES.md`](docs/FRI_MASTER_REFERENCES.md) | Complete reference list matching the manuscript exactly |
+All data are public. Raw market data are not redistributed in this repository; the scripts download them from the sources below. Full download paths are in [docs/DATA_CARD.md](docs/DATA_CARD.md).
 
----
-
-## Pre-registration and research integrity
-
-This research was pre-registered on the Open Science Framework before data collection.
+### Australia — National Electricity Market (NEM)
 
 | Item | Detail |
 |---|---|
-| OSF | 10.17605/OSF.IO/Z89HD *(note: internal project records also reference `osf.io/jpfwh` as the registration URL — confirm the correct, live one before publishing this README)* |
-| Pre-registered | H1 through H8 hypotheses, success criteria, train/test split (Oct 1, 2022) |
-| Deviations | D-001 through D-030, all documented in `docs/COMPLIANCE.md` |
-| Null results | H3 and H7 reported honestly, both bounded by explicit statistical reasoning |
-| Major correction | Classifier relabelled against a genuine reliability target during pre-submission review; both classifiers' results retained in the compliance log for audit-trail completeness |
+| Provider | Australian Energy Market Operator (AEMO) |
+| Archive | NEMweb, https://nemweb.com.au (MMSDM monthly archive and current reports) |
+| Pre-dispatch forecasts | `PREDISPATCHPRICE`: 30-min regional price forecasts from every pre-dispatch run, used for the decision forecast f(w_t) and the revision-path features |
+| Settled prices | `DISPATCHPRICE`: 5-min regional dispatch prices, averaged to the 30-min settled price p̄_t |
+| Regions | NSW1, QLD1, SA1, TAS1, VIC1 |
+| Periods | 2021–2022 (fitting, validation, test 1); 2023–2025 (replication, test 2) |
+| Access | Public, no authentication |
+
+### New Zealand — wholesale electricity market (H8 transfer)
+
+| Item | Detail |
+|---|---|
+| Provider | Electricity Authority (Te Mana Hiko) |
+| Archive | EMI datasets, https://www.emi.ea.govt.nz/Wholesale/Datasets |
+| Storage | Azure Blob Storage, https://emidatasets.blob.core.windows.net/publicdata |
+| Access | Public read-only, through the shared public access token published by the Electricity Authority (`si=publicdata`) |
+| Use | Cross-market transfer test (H8), initial label only |
+
+### Great Britain (H8 transfer)
+
+| Item | Detail |
+|---|---|
+| Source | Public GB wholesale market price archives |
+| Limitation | No published sequence of pre-dispatch runs, so the revision-path features and the decision forecast cannot be formed; the transfer model uses the remaining nine features |
+| Use | Cross-market transfer test (H8), initial label only, with the original and a harmonised threshold |
+
+---
+
+## Correction history
+
+The first version of this analysis used a pipeline that was later found to contain errors. Under that pipeline the model reached a test AUC of 0.967 and an F1 of 0.890, against 0.900 and 0.476 after correction. The errors were corrected on the 2021–22 data before the replication was registered, and all results in this README and in the manuscript use the corrected pipeline. The README of the first version is kept in `docs/README_v1.1_archive.md` for transparency only; its results are superseded.
 
 ---
 
 ## Citation
 
-```
-[Citation to be added on publication]
-```
+The manuscript is under review. Full citation details (journal, volume, pages and DOI) will be added here after acceptance.
 
-## License
+Pre-registration: doi:[10.17605/OSF.IO/Z89HD](https://doi.org/10.17605/OSF.IO/Z89HD)
 
-Code in this repository is licensed under the [Apache License 2.0](LICENSE).
-Data samples in `data/samples/` remain subject to their original sources' terms (see [`docs/DATA_CARD.md`](docs/DATA_CARD.md)) and are **not** covered by the code license. GB Elexon data specifically requires separate confirmation before any commercial use.
+---
 
-## Contact
-dh.ghale@gmail.com
+## Licence
+
+Apache License 2.0. See [LICENSE](LICENSE).
