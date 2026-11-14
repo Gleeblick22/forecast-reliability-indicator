@@ -1,3 +1,5 @@
+> **Superseded.** README of the first version, kept for transparency only. Its results came from a pipeline later found to contain errors; see the main README for the corrected results.
+
 # Forecast Reliability Indicator (FRI)
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)

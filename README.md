@@ -148,7 +148,6 @@ forecast-reliability-indicator/
 ├── README.md                     this file
 ├── LICENSE                       Apache License 2.0
 ├── requirements.txt              Python dependencies
-├── config.py                     paths, regions, label threshold, battery settings
 │
 ├── scripts/                      analysis pipeline and figure scripts
 │   ├── make_figures.py           manuscript figures (Figs. 1–9, Fig. A.1)
@@ -170,11 +169,10 @@ forecast-reliability-indicator/
 │
 └── docs/
     ├── DATA_CARD.md              data sources, download paths and access details per market
-    ├── RESULTS.md                results summary
-    ├── COMPLIANCE.md             pre-registration compliance record
+    ├── COMPLIANCE.md             chronological decision and compliance log
     ├── FRI_MASTER_REFERENCES.md  reference list
     ├── README_v1.1_archive.md    README of the first version (superseded)
-    └── archived/                 superseded material from the first version
+    └── archived/                 superseded material from the first version (incl. RESULTS_v1.1.md)
 ```
 
 Table files are prefixed by analysis stage (`c2_` original study, `c3_` corrected pipeline, `c4_` replication).

@@ -1,3 +1,5 @@
+> **Note (November 2026).** This file is the chronological decision log of the study and is kept unchanged for transparency. Entries made before the pipeline correction, including AUC 0.9666, +59.7% net revenue and the 65.1% signal-attributable fraction, refer to the first version and are superseded. Current results are in the main README and the manuscript.
+
 # Forecast Reliability Indicator(FRI)2026: COMPLIANCE DOCUMENT
 **Version:** 2.0
 **Date:** August  2026
