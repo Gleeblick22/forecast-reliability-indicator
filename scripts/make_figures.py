@@ -251,10 +251,8 @@ if "recent_std_3h" in rep.columns:
     v = rep.recent_std_3h.values.astype(float); v = np.where(np.isnan(v), np.nanmin(v) - 1, v)
     check("dAP 2023-25 (R4)", average_precision_score(y25, p25) - average_precision_score(y25, v), float(S["R"][3]["result"].split()[1]))
     S6.append(("vol", y25, v, dict(color=C["vol"], ls="-", lw=1.1), 2))
-fig = plt.figure(figsize=(7.2, 4.1))
-gs6 = fig.add_gridspec(2, 2, height_ratios=[1, 0.17])
-a, b = fig.add_subplot(gs6[0, 0]), fig.add_subplot(gs6[0, 1])
-lax = fig.add_subplot(gs6[1, :]); lax.axis("off")             # legend row: tight_layout keeps it clear of the axis labels
+fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.75))
+fig.set_layout_engine("none")  # Fig. 6: layout set by hand below; stop automatic re-layout at save
 met = {}
 for k, y_, s_, st, z_ in S6:
     f_, t_, _ = roc_curve(y_, s_); pr, rc, _ = precision_recall_curve(y_, s_)
@@ -272,7 +270,11 @@ for ax_, t_, xl, yl in [(a, "(a) ROC", "False positive rate", "True positive rat
 LAB = {"fri25": "FRI, test 2 (2023–25): AUC {0:.3f}, AP {1:.3f}", "fri22": "FRI, test 1 (2022): AUC {0:.3f}, AP {1:.3f}",
        "flev": "$|f(w_t)|$ alone*, test 2: AUC {0:.3f}, AP {1:.3f}", "vol": "Recent volatility, test 2: AP {1:.3f} (R4)"}
 H6 = [Line2D([], [], label=LAB[k].format(*met[k]), **st) for k, _, _, st, _ in S6]
-lax.legend(handles=H6, loc="center", ncol=2, fontsize=7.5, columnspacing=1.5)
+fig.tight_layout(rect=(0, 0.13, 1, 1))
+fig.canvas.draw(); rd6 = fig.canvas.get_renderer()
+ybot6 = min(ax_.get_tightbbox(rd6).transformed(fig.transFigure.inverted()).y0 for ax_ in (a, b))
+fig.legend(handles=H6, loc="upper center", bbox_to_anchor=(0.5, ybot6 - 0.01), ncol=2, fontsize=7.5, columnspacing=1.5)  # legend just below the x-axis labels
+fig.tight_layout = lambda *args, **kw: None  # keep this layout: save() must not re-run tight_layout for Fig. 6
 save(fig, 6, f"Fig. 6. ROC (a) and precision–recall (b) curves of the FRI model, fitted on 2021–22 and then held fixed, on test 2 (2023–25, "
      f"{h['rep_lead30']:,} intervals; solid) and test 1 (2022, {h['n_test']:,} intervals, {h['n_test_pos']} unreliable; dashed). "
      f"Orange: intervals ranked by raw recent volatility (recent_std_3h), the R4 comparison. *Aqua: ranked by the decision forecast "
