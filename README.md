@@ -128,6 +128,14 @@ The label is two-sided because it scores the reliability of the forecast itself.
 | R5 | AUC ≥ 0.75 at a 60-min lead | AUC 0.959 [0.954, 0.965] | Supported |
 | R6 | Ranking under alternative degradation shapes | Reported descriptively | Descriptive |
 
+![Forecast error in extreme and normal intervals](results/figures/fig_5.png)
+
+*Fig. 5. Mean absolute error of the decision forecast against the settled price in extreme and normal intervals, test 2 (2023–25; log scale). Bold labels give the ratio of means.*
+
+![ROC and precision–recall curves](results/figures/fig_6.png)
+
+*Fig. 6. ROC (a) and precision–recall (b) curves of the FRI model on test 2 (2023–25; solid) and test 1 (2022; dashed). Orange: raw recent volatility (recent_std_3h), the R4 comparison. Aqua: the decision forecast alone (exploratory). Dotted lines: chance (a) and no-skill precision, equal to the 0.64% prevalence (b).*
+
 ### Original hypotheses
 
 | Hypothesis | Data | Result | Outcome |
