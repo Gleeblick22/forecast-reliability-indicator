@@ -222,7 +222,7 @@ forecast-reliability-indicator/
     ├── DATA_CARD.md          provenance, access, coverage and licence of every dataset
     ├── COMPLIANCE.md         chronological decision and compliance log
     ├── FRI_MASTER_REFERENCES.md   reference list of the manuscript
-    ├── README_v1.1_archive.md     README of the first version (superseded)
+    ├── archived/README_v1.1.md  README of the first version (superseded)
     └── archived/             superseded material from the first version (incl. RESULTS_v1.1.md)
 ```
 
@@ -316,7 +316,7 @@ Full provenance, coverage and processing details are in [docs/DATA_CARD.md](docs
 
 ## Correction history
 
-The first version of this analysis used a pipeline that was later found to contain errors. Under that pipeline the model reached a test AUC of 0.967 and an F1 of 0.890, against 0.900 and 0.476 after correction. The errors were corrected on the 2021–22 data before the replication was registered, and all results in this README and in the manuscript use the corrected pipeline. The README of the first version is kept in `docs/README_v1.1_archive.md` for transparency only; its results are superseded.
+The first version of this analysis used a pipeline that was later found to contain errors. Under that pipeline the model reached a test AUC of 0.967 and an F1 of 0.890, against 0.900 and 0.476 after correction. The errors were corrected on the 2021–22 data before the replication was registered, and all results in this README and in the manuscript use the corrected pipeline. The README of the first version is kept in `docs/archived/README_v1.1.md` for transparency only; its results are superseded.
 
 ---
 
