@@ -4,27 +4,45 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-yellow)](https://python.org)
 [![Pre-registered](https://img.shields.io/badge/Pre--registered-OSF-lightblue)](https://doi.org/10.17605/OSF.IO/Z89HD)
 
-Code, frozen models and result tables for the manuscript:
+**Forecast Reliability Indicator for Risk-Aware Energy-Arbitrage Battery Dispatch in the Australian National Electricity Market**
 
-> D. P. Ghale, manuscript under review (2026). Citation details will be added after acceptance.
+D. P. Ghale. Manuscript under review (2026); citation details will be added after acceptance.
 
-A battery that acts on pre-dispatch price forecasts needs to know, at the moment it commits, whether the forecast it is about to act on can be trusted. The **Forecast Reliability Indicator (FRI)** estimates this from information published before each 30-min interval in Australia's National Electricity Market (NEM). It was evaluated in a pre-registered, out-of-sample replication on three years of NEM data (2023–2025), with the model fixed before the data were downloaded.
+This repository contains the code, frozen models and result tables of the paper.
+
+---
+
+## Abstract
+
+Battery operators in the Australian National Electricity Market commit energy on pre-dispatch price forecasts, yet these forecasts are least accurate in the extreme-price intervals where commitment matters most. This paper develops a Forecast Reliability Indicator (FRI) that estimates, at the moment of commitment, whether the forecast an agent is about to act on will miss the settled price by more than AUD 300/MWh, using only the forecast level and the revision path of the pre-dispatch runs published by then. In a pre-registered out-of-sample replication on 2023–2025 data, with the model fixed in advance, the error of the decision forecast was 28 to 56 times larger in extreme than in normal intervals, and 22 to 84 times larger when extreme intervals were identified by the forecast itself, where it was less accurate than a naive three-hour average. The FRI ranked unreliable intervals with an AUC of 0.955, against 0.906 for the forecast level alone, although both reached the same average precision (0.64). Scaling discharge by the FRI cut the energy committed to over-forecast intervals by 47%, more than volatility-matched scaling, and no forecast-threshold rule dominated it on both exposure and revenue. Net revenue changed by −0.3% in 2023–2025 and +1.0% in the held-out 2022 window, while discharges into extreme intervals with an overstated forecast rose from 8 to 16. The registered F1 and revenue criteria were not met, and constant derating earned more under convex degradation. The FRI is therefore a risk-exposure control for energy-arbitrage dispatch, not a revenue optimiser.
+
+**Keywords:** forecast reliability; pre-dispatch price forecasts; battery energy storage; National Electricity Market; energy arbitrage; risk-aware dispatch; pre-registered replication
+
+---
+
+## FRI pipeline
+
+![FRI pipeline](results/figures/fig_2.png)
+
+*Fig. 2. FRI pipeline, applied to each of the five NEM regions; each region has its own battery agent. Solid arrows carry information available at decision time; dashed arrows mark steps that use settled prices and take place only after settlement: building the label for model fitting and evaluating the agent. θ = 0.849089 was chosen on the validation period.*
 
 ---
 
 ## Contents
 
-1. [Summary of findings](#summary-of-findings)
-2. [Study design and registration](#study-design-and-registration)
-3. [Method](#method)
-4. [Results](#results)
-5. [Repository structure](#repository-structure)
-6. [Versions and tags](#versions-and-tags)
-7. [Reproducing the results](#reproducing-the-results)
-8. [Data sources](#data-sources)
-9. [Correction history](#correction-history)
-10. [Citation](#citation)
-11. [Licence](#licence)
+1. [Abstract](#abstract)
+2. [FRI pipeline](#fri-pipeline)
+3. [Summary of findings](#summary-of-findings)
+4. [Study design and registration](#study-design-and-registration)
+5. [Method](#method)
+6. [Results](#results)
+7. [Repository structure](#repository-structure)
+8. [Versions and tags](#versions-and-tags)
+9. [Reproducing the results](#reproducing-the-results)
+10. [Data sources](#data-sources)
+11. [Correction history](#correction-history)
+12. [Citation](#citation)
+13. [Licence](#licence)
 
 ---
 
@@ -37,9 +55,9 @@ A battery that acts on pre-dispatch price forecasts needs to know, at the moment
 
 The FRI is best used as a **risk signal alongside a dispatch or bidding policy**, not as a strategy on its own.
 
-![Risk–revenue trade-off of the dispatch agents](results/figures/fig_8.png)
+![Risk–revenue trade-off of the dispatch agents](results/figures/fig_8_frontier.png)
 
-*Fig. 8. Exposure reduction and net-revenue change of the dispatch agents relative to the baseline on (a) test 1 and (b) test 2. Shaded: better than the baseline on both.*
+*Fig. 8. Exposure reduction and net-revenue change of the dispatch agents relative to the baseline on (a) test 1 and (b) test 2 (β = 2.03). Shaded: better than the baseline on both.*
 
 ---
 
@@ -67,7 +85,7 @@ Analyses added during peer review are labelled **exploratory** and are not part 
 
 The label is two-sided because it scores the reliability of the forecast itself. A one-sided variant (over-forecasts only) is examined as an exploratory analysis.
 
-**Model.** XGBoost classifier on 17 features available before each interval, grouped into the decision forecast, the revision path across successive pre-dispatch runs, and other context. In TreeSHAP attributions on test 2, the decision forecast accounts for 44.2% of mean absolute attribution, the revision path for 37.1% and other features for 18.7%.
+**Model.** XGBoost classifier on 17 features available before each interval, grouped into the decision forecast, the revision path across successive pre-dispatch runs, and other context. In TreeSHAP attributions on test 1, the decision forecast accounts for 44.2% of mean absolute attribution, the revision path for 37.1% and other features for 18.7%.
 
 **Threshold.** θ = 0.849089, chosen at maximum F1 on the validation precision–recall curve.
 
@@ -151,12 +169,13 @@ forecast-reliability-indicator/
 │
 ├── scripts/                      analysis pipeline and figure scripts
 │   ├── make_figures.py           manuscript figures (Figs. 1–9, Fig. A.1)
-│   ├── fig_frontier.py           Fig. 8: risk–revenue trade-off of the dispatch agents
+│   ├── fig_frontier.py           Fig. 8 (fig_8_frontier): risk–revenue trade-off of the dispatch agents
 │   └── figs5to9_block.py         Figs. 5–9 support, incl. TreeSHAP attributions (Fig. 7)
 │
 ├── results/
 │   ├── figures/                  manuscript figures (PNG, PDF, SVG)
-│   │   ├── fig_1 … fig_9         main-text figures
+│   │   ├── fig_1 … fig_9         main-text figures (fig_2: FRI pipeline)
+│   │   ├── fig_8_frontier        Fig. 8 as in the manuscript (risk–revenue trade-off)
 │   │   ├── fig_A1                Appendix Fig. A.1 (AUC by region)
 │   │   └── v1_1_archive/         figures of the first version (superseded)
 │   ├── tables/                   result tables (CSV), one file per analysis step
