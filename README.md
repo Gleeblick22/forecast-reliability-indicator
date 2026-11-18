@@ -6,10 +6,6 @@
 
 **Forecast Reliability Indicator for Risk-Aware Energy-Arbitrage Battery Dispatch in the Australian National Electricity Market**
 
-D. P. Ghale. Manuscript under review (2026); citation details will be added after acceptance.
-
-This repository contains the code, frozen models and result tables of the paper.
-
 ---
 
 ## Abstract
